@@ -1,0 +1,100 @@
+pkgname=<%= name %>
+pkgver=<%= version %>
+pkgrel=<%= build %>
+pkgdesc=<%= name %>
+arch="x86_64"
+options="!check"
+pkgusers=<%= name %>
+pkggroups=<%= name %>
+license="MIT"
+
+depends="
+  bash
+  curl
+"
+
+makedepends="
+  elixir
+  erlang-crypto
+  erlang-syntax-tools
+  erlang-hipe
+  erlang-parsetools
+  erlang-runtime-tools
+  erlang-observer
+  erlang-tools
+  erlang-xmerl
+  erlang-eunit
+  nodejs
+  yarn
+"
+
+install="
+  $pkgname.pre-install
+  $pkgname.post-install
+  $pkgname.post-upgrade
+  $pkgname.pre-deinstall
+"
+
+source="
+  $pkgname-$pkgver.tar
+  $pkgname.initd
+  service/run
+  bin/config_$pkgname
+"
+
+root=../../..
+
+snapshot() {
+  abuild clean
+  abuild deps
+
+  cd $startdir
+  tar --exclude='.apk' -cf "$pkgname-$pkgver.tar" ${root} 
+
+  abuild checksum
+}
+
+build() {
+  cd "$srcdir/assets"
+  yarn install
+  yarn run build
+
+  cd "$srcdir"
+  mix local.hex --force
+  mix local.rebar --force
+  MIX_ENV=prod mix do deps.get --only prod, compile
+
+  MIX_ENV=prod mix release --env=prod
+}
+
+check() {
+  abuild clean
+  abuild deps
+
+  export MIX_ENV=test
+
+  cd "$root"
+
+  mix local.hex --force
+  mix local.rebar --force
+  mix deps.get --only test
+
+  mix ecto.drop
+  mix ecto.create
+  mix ecto.migrate
+}
+
+package() {
+  mkdir -p "$pkgdir"
+
+	cd "$pkgdir"
+
+  install -dm755 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"/
+  install -dm755 -g $pkggroups ./var/www/localhost/htdocs/console/
+
+  mv -v "$srcdir"/_build/prod/rel/"$pkgname"/* ./var/lib/"$pkgname"/
+
+  install -Dm755 "$srcdir"/$pkgname.initd ./etc/init.d/$pkgname
+  install -Dm755 "$srcdir"/run ./var/lib/$pkgname/service/run
+  install -Dm755 "$srcdir"/config_$pkgname ./usr/bin/config_$pkgname
+}
