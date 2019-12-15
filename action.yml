@@ -4,6 +4,7 @@ inputs:
   repository:
     description: 'repository name'
     required: true
+    default: ${{ github.repository }}
   version:
     description: 'version of the app'
     required: true
