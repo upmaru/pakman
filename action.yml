@@ -1,5 +1,15 @@
 name: 'apkify'
 description: 'builds project into alpine package'
+inputs:
+  repository:
+    description: 'repository name'
+    required: true
+  version:
+    description: 'version of the app'
+    required: true
+  build:
+    description: 'build number'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
