@@ -1,1 +1,9 @@
 name: 'apkify'
+description: 'builds project into alpine package'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - --repository ${{inputs.repository}}
+    - --version ${{inputs.version}}
+    - --build ${{inputs.build}}
