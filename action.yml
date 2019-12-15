@@ -1,4 +1,5 @@
 name: 'apkify'
+author: 'Zack Siri'
 description: 'builds project into alpine package'
 inputs:
   repository:
@@ -8,9 +9,11 @@ inputs:
   version:
     description: 'version of the app'
     required: true
+    default: echo "::set-env name=version::`git describe --tags --always`"
   build:
     description: 'build number'
     required: true
+    default: echo "::set-env name=build::`git rev-list HEAD --count`"
 runs:
   using: 'docker'
   image: 'Dockerfile'
