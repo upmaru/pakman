@@ -9,7 +9,8 @@ defmodule Apkify.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       escript: [
-        main_module: Apkify.CLI
+        main_module: Apkify.CLI,
+        path: "bin/apkify"
       ]
     ]
   end

@@ -1,9 +1,7 @@
 defmodule Apkify.CLI do
   alias Apkify.Bootstrap
 
-  def main(args \\ []) do
-    IO.inspect args
-    
+  def main(args \\ []) do    
     args
     |> parse_args()
     |> Bootstrap.perform()

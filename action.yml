@@ -15,6 +15,9 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --repository ${{inputs.repository}}
-    - --version ${{inputs.version}}
-    - --build ${{inputs.build}}
+    - --repository
+    - ${{inputs.repository}}
+    - --version
+    - ${{inputs.version}}
+    - --build
+    - ${{inputs.build}}

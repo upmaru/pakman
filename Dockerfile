@@ -2,6 +2,6 @@ FROM alpine:3.10
 
 RUN apk add alpine-sdk erlang
 
-COPY apkify /apkify
+COPY bin/apkify /usr/local/bin/apkify
 
-ENTRYPOINT [ "/apkify" ]
+ENTRYPOINT [ "/usr/local/bin/apkify" ]

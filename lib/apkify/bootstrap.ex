@@ -2,7 +2,6 @@ defmodule Apkify.Bootstrap do
   @apkbuild "lib/apk/templates/apkbuild.eex"
 
   def perform(options) do
-    IO.inspect(options)
     %{namespace: namespace, name: name} = Keyword.get(options, :repository)
     version = Keyword.get(options, :version)
     build = Keyword.get(options, :build)
