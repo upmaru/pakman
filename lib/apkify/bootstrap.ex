@@ -1,5 +1,5 @@
 defmodule Apkify.Bootstrap do
-  @apkbuild "lib/apk/templates/apkbuild.eex"
+  @apkbuild "apkbuild.eex"
   @workspace System.get_env(~s(GITHUB_WORKSPACE))
 
   def perform(options) do
@@ -20,6 +20,8 @@ defmodule Apkify.Bootstrap do
   end
 
   defp render_template(file, name, version, build) do
-    EEx.eval_file(file, name: name, version: version, build: build)
+    file
+    |> Apkify.template()
+    |> EEx.eval_file(name: name, version: version, build: build)
   end
 end
