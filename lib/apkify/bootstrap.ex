@@ -5,7 +5,7 @@ defmodule Apkify.Bootstrap do
   def perform(options) do
     [namespace, name] =
       options
-      |> Keyword.get(options, :repository)
+      |> Keyword.get(:repository)
       |> String.split("/")
 
     version = Keyword.get(options, :version)
