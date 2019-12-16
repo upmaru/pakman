@@ -1,7 +1,10 @@
 FROM alpine:3.10
 
-RUN apk add alpine-sdk erlang
+RUN apk add alpine-sdk elixir
 
-COPY bin/apkify /usr/local/bin/apkify
+COPY . /var/lib/apkify
 
-ENTRYPOINT [ "/usr/local/bin/apkify" ]
+WORKDIR /var/lib/apkify
+RUN mix escript.build
+
+ENTRYPOINT [ "/var/lib/apkify/bin/apkify" ]
