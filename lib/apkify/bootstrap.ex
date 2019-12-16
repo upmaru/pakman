@@ -16,12 +16,6 @@ defmodule Apkify.Bootstrap do
 
     [@workspace, base_path, "APKBUILD"]
     |> Enum.join("/")
-    |> File.write(render_template(@apkbuild, name, version, build))
-  end
-
-  defp render_template(file, name, version, build) do
-    file
-    |> Apkify.template()
-    |> EEx.eval_file(name: name, version: version, build: build)
+    |> File.write(Templates.apkbuild(name, version, build))
   end
 end
