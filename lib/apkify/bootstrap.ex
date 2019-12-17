@@ -17,8 +17,6 @@ defmodule Apkify.Bootstrap do
       |> System.get_env()
       |> Path.join(".apk/#{namespace}/#{name}")
     
-    IO.inspect System.cmd("ls", ["-la"])
-
     File.mkdir_p!(base_path)
 
     create_apkbuild(base_path, name, version, build, depends, makedepends)

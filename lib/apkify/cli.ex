@@ -10,10 +10,10 @@ defmodule Apkify.CLI do
       [".apk", Keyword.get(options, :repository)]
       |> Enum.join("/")
 
-    System.cmd(~s(cd), [apk_dir])
+    System.cmd(~s(cd), [Path.join(System.get_env(~s(GITHUB_WORKSPACE)), apk_dir)])
 
-    System.cmd(~s(abuild), ["snapshot"])
-    System.cmd(~s(abuild), ["-r"])
+    System.cmd(~s(abuild), ["snapshot -F"])
+    System.cmd(~s(abuild), ["-rF"])
   end
 
   defp parse_args(args) do
