@@ -8,4 +8,12 @@ defmodule Apkify.Templates do
     :depends,
     :makedepends
   ])
+
+  EEx.function_from_file(:def, :initd, "lib/apkify/templates/initd.eex", [
+    :name
+  ])
+
+  EEx.function_from_file(:def, :profile, "lib/apkify/templates/profile.eex", [
+    :name
+  ])
 end

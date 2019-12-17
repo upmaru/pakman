@@ -2,16 +2,14 @@ pkgname=<%= name %>
 pkgver=<%= version %>
 pkgrel=<%= build %>
 pkgdesc=<%= name %>
-arch="x86_64"
+arch="noarch"
 options="!check"
 pkgusers=<%= name %>
 pkggroups=<%= name %>
 license="MIT"
-
+subpackages="<%= name %>-openrc"
 depends=<%= depends %>
-
 makedepends=<%= makedepends %>
-
 install="
   $pkgname.pre-install
   $pkgname.post-install
@@ -23,7 +21,7 @@ source="
   $pkgname-$pkgver.tar
   $pkgname.initd
   service/run
-  bin/config_$pkgname
+  bin/config_<%= name %>
 "
 
 root=<%= System.get_env(~s(GITHUB_WORKSPACE)) %>

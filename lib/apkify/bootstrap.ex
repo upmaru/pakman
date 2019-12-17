@@ -14,15 +14,25 @@ defmodule Apkify.Bootstrap do
     depends = Keyword.get(options, :depends)
     makedepends = Keyword.get(options, :makedepends)
 
-    base_path = ".apk/#{namespace}/#{name}"
-    File.mkdir_p(base_path)
+    base_path =
+      [@workspace, ".apk/#{namespace}/#{name}"]
+      |> Enum.join("/")
+      |> File.mkdir_p()
 
     create_apkbuild(base_path, name, version, build, depends, makedepends)
+    create_file(base_path, name, :initd)
+    create_file(base_path, name, :profile)
   end
 
   defp create_apkbuild(base_path, name, version, build, depends, makedepends) do
-    [@workspace, base_path, "APKBUILD"]
+    [base_path, "APKBUILD"]
     |> Enum.join("/")
     |> File.write(Templates.apkbuild(name, version, build, depends, makedepends))
+  end
+
+  defp create_file(base_path, name, extension) do
+    [base_path, "#{name}.#{extension}"]
+    |> Enum.join("/")
+    |> File.write(apply(Templates, extension, [name]))
   end
 end
