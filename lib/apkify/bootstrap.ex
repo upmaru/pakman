@@ -23,8 +23,6 @@ defmodule Apkify.Bootstrap do
     create_apkbuild(base_path, name, version, build, depends, makedepends)
     create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
-
-    base_path
   end
 
   defp create_apkbuild(base_path, name, version, build, depends, makedepends) do

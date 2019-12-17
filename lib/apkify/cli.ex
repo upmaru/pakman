@@ -3,12 +3,8 @@ defmodule Apkify.CLI do
 
   def main(args \\ []) do
     args
-    |> parse_args
+    |> parse_args()
     |> Bootstrap.perform()
-    |> File.cd!()
-    
-    System.cmd(~s(abuild), ~w(snapshot))
-    System.cmd(~s(abuild), ~w(-r))
   end
 
   defp parse_args(args) do
