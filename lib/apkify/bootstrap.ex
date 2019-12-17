@@ -11,12 +11,14 @@ defmodule Apkify.Bootstrap do
 
     version = Keyword.get(options, :version)
     build = Keyword.get(options, :build)
+    depends = Keyword.get(options, :depends)
+    makedepends = Keyword.get(options, :makedepends)
 
     base_path = ".apk/#{namespace}/#{name}"
     File.mkdir_p(base_path)
 
     [@workspace, base_path, "APKBUILD"]
     |> Enum.join("/")
-    |> File.write(Templates.apkbuild(name, version, build))
+    |> File.write(Templates.apkbuild(name, version, build, depends, makedepends))
   end
 end

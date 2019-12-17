@@ -4,6 +4,8 @@ defmodule Apkify.Templates do
   EEx.function_from_file(:def, :apkbuild, "lib/apkify/templates/apkbuild.eex", [
     :name,
     :version,
-    :build
+    :build,
+    :depends,
+    :makedepends
   ])
 end
