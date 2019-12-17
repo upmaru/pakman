@@ -16,7 +16,7 @@ defmodule Apkify.Bootstrap do
       ~s(GITHUB_WORKSPACE)
       |> System.get_env()
       |> Path.join(".apk/#{namespace}/#{name}")
-    
+
     File.mkdir_p!(base_path)
 
     create_apkbuild(base_path, name, version, build, depends, makedepends)
