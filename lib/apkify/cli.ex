@@ -5,6 +5,9 @@ defmodule Apkify.CLI do
     args
     |> parse_args()
     |> Bootstrap.perform()
+    
+    System.cmd("abuild snapshot", [])
+    System.cmd("abuild -r", [])
   end
 
   defp parse_args(args) do
