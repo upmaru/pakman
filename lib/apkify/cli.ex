@@ -5,17 +5,6 @@ defmodule Apkify.CLI do
     options = parse_args(args)
 
     Bootstrap.perform(options)
-
-    apk_dir =
-      [".apk", Keyword.get(options, :repository)]
-      |> Enum.join("/")
-
-    File.cd!(apk_dir)
-
-    System.cmd("su", ["-l", "builder"])
-
-    # System.cmd(~s(abuild), ["snapshot"])
-    # System.cmd(~s(abuild), ["-r"])
   end
 
   defp parse_args(args) do
