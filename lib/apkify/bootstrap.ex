@@ -1,8 +1,6 @@
 defmodule Apkify.Bootstrap do
   alias Apkify.Templates
 
-  @workspace System.get_env(~s(GITHUB_WORKSPACE))
-
   def perform(options) do
     [namespace, name] =
       options
@@ -14,7 +12,11 @@ defmodule Apkify.Bootstrap do
     depends = Keyword.get(options, :depends)
     makedepends = Keyword.get(options, :makedepends)
 
-    base_path = ".apk/#{namespace}/#{name}"
+    base_path =
+      ~s(GITHUB_WORKSPACE)
+      |> System.get_env()
+      |> Path.join(".apk/#{namespace}/#{name}")
+
     File.mkdir_p!(base_path)
 
     create_apkbuild(base_path, name, version, build, depends, makedepends)
