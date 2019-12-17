@@ -16,6 +16,8 @@ defmodule Apkify.Bootstrap do
       ~s(GITHUB_WORKSPACE)
       |> System.get_env()
       |> Path.join(".apk/#{namespace}/#{name}")
+    
+    IO.inspect System.cmd("ls", ["-la"])
 
     File.mkdir_p!(base_path)
 
