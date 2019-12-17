@@ -2,11 +2,5 @@
 
 cd "$GITHUB_WORKSPACE"/.apk/"$GITHUB_REPOSITORY" || exit
 
-pwd
-
-ls -la
-
-cat APKBUILD
-
 abuild snapshot
 abuild -r
