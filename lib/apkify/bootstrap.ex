@@ -1,6 +1,6 @@
 defmodule Apkify.Bootstrap do
   alias Apkify.Templates
-  
+
   @workspace System.get_env(~s(GITHUB_WORKSPACE))
 
   def perform(options) do

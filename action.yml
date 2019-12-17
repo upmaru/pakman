@@ -12,6 +12,12 @@ inputs:
   build:
     description: 'build number'
     required: true
+  depends:
+    description: 'Runtime Dependencies'
+    required: true
+  makedepends:
+    description: 'Build Dependencies'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -22,3 +28,7 @@ runs:
     - ${{inputs.version}}
     - --build
     - ${{inputs.build}}
+    - --depends
+    - ${{inputs.depends}}
+    - --makedepends
+    - ${{inputs.makedepends}}
