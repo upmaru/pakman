@@ -1,8 +1,0 @@
-#!/bin/sh
-
-cd "$GITHUB_WORKSPACE"/.apk/"$GITHUB_REPOSITORY" || exit
-
-su -l builder
-
-abuild snapshot
-abuild -r
