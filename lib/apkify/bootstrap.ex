@@ -15,7 +15,7 @@ defmodule Apkify.Bootstrap do
     makedepends = Keyword.get(options, :makedepends)
 
     base_path = Enum.join([@workspace, ".apk/#{namespace}/#{name}"], "/")
-    File.mkdir_p(base_path)
+    File.mkdir_p!(base_path)
 
     create_apkbuild(base_path, name, version, build, depends, makedepends)
     create_file(base_path, name, :initd)

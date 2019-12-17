@@ -7,11 +7,7 @@ defmodule Apkify.CLI do
     Bootstrap.perform(options)
 
     apk_dir =
-      [
-        System.get_env(~s(GITHUB_WORKSPACE)),
-        ".apk",
-        Keyword.get(options, :repository)
-      ]
+      [".apk", Keyword.get(options, :repository)]
       |> Enum.join("/")
 
     System.cmd(~s(cd), [apk_dir])
