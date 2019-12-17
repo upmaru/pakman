@@ -2,9 +2,19 @@ defmodule Apkify.CLI do
   alias Apkify.Bootstrap
 
   def main(args \\ []) do
-    args
-    |> parse_args()
-    |> Bootstrap.perform()
+    options = parse_args(args)
+
+    Bootstrap.perform(options)
+
+    apk_dir =
+      [
+        System.get_env(~s(GITHUB_WORKSPACE)),
+        ".apk",
+        Keyword.get(options, :repository)
+      ]
+      |> Enum.join("/")
+
+    System.cmd(~s(cd), [apk_dir])
 
     System.cmd(~s(abuild), ["snapshot"])
     System.cmd(~s(abuild), ["-r"])
