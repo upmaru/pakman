@@ -10,7 +10,7 @@ defmodule Apkify.CLI do
       [".apk", Keyword.get(options, :repository)]
       |> Enum.join("/")
 
-    System.cmd(~s(cd), [Path.join(System.get_env(~s(GITHUB_WORKSPACE)), apk_dir)])
+    File.cd!(apk_dir)
 
     System.cmd(~s(abuild), ["snapshot", "-F"])
     System.cmd(~s(abuild), ["-r", "-F"])
