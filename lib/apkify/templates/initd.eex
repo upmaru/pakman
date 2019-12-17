@@ -1,10 +1,10 @@
 #!/sbin/openrc-run
 # shellcheck shell=bash
 
-name=<%= name %>
+name="<%= name %>"
 
 # shellcheck disable=2034
-description=<%= name %>
+description="<%= name %>"
 
 # shellcheck disable=2034
 extra_commands="migrate seed"

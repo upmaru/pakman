@@ -1,15 +1,15 @@
-pkgname=<%= name %>
-pkgver=<%= version %>
-pkgrel=<%= build %>
-pkgdesc=<%= name %>
+pkgname="<%= name %>"
+pkgver="<%= version %>"
+pkgrel="<%= build %>"
+pkgdesc="<%= name %>"
 arch="noarch"
 options="!check"
-pkgusers=<%= name %>
-pkggroups=<%= name %>
+pkgusers="<%= name %>"
+pkggroups="<%= name %>"
 license="MIT"
 subpackages="<%= name %>-openrc"
-depends=<%= depends %>
-makedepends=<%= makedepends %>
+depends="<%= depends %>"
+makedepends="<%= makedepends %>"
 install="
   $pkgname.pre-install
   $pkgname.post-install
@@ -24,7 +24,7 @@ source="
   bin/config_<%= name %>
 "
 
-root=<%= System.get_env(~s(GITHUB_WORKSPACE)) %>
+root="<%= System.get_env(~s(GITHUB_WORKSPACE)) %>"
 
 snapshot() {
   abuild clean
