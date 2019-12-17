@@ -8,25 +8,9 @@ pkgusers=<%= name %>
 pkggroups=<%= name %>
 license="MIT"
 
-depends="
-  bash
-  curl
-"
+depends=<%= depends %>
 
-makedepends="
-  elixir
-  erlang-crypto
-  erlang-syntax-tools
-  erlang-hipe
-  erlang-parsetools
-  erlang-runtime-tools
-  erlang-observer
-  erlang-tools
-  erlang-xmerl
-  erlang-eunit
-  nodejs
-  yarn
-"
+makedepends=<%= makedepends %>
 
 install="
   $pkgname.pre-install
@@ -42,7 +26,7 @@ source="
   bin/config_$pkgname
 "
 
-root=../../..
+root=<%= root %>
 
 snapshot() {
   abuild clean
@@ -65,23 +49,6 @@ build() {
   MIX_ENV=prod mix do deps.get --only prod, compile
 
   MIX_ENV=prod mix release --env=prod
-}
-
-check() {
-  abuild clean
-  abuild deps
-
-  export MIX_ENV=test
-
-  cd "$root"
-
-  mix local.hex --force
-  mix local.rebar --force
-  mix deps.get --only test
-
-  mix ecto.drop
-  mix ecto.create
-  mix ecto.migrate
 }
 
 package() {
