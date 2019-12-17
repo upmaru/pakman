@@ -2,8 +2,7 @@ FROM alpine:3.10
 
 RUN apk add alpine-sdk elixir \
   && adduser -G abuild -g "Alpine Package Builder" -s /bin/ash -D builder \
-  && echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
-  && chown builder:abuild /github/workspace
+  && echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 COPY . /var/lib/apkify
 
