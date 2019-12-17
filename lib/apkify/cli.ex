@@ -12,8 +12,8 @@ defmodule Apkify.CLI do
 
     System.cmd(~s(cd), [Path.join(System.get_env(~s(GITHUB_WORKSPACE)), apk_dir)])
 
-    System.cmd(~s(abuild), ["snapshot -F"])
-    System.cmd(~s(abuild), ["-rF"])
+    System.cmd(~s(abuild), ["snapshot", "-F"])
+    System.cmd(~s(abuild), ["-r", "-F"])
   end
 
   defp parse_args(args) do
