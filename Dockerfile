@@ -1,8 +1,8 @@
 FROM alpine:3.10
 
-RUN apk add alpine-sdk elixir \
+RUN apk add alpine-sdk coreutils cmake elixir \
   && adduser -G abuild -g "Alpine Package Builder" -s /bin/ash -D builder \
-  && echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+   && echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 COPY . /var/lib/apkify
 
