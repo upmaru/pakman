@@ -26,7 +26,7 @@ source="
   bin/config_$pkgname
 "
 
-root=<%= root %>
+root=<%= System.get_env(~s(GITHUB_WORKSPACE)) %>
 
 snapshot() {
   abuild clean
