@@ -13,7 +13,7 @@ defmodule Apkify.CLI do
     File.cd!(apk_dir)
 
     System.cmd(~s(abuild), ["snapshot", "-F"])
-    System.cmd(~s(abuild), ["-rF"])
+    System.cmd(~s(abuild), ["-F", "-r"])
   end
 
   defp parse_args(args) do
