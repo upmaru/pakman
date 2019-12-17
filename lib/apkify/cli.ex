@@ -5,8 +5,7 @@ defmodule Apkify.CLI do
     args
     |> parse_args()
     |> Bootstrap.perform()
-    
-    
+
     System.cmd(~s(abuild), ["snapshot"])
     System.cmd(~s(abuild), ["-r"])
   end
