@@ -2,7 +2,7 @@ FROM alpine:3.10
 
 RUN apk add alpine-sdk elixir
 
-RUN useradd --system -s /sbin/nologin builder
+RUN adduser --system -s /sbin/nologin builder
 
 COPY . /var/lib/apkify
 
