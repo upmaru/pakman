@@ -10,4 +10,6 @@ RUN echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 WORKDIR /var/lib/apkify
 RUN mix escript.build
 
+USER builder
+
 ENTRYPOINT [ "/var/lib/apkify/bin/apkify" ]

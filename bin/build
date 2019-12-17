@@ -2,8 +2,5 @@
 
 cd "$GITHUB_WORKSPACE"/.apk/"$GITHUB_REPOSITORY" || exit
 
-su - builder
-whoami
-
 abuild snapshot
 abuild -r
