@@ -2,9 +2,13 @@ defmodule Apkify.CLI do
   alias Apkify.Bootstrap
 
   def main(args \\ []) do
-    options = parse_args(args)
-
-    Bootstrap.perform(options)
+    args
+    |> parse_args
+    |> Bootstrap.perform()
+    |> File.cd!()
+    
+    System.cmd(~s(abuild), ~w(snapshot))
+    System.cmd(~s(abuild), ~w(-r))
   end
 
   defp parse_args(args) do
