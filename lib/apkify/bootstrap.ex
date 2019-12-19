@@ -51,7 +51,7 @@ defmodule Apkify.Bootstrap do
     extension = Keyword.get(options, :extension)
 
     if extension,
-      do: [base_path, "#{name}.#{extension}"],
+      do: [base_path, "#{name}.#{type}"],
       else: [base_path, "#{name}"]
   end
 end
