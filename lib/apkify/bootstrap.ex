@@ -41,8 +41,6 @@ defmodule Apkify.Bootstrap do
   end
 
   defp create_file(base_path, name, type) do
-    path = Keyword.get(options, :path, name)
-
     [base_path, "#{name}.#{type}"]
     |> Enum.join("/")
     |> File.write(apply(Templates, type, [name]))
