@@ -29,7 +29,7 @@ defmodule Apkify.Bootstrap do
   end
 
   defp create_config(base_path, name, runtime_vars) do
-    [base_path, "bin/#{name}.config"]
+    [base_path, "#{name}.config"]
     |> Enum.join("/")
     |> File.write(Templates.config(name, runtime_vars))
   end
