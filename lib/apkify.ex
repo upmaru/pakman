@@ -7,9 +7,9 @@ defmodule Apkify do
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
 
-    abuild_config_path = Path.join(home, ".abuild")
+    System.cmd("sudo", ["chown", "-R", "builder:abuild", home])
 
-    System.cmd("sudo", ["chown", "-R", "builder:abuild", abuild_config_path])
+    abuild_config_path = Path.join(home, ".abuild")
 
     File.mkdir_p!(abuild_config_path)
 
