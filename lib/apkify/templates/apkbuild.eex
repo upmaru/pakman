@@ -20,8 +20,8 @@ install="
 source="
   $pkgname-$pkgver.tar
   $pkgname.initd
-  service/run
-  bin/config_<%= name %>
+  $pkgname.service
+  $pkgname.config
 "
 
 root="<%= System.get_env(~s(GITHUB_WORKSPACE)) %>"
@@ -60,6 +60,6 @@ package() {
   mv -v "$srcdir"/_build/prod/rel/"$pkgname"/* ./var/lib/"$pkgname"/
 
   install -Dm755 "$srcdir"/$pkgname.initd ./etc/init.d/$pkgname
-  install -Dm755 "$srcdir"/run ./var/lib/$pkgname/service/run
-  install -Dm755 "$srcdir"/config_$pkgname ./usr/bin/config_$pkgname
+  install -Dm755 "$srcdir"/$pkgname.service ./var/lib/$pkgname/service/run
+  install -Dm755 "$srcdir"/$pkgname.config ./usr/bin/config_$pkgname
 }
