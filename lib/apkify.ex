@@ -3,7 +3,7 @@ defmodule Apkify do
   Documentation for Apkify.
   """
 
-  def setup_keys do
+  def setup do
     home = System.get_env("HOME")
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
@@ -27,8 +27,8 @@ defmodule Apkify do
     |> File.write!(public_key)
   end
 
-  defp render_conf(home), do:
-    """
+  defp render_conf(home),
+    do: """
     PACKAGER_PRIVKEY=#{home}/.abuild/apkify.rsa
     """
 end

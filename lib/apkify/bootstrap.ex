@@ -37,7 +37,15 @@ defmodule Apkify.Bootstrap do
   defp create_apkbuild(base_path, name, version, build, depends, makedepends) do
     [base_path, "APKBUILD"]
     |> Enum.join("/")
-    |> File.write!(Templates.apkbuild(name, version, build, depends, makedepends))
+    |> File.write!(
+      Templates.apkbuild(name, determine_version(version), build, depends, makedepends)
+    )
+  end
+
+  defp determine_version(version) do
+    if String.match?(version, ~r/^([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)/),
+      do: version,
+      else: "0.0.0"
   end
 
   defp create_file(base_path, name, type) do

@@ -6,7 +6,7 @@ defmodule Apkify.CLI do
     |> parse_args()
     |> Bootstrap.perform()
 
-    Apkify.setup_keys()
+    Apkify.setup()
   end
 
   defp parse_args(args) do
