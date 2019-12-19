@@ -36,3 +36,5 @@ runs:
     - ${{inputs.depends}}
     - --makedepends
     - ${{inputs.makedepends}}
+    - --runtime_vars
+    - ${{inputs.runtime_vars}}
