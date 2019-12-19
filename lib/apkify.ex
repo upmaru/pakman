@@ -11,6 +11,8 @@ defmodule Apkify do
 
     System.cmd("sudo", ["chown", "-R", "builder:abuild", abuild_config_path])
 
+    File.mkdir_p!(abuild_config_path)
+
     abuild_config_path
     |> Path.join("apkify.rsa")
     |> File.write!(private_key)
