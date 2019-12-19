@@ -31,18 +31,18 @@ defmodule Apkify.Bootstrap do
   defp create_config(base_path, name, runtime_vars) do
     [base_path, "#{name}.config"]
     |> Enum.join("/")
-    |> File.write(Templates.config(name, runtime_vars))
+    |> File.write!(Templates.config(name, runtime_vars))
   end
 
   defp create_apkbuild(base_path, name, version, build, depends, makedepends) do
     [base_path, "APKBUILD"]
     |> Enum.join("/")
-    |> File.write(Templates.apkbuild(name, version, build, depends, makedepends))
+    |> File.write!(Templates.apkbuild(name, version, build, depends, makedepends))
   end
 
   defp create_file(base_path, name, type) do
     [base_path, "#{name}.#{type}"]
     |> Enum.join("/")
-    |> File.write(apply(Templates, type, [name]))
+    |> File.write!(apply(Templates, type, [name]))
   end
 end

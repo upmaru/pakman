@@ -9,12 +9,14 @@ defmodule Apkify do
 
     abuild_config_path = Path.join(home, ".abuild")
 
+    System.cmd("sudo", ["chown", "-R", "builder:abuild", abuild_config_path])
+
     abuild_config_path
     |> Path.join("apkify.rsa")
-    |> File.write(private_key)
+    |> File.write!(private_key)
 
     abuild_config_path
     |> Path.join("apkify.rsa.pub")
-    |> File.write(public_key)
+    |> File.write!(public_key)
   end
 end
