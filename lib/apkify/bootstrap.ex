@@ -13,6 +13,7 @@ defmodule Apkify.Bootstrap do
     build = Keyword.get(options, :build)
     depends = Keyword.get(options, :depends)
     makedepends = Keyword.get(options, :makedepends)
+    runtime_vars = Keyword.get(options, :runtime_vars)
 
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
 
@@ -24,6 +25,7 @@ defmodule Apkify.Bootstrap do
     create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
     create_file(base_path, name, :service, extension: false, path: "service/run")
+    create_config(base_path, name, runtime_vars)
   end
 
   defp create_config(base_path, name, runtime_vars) do
