@@ -5,8 +5,8 @@ defmodule Apkify.Bootstrap do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
     [namespace, name] =
-      options
-      |> Keyword.get(:repository)
+      ~s(GITHUB_REPOSITORY)
+      |> System.get_env()
       |> String.split("/")
 
     version = Keyword.get(options, :version)

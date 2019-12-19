@@ -14,7 +14,6 @@ defmodule Apkify.CLI do
       args
       |> OptionParser.parse(
         switches: [
-          repository: :string,
           version: :string,
           build: :string,
           depends: :string,

@@ -2,10 +2,6 @@ name: 'apkify'
 author: 'Zack Siri'
 description: 'builds project into alpine package'
 inputs:
-  repository:
-    description: 'repository name'
-    required: true
-    default: ${{ github.repository }}
   version:
     description: 'version of the app'
     required: true
@@ -26,8 +22,6 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --repository
-    - ${{inputs.repository}}
     - --version
     - ${{inputs.version}}
     - --build

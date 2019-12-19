@@ -10,6 +10,7 @@ license="MIT"
 subpackages="<%= name %>-openrc"
 depends="<%= depends %>"
 makedepends="<%= makedepends %>"
+url="https://github.com/<%= System.get_env(~s(GITHUB_REPOSITORY)) %>"
 install="
   $pkgname.pre-install
   $pkgname.post-install
