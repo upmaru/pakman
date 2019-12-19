@@ -31,7 +31,7 @@ snapshot() {
   abuild deps
 
   cd $startdir
-  tar --exclude='.apk' -cf "$pkgname-$pkgver.tar" ${root} 
+  tar --exclude='.apk' -cf "$pkgname-$pkgver.tar" ${root}
 
   abuild checksum
 }

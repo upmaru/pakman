@@ -16,4 +16,13 @@ defmodule Apkify.Templates do
   EEx.function_from_file(:def, :profile, "lib/apkify/templates/profile.eex", [
     :name
   ])
+
+  EEx.function_from_file(:def, :service, "lib/apkify/templates/service.eex", [
+    :name
+  ])
+
+  EEx.function_from_file(:def, :config, "lib/apkify/templates/config.eex", [
+    :name,
+    :runtime_vars
+  ])
 end

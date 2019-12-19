@@ -23,6 +23,13 @@ defmodule Apkify.Bootstrap do
     create_apkbuild(base_path, name, version, build, depends, makedepends)
     create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
+    create_file(base_path, name, :service, extension: false, path: "service/run")
+  end
+
+  defp create_config(base_path, name, runtime_vars) do
+    [base_path, "bin/config_#{name}"]
+    |> Enum.join("/")
+    |> File.write(Templates.config(name, runtime_vars))
   end
 
   defp create_apkbuild(base_path, name, version, build, depends, makedepends) do
@@ -31,9 +38,20 @@ defmodule Apkify.Bootstrap do
     |> File.write(Templates.apkbuild(name, version, build, depends, makedepends))
   end
 
-  defp create_file(base_path, name, extension) do
-    [base_path, "#{name}.#{extension}"]
+  defp create_file(base_path, name, type, options \\ [extension: true]) do
+    path = Keyword.get(options, :path, name)
+
+    base_path
+    |> file_path(path, type, options)
     |> Enum.join("/")
-    |> File.write(apply(Templates, extension, [name]))
+    |> File.write(apply(Templates, type, [name]))
+  end
+
+  defp file_path(base_path, name, type, options) do
+    extension = Keyword.get(options, :extension)
+
+    if extension,
+      do: [base_path, "#{name}.#{extension}"],
+      else: [base_path, "#{name}"]
   end
 end
