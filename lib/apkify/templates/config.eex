@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -e
+
+name="<%= name %>"
+
+# put ENV variable keys here
+keys="<%= runtime_vars %>"
+
+for k in ${keys}; do
+  export "${k}"="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user."${k}")";
+done
+
+NODE_IP=$(cat /var/lib/${name}/.self)
+export NODE_IP
+
+if [ -e "/var/lib/${name}/.cluster" ]
+then
+  rm -f "/var/lib/${name}/.hosts.erlang"
+  hosts=$(cat /var/lib/${name}/.cluster)
+
+  for host in ${hosts}; do
+    echo "'${host}'." >> "/var/lib/${name}/.hosts.erlang"
+  done
+fi
+
+export HOME=/var/lib/${name}
+export REPLACE_OS_VARS=true
+export MIX_ENV=prod
