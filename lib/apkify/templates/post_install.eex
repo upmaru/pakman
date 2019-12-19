@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rc-update add <%= name %>
+rc-service <%= name %> migrate
+rc-service <%= name %> start
