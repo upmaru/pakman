@@ -25,6 +25,10 @@ defmodule Apkify.Bootstrap do
     create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
     create_file(base_path, name, :service)
+    create_file(base_path, name, :pre_install)
+    create_file(base_path, name, :post_install)
+    create_file(base_path, name, :post_upgrade)
+    create_file(base_path, name, :pre_deinstall)
     create_config(base_path, name, runtime_vars)
   end
 
@@ -49,7 +53,12 @@ defmodule Apkify.Bootstrap do
   end
 
   defp create_file(base_path, name, type) do
-    [base_path, "#{name}.#{type}"]
+    file_type =
+      type
+      |> Atom.to_string()
+      |> String.replace("_", "-")
+
+    [base_path, "#{name}.#{file_type}"]
     |> Enum.join("/")
     |> File.write!(apply(Templates, type, [name]))
   end
