@@ -38,10 +38,6 @@ snapshot() {
 }
 
 build() {
-  cd "$srcdir/assets"
-  yarn install
-  yarn run build
-
   cd "$srcdir"
   mix local.hex --force
   mix local.rebar --force
