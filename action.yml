@@ -14,10 +14,6 @@ inputs:
   makedepends:
     description: 'Build Dependencies'
     required: true
-  runtime_vars:
-    description: 'Runtime Variables'
-    required: true
-    default: 'DATABASE_URL'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -30,5 +26,3 @@ runs:
     - ${{inputs.depends}}
     - --makedepends
     - ${{inputs.makedepends}}
-    - --runtime_vars
-    - ${{inputs.runtime_vars}}
