@@ -17,8 +17,7 @@ defmodule Apkify.CLI do
           version: :string,
           build: :string,
           depends: :string,
-          makedepends: :string,
-          runtime_vars: :string
+          makedepends: :string        
         ]
       )
 
