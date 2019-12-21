@@ -36,9 +36,4 @@ defmodule Apkify.Templates do
   EEx.function_from_file(:def, :pre_deinstall, "lib/apkify/templates/pre_deinstall.eex", [
     :name
   ])
-
-  EEx.function_from_file(:def, :config, "lib/apkify/templates/config.eex", [
-    :name,
-    :runtime_vars
-  ])
 end
