@@ -41,9 +41,9 @@ build() {
   cd "$srcdir"
   mix local.hex --force
   mix local.rebar --force
-  MIX_ENV=prod mix do deps.get --only prod, compile
+  MIX_ENV=prod mix do deps.get --only prod
 
-  MIX_ENV=prod mix release --env=prod
+  MIX_ENV=prod mix release
 }
 
 package() {
