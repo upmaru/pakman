@@ -39,7 +39,6 @@ snapshot() {
 
 build() {
   cd "$srcdir"
-  ls -la
   mix local.hex --force
   mix local.rebar --force
   MIX_ENV=prod mix do deps.get --only prod, compile
