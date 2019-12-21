@@ -22,7 +22,6 @@ source="
   $pkgname-$pkgver.tar
   $pkgname.initd
   $pkgname.service
-  $pkgname.config
 "
 
 root=../../..

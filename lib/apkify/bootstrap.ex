@@ -29,13 +29,6 @@ defmodule Apkify.Bootstrap do
     create_file(base_path, name, :post_install)
     create_file(base_path, name, :post_upgrade)
     create_file(base_path, name, :pre_deinstall)
-    create_config(base_path, name, runtime_vars)
-  end
-
-  defp create_config(base_path, name, runtime_vars) do
-    [base_path, "#{name}.config"]
-    |> Enum.join("/")
-    |> File.write!(Templates.config(name, runtime_vars))
   end
 
   defp create_apkbuild(base_path, name, version, build, depends, makedepends) do
