@@ -37,12 +37,14 @@ snapshot() {
 }
 
 build() {
+  export MIX_ENV=prod
+
   cd "$srcdir"
   mix local.hex --force
   mix local.rebar --force
-  MIX_ENV=prod mix do deps.get --only prod
+  mix do deps.get --only prod
 
-  MIX_ENV=prod mix release
+  mix release
 }
 
 package() {
