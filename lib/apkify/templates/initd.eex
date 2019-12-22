@@ -18,11 +18,11 @@ s6_service_path="${RC_SVCDIR}/s6-scan/<%= name %>"
 command=/var/lib/<%= name %>/bin/<%= name %>
 
 migrate() {
-  source config_<%= name %> && $command migrate
+  $command migrate
 }
 
 seed() {
-  source config_<%= name %> && $command seed
+  $command seed
 }
 
 depend() {
