@@ -3,4 +3,4 @@
 name=<%= name %>
 command=/var/lib/<%= name %>/bin/<%= name %>
 
-${command} start > /var/log/${name}.log 2>&1
+exec ${command} start > /var/log/${name}.log 2>&1
