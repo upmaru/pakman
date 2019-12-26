@@ -28,6 +28,8 @@ defmodule Apkify.Bootstrap do
     create_file(base_path, name, :post_install)
     create_file(base_path, name, :post_upgrade)
     create_file(base_path, name, :pre_deinstall)
+
+    Apkify.setup()
   end
 
   defp create_apkbuild(base_path, name, version, build, depends, makedepends) do
