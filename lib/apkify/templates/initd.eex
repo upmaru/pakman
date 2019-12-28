@@ -18,11 +18,11 @@ s6_service_path="${RC_SVCDIR}/s6-scan/<%= name %>"
 command=/var/lib/<%= name %>/bin/<%= name %>
 
 migrate() {
-  $command migrate
+  $command eval "<%= Macro.camelize(name) %>.Release.Tasks.migrate"
 }
 
 seed() {
-  $command seed
+  $command eval "<%= Macro.camelize(name) %>.Release.Tasks.seed"
 }
 
 depend() {
