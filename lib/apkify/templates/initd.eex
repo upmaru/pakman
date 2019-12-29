@@ -19,14 +19,12 @@ command=/var/lib/<%= name %>/bin/<%= name %>
 
 migrate() {
   export HOME=/var/lib/<%= name %>
-  export MIX_ENV=prod
-  $command eval "<%= Macro.camelize(name) %>.Release.Tasks.migrate"
+  $command rpc "<%= Macro.camelize(name) %>.Release.Tasks.migrate"
 }
 
 seed() {
   export HOME=/var/lib/<%= name %>
-  export MIX_ENV=prod
-  $command eval "<%= Macro.camelize(name) %>.Release.Tasks.seed"
+  $command rpc "<%= Macro.camelize(name) %>.Release.Tasks.seed"
 }
 
 depend() {
