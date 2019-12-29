@@ -1,4 +1,4 @@
 #!/bin/sh
 
-rc-service <%= name %> migrate
 rc-service <%= name %> restart
+rc-service <%= name %> migrate
