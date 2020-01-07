@@ -30,6 +30,12 @@ defmodule Pakman.Instellar do
       |> Multipart.add_field("deployment[ref]", System.get_env("GITHUB_REF"))
       |> Multipart.add_field("deployment[hash]", System.get_env("GITHUB_SHA"))
 
-    post("/publish/deployments", multipart, headers: headers)
+    case post("/publish/deployments", multipart, headers: headers) do
+      {:ok, %{status: 201, body: body}} ->
+        {:ok, body["data"]}
+
+      _ ->
+        {:error, :deployment_creation_failed}
+    end
   end
 end
