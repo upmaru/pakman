@@ -1,5 +1,8 @@
 defmodule Pakman.Deploy do
-  def perform(options) do
-    
-  end
+  alias Pakman.Instellar
+
+  # def perform(options) do
+  #   with {:ok, token} <- Instellar.authenticate(),
+  #        {:ok, }
+  # end
 end
