@@ -1,4 +1,4 @@
-name: 'apkify'
+name: 'pakman'
 author: 'Zack Siri'
 description: 'builds project into alpine package'
 inputs:

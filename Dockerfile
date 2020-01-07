@@ -4,11 +4,11 @@ RUN apk add alpine-sdk coreutils cmake \
   && adduser -G abuild -g "Alpine Package Builder" -s /bin/ash -D builder \
   && echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-COPY . /var/lib/apkify
+COPY . /var/lib/pakman
 
-WORKDIR /var/lib/apkify
+WORKDIR /var/lib/pakman
 RUN mix escript.build
 
 USER builder
 
-ENTRYPOINT [ "/var/lib/apkify/bin/apkify" , "bootstrap" ]
+ENTRYPOINT [ "/var/lib/pakman/bin/pakman" , "bootstrap" ]

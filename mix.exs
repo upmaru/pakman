@@ -1,16 +1,16 @@
-defmodule Apkify.MixProject do
+defmodule Pakman.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :apkify,
+      app: :pakman,
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       escript: [
-        main_module: Apkify.CLI,
-        path: "bin/apkify"
+        main_module: Pakman.CLI,
+        path: "bin/pakman"
       ]
     ]
   end

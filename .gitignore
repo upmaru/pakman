@@ -10,7 +10,7 @@
 # Where third-party dependencies like ExDoc output generated docs.
 /doc/
 
-!/bin/apkify
+!/bin/pakman
 
 # Ignore .fetch files in case you like to edit your project deps locally.
 /.fetch
@@ -22,5 +22,5 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-apkify-*.tar
+pakman-*.tar
 
