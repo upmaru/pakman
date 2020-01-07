@@ -1,7 +1,7 @@
 defmodule Pakman.Instellar do
   use Tesla
 
-  plug(Tesla.Middleware.BaseUrl, "http://localhost:4000")
+  plug(Tesla.Middleware.BaseUrl, "https://instellar.app")
   plug(Tesla.Middleware.JSON)
 
   alias Tesla.Multipart
@@ -17,7 +17,7 @@ defmodule Pakman.Instellar do
 
   def create_deployment(token, archive_path) do
     package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
-    
+
     headers = [
       {"authorization", "Bearer #{token}"},
       {"x-instellar-package-token", package_token}
