@@ -7,6 +7,11 @@ defmodule Pakman.CLI do
         depends: :string,
         makedepends: :string
       ]
+    ],
+    deploy: [
+      switches: [
+        package_path: :string
+      ]
     ]
   ]
 
