@@ -8,6 +8,7 @@ COPY . /var/lib/pakman
 
 WORKDIR /var/lib/pakman
 
+RUN mix local.hex --force
 RUN mix deps.get
 RUN mix escript.build
 
