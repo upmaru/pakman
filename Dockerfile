@@ -7,6 +7,8 @@ RUN apk add alpine-sdk coreutils cmake \
 COPY . /var/lib/pakman
 
 WORKDIR /var/lib/pakman
+
+RUN mix deps.get
 RUN mix escript.build
 
 USER builder
