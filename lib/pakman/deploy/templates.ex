@@ -1,4 +1,6 @@
 defmodule Pakman.Deploy.Templates do
+  require EEx
+  
   @prefix "lib/pakman/templates/deploy"
 
   EEx.function_from_file(

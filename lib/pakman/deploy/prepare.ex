@@ -2,7 +2,7 @@ defmodule Pakman.Deploy.Prepare do
   alias Pakman.Environment
   alias Pakman.Deploy.Templates
 
-  def perform(options) do
+  def perform(_options) do
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
     package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
     branch = Environment.branch()
