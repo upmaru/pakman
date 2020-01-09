@@ -2,17 +2,11 @@ name: 'pakman'
 author: 'Zack Siri'
 description: 'builds project into alpine package'
 inputs:
-  version:
-    description: 'version of the app'
+  command:
+    description: 'command to run'
     required: true
-  build:
-    description: 'build number'
-    required: true
-  depends:
-    description: 'Runtime Dependencies'
-    required: true
-  makedepends:
-    description: 'Build Dependencies'
+  options:
+    description: 'arguments'
     required: true
 runs:
   using: 'docker'
@@ -20,3 +14,5 @@ runs:
   args:
     - --command
     - ${{inputs.command}}
+    - --options
+    - ${{inputs.options}}
