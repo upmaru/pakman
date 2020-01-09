@@ -26,8 +26,9 @@ defmodule Pakman.CLI do
 
   def main(args \\ []) do
     {[command: command], [], []} = OptionParser.parse(args, @switches)
+    command = String.to_atom(command)
 
-    apply(Pakman, command, [parse_args(String.to_atom(command), args)])
+    apply(Pakman, command, [parse_args(command, args)])
   end
 
   defp parse_args(command, args) do
