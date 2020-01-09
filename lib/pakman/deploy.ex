@@ -11,7 +11,7 @@ defmodule Pakman.Deploy do
     package_path = Keyword.fetch!(options, :package_path)
 
     with {:ok, token} <- Instellar.authenticate(),
-         {:ok, response} <- Instellar.create_deployment(token, package_path) do
+         {:ok, _response} <- Instellar.create_deployment(token, package_path) do
       Logger.info("[Pakman.Deploy] Deployment successfully created...")
     else
       _ ->
