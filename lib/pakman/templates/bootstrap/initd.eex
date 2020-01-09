@@ -1,0 +1,38 @@
+#!/sbin/openrc-run
+# shellcheck shell=bash
+
+name="<%= name %>"
+
+# shellcheck disable=2034
+description="<%= name %>"
+
+# shellcheck disable=2034
+extra_commands="migrate seed"
+
+# shellcheck disable=2034
+supervisor="s6"
+
+# shellcheck disable=2034
+s6_service_path="${RC_SVCDIR}/s6-scan/<%= name %>"
+
+command=/var/lib/<%= name %>/bin/<%= name %>
+
+migrate() {
+  export HOME=/var/lib/<%= name %>
+  $command rpc "<%= Macro.camelize(name) %>.Release.Tasks.migrate"
+}
+
+seed() {
+  export HOME=/var/lib/<%= name %>
+  $command rpc "<%= Macro.camelize(name) %>.Release.Tasks.seed"
+}
+
+depend() {
+  need net s6-svscan
+}
+
+start_pre() {
+  if [ ! -L "${RC_SVCDIR}/s6-scan/<%= name %>" ]; then
+    ln -s "/var/lib/<%= name %>/service" "${RC_SVCDIR}/s6-scan/<%= name %>"
+  fi
+}

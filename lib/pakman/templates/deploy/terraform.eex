@@ -1,0 +1,3 @@
+app_name="<%= name %>"
+app_hostname="<%= name %>"
+app_version="<%= System.get_env(~s(GITHUB_SHA)) %>"

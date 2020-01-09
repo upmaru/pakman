@@ -1,0 +1,66 @@
+pkgname="<%= name %>"
+pkgver="<%= version %>"
+pkgrel="<%= build %>"
+pkgdesc="<%= name %>"
+arch="x86_64"
+options="!check"
+pkgusers="<%= name %>"
+pkggroups="<%= name %>"
+license="MIT"
+subpackages="<%= name %>-openrc"
+depends="<%= depends %>"
+makedepends="<%= makedepends %>"
+url="https://github.com/<%= System.get_env(~s(GITHUB_REPOSITORY)) %>"
+install="
+  $pkgname.pre-install
+  $pkgname.post-install
+  $pkgname.post-upgrade
+  $pkgname.pre-deinstall
+"
+
+source="
+  $pkgname-$pkgver.tar
+  $pkgname.initd
+  $pkgname.service
+"
+
+root=../../..
+
+snapshot() {
+  abuild clean
+  abuild deps
+
+  cd $startdir
+  tar --exclude='.apk' -cf "$pkgname-$pkgver.tar" ${root}
+
+  abuild checksum
+}
+
+build() {
+  export MIX_ENV=prod
+
+  cd "$srcdir"
+  mix local.hex --force
+  mix local.rebar --force
+  mix do deps.get --only prod
+  npm --prefix ./assets install ./assets
+
+  npm run deploy --prefix ./assets
+  mix phx.digest
+
+  mix release
+}
+
+package() {
+  mkdir -p "$pkgdir"
+
+	cd "$pkgdir"
+
+  install -dm755 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"/
+  install -dm755 -g $pkggroups ./var/www/localhost/htdocs/console/
+
+  mv -v "$srcdir"/_build/prod/rel/"$pkgname"/* ./var/lib/"$pkgname"/
+
+  install -Dm755 "$srcdir"/"$pkgname".initd ./etc/init.d/"$pkgname"
+  install -Dm755 "$srcdir"/"$pkgname".service ./var/lib/"$pkgname"/service/run
+}

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if [ ! -f /var/lib/<%= name %>/bin/<%= name %> ]
+then
+  echo "https://instellar.app/distribution/<%= package_token %>/channels/<%= ref %> >> /etc/apk/repositories
+fi
