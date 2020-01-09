@@ -22,7 +22,7 @@ runs:
     - --command
     - ${{inputs.command}}
     - --version
-    - ${{inputs.options}}
+    - ${{inputs.version}}
     - --build
     - ${{inputs.build}}
     - --depends
