@@ -16,7 +16,7 @@ defmodule Pakman.Deploy.Prepare do
     |> File.write!(public_key)
   end
 
-  defp create_setup(name, branch, package_oken) do
+  defp create_setup(name, branch, package_token) do
     ["deploy", "setup.start"]
     |> Path.join()
     |> File.write!(Templates.local_d_setup(name, branch, package_token))
