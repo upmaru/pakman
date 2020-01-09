@@ -16,6 +16,6 @@ defmodule Pakman.CLI do
 
     command = String.to_atom(command)
 
-    apply(Pakman, command, options)
+    apply(Pakman, command, [options])
   end
 end
