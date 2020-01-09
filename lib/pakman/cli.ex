@@ -25,8 +25,7 @@ defmodule Pakman.CLI do
   ]
 
   def main(args \\ []) do
-    {opts, _} = OptionParser.parse(args, @switches)
-    command = Keyword.fetch!(opts, :command)
+    {[command: command], [], []} = OptionParser.parse(args, @switches)
 
     apply(Pakman, command, [parse_args(command, args)])
   end
