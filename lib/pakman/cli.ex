@@ -14,9 +14,7 @@ defmodule Pakman.CLI do
       ]
     ],
     prepare_launch_deployment: [
-      switches: [
-        package_token: :string
-      ]
+      switches: []
     ]
   ]
 

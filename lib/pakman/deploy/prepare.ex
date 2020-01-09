@@ -4,7 +4,7 @@ defmodule Pakman.Deploy.Prepare do
 
   def perform(options) do
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
-    package_token = Keyword.fetch!(options, :package_token)
+    package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
     branch = Environment.branch()
     %{name: name} = Environment.repository()
 
