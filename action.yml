@@ -18,11 +18,5 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --version
-    - ${{inputs.version}}
-    - --build
-    - ${{inputs.build}}
-    - --depends
-    - ${{inputs.depends}}
-    - --makedepends
-    - ${{inputs.makedepends}}
+    - --command
+    - ${{inputs.command}}

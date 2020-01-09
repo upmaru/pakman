@@ -1,5 +1,11 @@
 defmodule Pakman.CLI do
   @switches [
+    switches: [
+      command: :string
+    ]
+  ]
+
+  @sub_switches [
     bootstrap: [
       switches: [
         version: :string,
@@ -19,16 +25,14 @@ defmodule Pakman.CLI do
   ]
 
   def main(args \\ []) do
-    command =
-      args
-      |> List.first()
-      |> String.to_atom()
+    {opts, _} = OptionParser.parse(args, @switches)
+    command = Keyword.fetch!(opts, :command)
 
     apply(Pakman, command, [parse_args(command, args)])
   end
 
   defp parse_args(command, args) do
-    switches = Keyword.fetch!(@switches, command)
+    switches = Keyword.fetch!(@sub_switches, command)
 
     {opts, _word, _} =
       args

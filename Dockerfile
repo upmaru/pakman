@@ -14,4 +14,4 @@ RUN mix escript.build
 
 USER builder
 
-ENTRYPOINT [ "/var/lib/pakman/bin/pakman" , "bootstrap" ]
+ENTRYPOINT [ "/var/lib/pakman/bin/pakman" ]
