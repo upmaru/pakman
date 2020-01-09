@@ -8,9 +8,14 @@ defmodule Pakman.CLI do
         makedepends: :string
       ]
     ],
-    deploy: [
+    create_deployment: [
       switches: [
         package_path: :string
+      ]
+    ],
+    prepare_launch_deployment: [
+      switches: [
+        package_token: :string
       ]
     ]
   ]

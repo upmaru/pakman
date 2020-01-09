@@ -1,13 +1,11 @@
 defmodule Pakman.Bootstrap do
-  alias Pakman.Templates
+  alias Pakman.Environment
+  alias Pakman.Bootstrap.Templates
 
   def perform(options) do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
-    [namespace, name] =
-      ~s(GITHUB_REPOSITORY)
-      |> System.get_env()
-      |> String.split("/")
+    %{organization: namespace, name: name} = Environment.repository()
 
     version = Keyword.get(options, :version)
     build = Keyword.get(options, :build)
@@ -36,14 +34,23 @@ defmodule Pakman.Bootstrap do
     [base_path, "APKBUILD"]
     |> Enum.join("/")
     |> File.write!(
-      Templates.apkbuild(name, determine_version(version), build, depends, makedepends)
+      Templates.apkbuild(
+        name,
+        determine_version(version),
+        build,
+        depends,
+        makedepends
+      )
     )
   end
 
   defp determine_version(version) do
-    if String.match?(version, ~r/^([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)/),
-      do: version,
-      else: "0.0.0"
+    if String.match?(
+         version,
+         ~r/^([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)/
+       ),
+       do: version,
+       else: "0.0.0"
   end
 
   defp create_file(base_path, name, type) do
