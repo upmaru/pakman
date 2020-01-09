@@ -6,7 +6,7 @@ defmodule Pakman.CLI do
       build: :string,
       depends: :string,
       makedepends: :string,
-      package_path: :string
+      archive: :string
     ]
   ]
 

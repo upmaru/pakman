@@ -13,8 +13,8 @@ inputs:
     description: 'dependencies'
   makedepends:
     description: 'build dependencies'
-  package_path:
-    description: 'package path'
+  archive:
+    description: 'archive path'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -29,5 +29,5 @@ runs:
     - ${{inputs.depends}}
     - --makedepends
     - ${{inputs.makedepends}}
-    - --package_path
-    - ${{inputs.package_path}}
+    - --archive
+    - ${{inputs.archive}}
