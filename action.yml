@@ -5,14 +5,29 @@ inputs:
   command:
     description: 'command to run'
     required: true
-  options:
-    description: 'arguments'
-    required: true
+  version:
+    description: 'version'
+  build:
+    description: 'build'
+  depends:
+    description: 'dependencies'
+  makedepends:
+    description: 'build dependencies'
+  package_path:
+    description: 'package path'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - --command
     - ${{inputs.command}}
-    - --options
+    - --version
     - ${{inputs.options}}
+    - --build
+    - ${{inputs.build}}
+    - --depends
+    - ${{inputs.depends}}
+    - --makedepends
+    - ${{inputs.makedepends}}
+    - --package_path
+    - ${{inputs.package_path}}
