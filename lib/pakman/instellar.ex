@@ -32,7 +32,10 @@ defmodule Pakman.Instellar do
 
     case post("/publish/deployments", multipart, headers: headers) do
       {:ok, %{status: 201, body: body}} ->
-        {:ok, body["data"]}
+        {:ok, :created, body["data"]}
+
+      {:ok, %{status: 200, body: body}} ->
+        {:ok, :already_exists, body["data"]}
 
       _ ->
         {:error, :deployment_creation_failed}
