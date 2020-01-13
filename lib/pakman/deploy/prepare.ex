@@ -8,6 +8,8 @@ defmodule Pakman.Deploy.Prepare do
     branch = Environment.branch()
     %{name: name} = Environment.repository()
 
+    File.mkdir_p!(~s(deploy))
+
     create_setup(name, branch, package_token)
     create_terraform_vars(name)
 
