@@ -9,7 +9,7 @@ defmodule Pakman.Instellar do
   def authenticate do
     auth_token = System.get_env("INSTELLAR_AUTH_TOKEN")
 
-    case post("/auth/automation/callback", %{auth_token: auth_token}) do
+    case post("/publish/automation/callback", %{auth_token: auth_token}) do
       {:ok, %{status: 201, body: body}} -> {:ok, body["data"]["token"]}
       {:ok, %{status: 404}} -> {:error, :not_found}
     end
