@@ -17,7 +17,7 @@ defmodule Pakman.Bootstrap do
 
     File.mkdir_p!(base_path)
 
-    create_apkbuild(base_path, name, version, build, config)
+    IO.inspect(create_apkbuild(base_path, name, version, build, config))
     create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
     create_file(base_path, name, :service)
