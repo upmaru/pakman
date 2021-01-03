@@ -11,8 +11,7 @@ defmodule Pakman.Bootstrap.Templates do
       :name,
       :version,
       :build,
-      :depends,
-      :makedepends
+      :configuration
     ]
   )
 

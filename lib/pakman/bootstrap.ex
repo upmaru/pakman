@@ -9,16 +9,15 @@ defmodule Pakman.Bootstrap do
 
     version = Keyword.get(options, :version)
     build = Keyword.get(options, :build)
-    depends = Keyword.get(options, :depends)
-    makedepends = Keyword.get(options, :makedepends)
 
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
+    config = YamlElixir.read_from_file!(Path.join(workspace, "instellar.yml"))
 
     System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
 
     File.mkdir_p!(base_path)
 
-    create_apkbuild(base_path, name, version, build, depends, makedepends)
+    create_apkbuild(base_path, name, version, build, config)
     create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
     create_file(base_path, name, :service)
@@ -30,7 +29,7 @@ defmodule Pakman.Bootstrap do
     Pakman.setup()
   end
 
-  defp create_apkbuild(base_path, name, version, build, depends, makedepends) do
+  defp create_apkbuild(base_path, name, version, build, configuration) do
     [base_path, "APKBUILD"]
     |> Enum.join("/")
     |> File.write!(
@@ -38,8 +37,7 @@ defmodule Pakman.Bootstrap do
         name,
         determine_version(version),
         build,
-        depends,
-        makedepends
+        configuration
       )
     )
   end
