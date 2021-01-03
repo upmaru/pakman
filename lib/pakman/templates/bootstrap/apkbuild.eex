@@ -38,7 +38,7 @@ snapshot() {
 
 build() {
   cd "$srcdir"
-  <%= configuration["build"] %>
+  <%= configuration["build"]["command"] %>
 }
 
 package() {
@@ -49,7 +49,7 @@ package() {
   install -dm755 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"/
   install -dm755 -g $pkggroups ./var/www/localhost/htdocs/console/
 
-  mv -v "$srcdir"/_build/prod/rel/"$pkgname"/* ./var/lib/"$pkgname"/
+  mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/"$pkgname"/
 
   install -Dm755 "$srcdir"/"$pkgname".initd ./etc/init.d/"$pkgname"
   install -Dm755 "$srcdir"/"$pkgname".service ./var/lib/"$pkgname"/service/run

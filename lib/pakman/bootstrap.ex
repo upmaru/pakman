@@ -18,14 +18,12 @@ defmodule Pakman.Bootstrap do
 
     File.mkdir_p!(base_path)
 
-    IO.inspect(
-      create_apkbuild(
-        base_path,
-        name,
-        String.trim(version),
-        String.trim(build),
-        config
-      )
+    create_apkbuild(
+      base_path,
+      name,
+      String.trim(version),
+      String.trim(build),
+      config
     )
 
     create_file(base_path, name, :initd)
