@@ -19,7 +19,7 @@ defmodule Pakman.Bootstrap do
         "dependencies" =>
           Map.merge(Map.get(config["dependencies"], %{}), %{
             "runtime" =>
-              Map.get(config["dependencies"]["runtime"], []) ++
+              config["dependencies"]["runtime"] ++
                 base_runtime_dependencies(config["type"])
           })
       })
