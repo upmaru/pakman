@@ -14,6 +14,16 @@ defmodule Pakman.Bootstrap do
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
     config = YamlElixir.read_from_file!(Path.join(workspace, "instellar.yml"))
 
+    config =
+      Map.merge(config, %{
+        "dependencies" =>
+          Map.merge(Map.get(config["dependencies"], %{}), %{
+            "runtime" =>
+              Map.get(config["dependencies"]["runtime"], []) ++
+                base_runtime_dependencies(config["type"])
+          })
+      })
+
     System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
 
     File.mkdir_p!(base_path)
@@ -26,13 +36,7 @@ defmodule Pakman.Bootstrap do
       config
     )
 
-    create_file(base_path, name, :initd)
-    create_file(base_path, name, :profile)
-    create_file(base_path, name, :service)
-    create_file(base_path, name, :pre_install)
-    create_file(base_path, name, :post_install)
-    create_file(base_path, name, :post_upgrade)
-    create_file(base_path, name, :pre_deinstall)
+    create_build_files(base_path, name, config["type"])
 
     Pakman.setup()
   end
@@ -57,6 +61,26 @@ defmodule Pakman.Bootstrap do
        ),
        do: version,
        else: "0.0.0"
+  end
+
+  defp base_runtime_dependencies("static"), do: ["nginx"]
+  defp base_runtime_dependencies(_), do: []
+
+  defp create_build_files(base_path, name, "static") do
+    create_file(base_path, name, :pre_install)
+    create_file(base_path, name, :post_install)
+    create_file(base_path, name, :post_upgrade)
+    create_file(base_path, name, :pre_deinstall)
+  end
+
+  defp create_build_files(base_path, name, _) do
+    create_file(base_path, name, :initd)
+    create_file(base_path, name, :profile)
+    create_file(base_path, name, :service)
+    create_file(base_path, name, :pre_install)
+    create_file(base_path, name, :post_install)
+    create_file(base_path, name, :post_upgrade)
+    create_file(base_path, name, :pre_deinstall)
   end
 
   defp create_file(base_path, name, type) do

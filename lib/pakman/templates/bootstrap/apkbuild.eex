@@ -20,8 +20,10 @@ install="
 
 source="
   $pkgname-$pkgver.tar
+<%= if configuration["type"] != "static" do %>
   $pkgname.initd
   $pkgname.service
+<% end %>
 "
 
 root=../../..
@@ -48,6 +50,10 @@ package() {
 
   install -dm755 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"/
   install -dm755 -g $pkggroups ./var/www/localhost/htdocs/console/
+
+  <%= if configuration["type"] == "static" do %>
+  mv -v "$srcdir"/nginx.conf ./etc/nginx/conf.d/"$pkgname".conf
+  <% end %>
 
   mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/"$pkgname"/
 
