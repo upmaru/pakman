@@ -55,10 +55,10 @@ package() {
 
   mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/"$pkgname"/
 
-  <%= if configuration["type"] == "static" do %>
+<%= if configuration["type"] == "static" do %>
   install -Dm644 "$srcdir"/nginx.conf ./etc/nginx/conf.d/default.conf
-  <% else %>
+<% else %>
   install -Dm755 "$srcdir"/"$pkgname".initd ./etc/init.d/"$pkgname"
   install -Dm755 "$srcdir"/"$pkgname".service ./var/lib/"$pkgname"/service/run
-  <% end %>
+<% end %>
 }
