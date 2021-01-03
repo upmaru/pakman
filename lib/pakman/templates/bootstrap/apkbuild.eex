@@ -7,7 +7,9 @@ options="!check"
 pkgusers="<%= name %>"
 pkggroups="<%= name %>"
 license="MIT"
+<%= if configuration["type"] != "static" do %>
 subpackages="<%= name %>-openrc"
+<% end %>
 depends="<%= Enum.join(configuration["dependencies"]["runtime"], " ") %>"
 makedepends="<%= Enum.join(configuration["dependencies"]["build"], " ") %>"
 url="https://github.com/<%= System.get_env(~s(GITHUB_REPOSITORY)) %>"
@@ -59,5 +61,4 @@ package() {
   install -Dm755 "$srcdir"/"$pkgname".initd ./etc/init.d/"$pkgname"
   install -Dm755 "$srcdir"/"$pkgname".service ./var/lib/"$pkgname"/service/run
   <% end %>
-
 }
