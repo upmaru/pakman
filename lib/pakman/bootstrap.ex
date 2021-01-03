@@ -17,10 +17,12 @@ defmodule Pakman.Bootstrap do
     config =
       Map.merge(config, %{
         "dependencies" =>
-          Map.merge(Map.get(config["dependencies"], %{}), %{
+          Map.merge(config["dependencies"], %{
             "runtime" =>
-              config["dependencies"]["runtime"] ++
-                base_runtime_dependencies(config["type"])
+              merge_runtime_dependencies(
+                config["dependencies"]["runtime"],
+                config["type"]
+              )
           })
       })
 
@@ -63,8 +65,14 @@ defmodule Pakman.Bootstrap do
        else: "0.0.0"
   end
 
-  defp base_runtime_dependencies("static"), do: ["nginx"]
-  defp base_runtime_dependencies(_), do: []
+  defp merge_runtime_dependencies(nil, type),
+    do: merge_runtime_dependencies([], type)
+
+  defp merge_runtime_dependencies(original, "static") when is_list(original),
+    do: original ++ ["nginx"]
+
+  defp merge_runtime_dependencies(original, _) when is_list(original),
+    do: original
 
   defp create_build_files(base_path, name, "static") do
     create_file(base_path, name, :pre_install)
