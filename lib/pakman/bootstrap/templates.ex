@@ -16,8 +16,7 @@ defmodule Pakman.Bootstrap.Templates do
   )
 
   EEx.function_from_file(:def, :initd, Path.join(@prefix, "initd.eex"), [
-    :name,
-    :configuration
+    :name
   ])
 
   EEx.function_from_file(
@@ -25,8 +24,7 @@ defmodule Pakman.Bootstrap.Templates do
     :profile,
     Path.join(@prefix, "profile.eex"),
     [
-      :name,
-      :configuration
+      :name
     ]
   )
 
@@ -35,8 +33,7 @@ defmodule Pakman.Bootstrap.Templates do
     :service,
     Path.join(@prefix, "service.eex"),
     [
-      :name,
-      :configuration
+      :name
     ]
   )
 
@@ -45,8 +42,7 @@ defmodule Pakman.Bootstrap.Templates do
     :pre_install,
     Path.join(@prefix, "pre_install.eex"),
     [
-      :name,
-      :configuration
+      :name
     ]
   )
 
