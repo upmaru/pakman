@@ -2,7 +2,7 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Environment
   alias Pakman.Bootstrap.Templates
 
-  def perform(_options) do
+  def perform(options) do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
     %{organization: namespace, name: name} = Environment.repository()
@@ -40,6 +40,9 @@ defmodule Pakman.Bootstrap do
 
     create_build_files(base_path, name, config["type"])
 
+    Map.get(config, "hook", %{})
+    |> Enum.map(&create_hook_file(&1, base_path, name))
+
     Pakman.setup()
   end
 
@@ -74,21 +77,20 @@ defmodule Pakman.Bootstrap do
   defp merge_runtime_dependencies(original, _) when is_list(original),
     do: original
 
-  defp create_build_files(base_path, name, "static") do
-    create_file(base_path, name, :pre_install)
-    create_file(base_path, name, :post_install)
-    create_file(base_path, name, :post_upgrade)
-    create_file(base_path, name, :pre_deinstall)
-  end
+  defp create_build_files(base_path, name, "static"),
+    do: create_file(base_path, name, :pre_install)
 
   defp create_build_files(base_path, name, _) do
     create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
     create_file(base_path, name, :service)
     create_file(base_path, name, :pre_install)
-    create_file(base_path, name, :post_install)
-    create_file(base_path, name, :post_upgrade)
-    create_file(base_path, name, :pre_deinstall)
+  end
+
+  defp create_hook_file({hook_name, content}, base_path, name) do
+    [base_path, "#{name}.#{hook_name}"]
+    |> Path.join()
+    |> File.write!(Templates.hook(content))
   end
 
   defp create_file(base_path, name, type) do
@@ -98,7 +100,7 @@ defmodule Pakman.Bootstrap do
       |> String.replace("_", "-")
 
     [base_path, "#{name}.#{file_type}"]
-    |> Enum.join("/")
+    |> Path.join()
     |> File.write!(apply(Templates, type, [name]))
   end
 end
