@@ -53,7 +53,6 @@ defmodule Pakman.Bootstrap do
         build,
         configuration
       )
-      |> IO.inspect()
     )
   end
 
