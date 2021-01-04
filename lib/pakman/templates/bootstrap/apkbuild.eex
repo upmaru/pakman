@@ -15,9 +15,11 @@ makedepends="<%= Enum.join(configuration["dependencies"]["build"], " ") %>"
 url="https://github.com/<%= System.get_env(~s(GITHUB_REPOSITORY)) %>"
 install="
   $pkgname.pre-install
-<%= Enum.map(Map.get(configuration["hook"], %{}), fn {hook_name, _content} -> %>
+<%= if hook = configuration["hook"] do %>
+  <%= Enum.map(hook, fn {hook_name, _content} -> %>
   $pkgname.<%= hook_name %>
-<% end) %>
+  <% end) %>
+<% end %>
 "
 
 source="
