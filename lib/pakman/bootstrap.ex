@@ -38,8 +38,8 @@ defmodule Pakman.Bootstrap do
       config
     )
 
-    if is_nil(config["type"]) do
-      create_run_files(base_path, config["run"], Map.get(config, "type"))
+    if run_config = Map.get(config, "run") do
+      create_run_files(base_path, run_config)
     end
 
     create_build_files(base_path, name, config["type"])
@@ -89,7 +89,7 @@ defmodule Pakman.Bootstrap do
     create_file(base_path, name, :pre_install)
   end
 
-  def create_run_files(base_path, %{"name" => name} = configuration, nil) do
+  def create_run_files(base_path, %{"name" => name} = configuration) do
     [base_path, "#{name}.initd"]
     |> Path.join()
     |> File.write!(Templates.initd(configuration))
