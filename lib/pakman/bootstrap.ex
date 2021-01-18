@@ -39,8 +39,6 @@ defmodule Pakman.Bootstrap do
     )
 
     if run_config = Map.get(config, "run") do
-      IO.inspect(Map.get(config, "run"))
-
       create_run_files(base_path, run_config)
     end
 
