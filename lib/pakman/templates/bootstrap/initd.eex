@@ -1,38 +1,36 @@
 #!/sbin/openrc-run
 # shellcheck shell=bash
 
-name="<%= name %>"
+name="<%= configuration["name"] %>"
 
 # shellcheck disable=2034
-description="<%= name %>"
+description="<%= configuration["name"] %> service"
 
 # shellcheck disable=2034
-extra_commands="migrate seed"
+extra_commands="<%= Enum.map(configuration["command"]["variations"], fn {key, _} -> key end) %>" 
 
 # shellcheck disable=2034
 supervisor="s6"
 
 # shellcheck disable=2034
-s6_service_path="${RC_SVCDIR}/s6-scan/<%= name %>"
+s6_service_path="${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
 
-command=/var/lib/<%= name %>/bin/<%= name %>
+command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["name"] %>
 
-migrate() {
-  export HOME=/var/lib/<%= name %>
-  $command rpc "<%= Macro.camelize(name) %>.Release.Tasks.migrate"
+
+<%= Enum.map(configuration["command"]["variations"], fn {key, input} -> %>
+<%= key %>() {
+  export HOME=/var/lib/<%= configuration["name"] %>
+  $command <%= configuration["command"]["call"] %> <%= input %>
 }
-
-seed() {
-  export HOME=/var/lib/<%= name %>
-  $command rpc "<%= Macro.camelize(name) %>.Release.Tasks.seed"
-}
+<% end) %>
 
 depend() {
   need net s6-svscan
 }
 
 start_pre() {
-  if [ ! -L "${RC_SVCDIR}/s6-scan/<%= name %>" ]; then
-    ln -s "/var/lib/<%= name %>/service" "${RC_SVCDIR}/s6-scan/<%= name %>"
+  if [ ! -L "${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>" ]; then
+    ln -s "/var/lib/<%= configuration["name"] %>/service" "${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
   fi
 }

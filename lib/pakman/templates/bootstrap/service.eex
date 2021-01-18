@@ -1,6 +1,6 @@
 #!/bin/sh
 
-name=<%= name %>
-command=/var/lib/<%= name %>/bin/<%= name %>
+name=<%= configuration["name"] %>
+command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["name"] %>
 
-exec ${command} start > /var/log/${name}.log 2>&1
+exec ${command} <%= configuration["process"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1

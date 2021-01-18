@@ -38,6 +38,10 @@ defmodule Pakman.Bootstrap do
       config
     )
 
+    if is_nil(config["type"]) do
+      create_run_files(base_path, config["run"], Map.get(config, "type"))
+    end
+
     create_build_files(base_path, name, config["type"])
 
     Map.get(config, "hook", %{})
@@ -81,10 +85,18 @@ defmodule Pakman.Bootstrap do
     do: create_file(base_path, name, :pre_install)
 
   defp create_build_files(base_path, name, _) do
-    create_file(base_path, name, :initd)
     create_file(base_path, name, :profile)
-    create_file(base_path, name, :service)
     create_file(base_path, name, :pre_install)
+  end
+
+  def create_run_files(base_path, %{"name" => name} = configuration, nil) do
+    [base_path, "#{name}.initd"]
+    |> Path.join()
+    |> File.write!(Templates.initd(configuration))
+
+    [base_path, "#{name}.service"]
+    |> Path.join()
+    |> File.write!(Templates.service(configuration))
   end
 
   defp create_hook_file({hook_name, content}, base_path, name) do
