@@ -26,8 +26,6 @@ defmodule Pakman.Bootstrap do
           })
       })
 
-    IO.inspect(config)
-
     System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
 
     File.mkdir_p!(base_path)
@@ -41,6 +39,8 @@ defmodule Pakman.Bootstrap do
     )
 
     if run_config = Map.get(config, "run") do
+      IO.inspect(Map.get(config, "run"))
+
       create_run_files(base_path, run_config)
     end
 
