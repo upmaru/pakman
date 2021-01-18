@@ -2,7 +2,7 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Environment
   alias Pakman.Bootstrap.Templates
 
-  def perform(options) do
+  def perform(_options) do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
     %{organization: namespace, name: name} = Environment.repository()
@@ -25,6 +25,8 @@ defmodule Pakman.Bootstrap do
               )
           })
       })
+
+    IO.inspect(config)
 
     System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
 
