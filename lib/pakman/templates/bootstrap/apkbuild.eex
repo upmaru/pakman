@@ -27,6 +27,7 @@ source="
 <%= if configuration["type"] != "static" do %>
   $pkgname.initd
   $pkgname.service
+  $pkgname.environment
 <% end %>
 "
 
@@ -62,5 +63,6 @@ package() {
 <% else %>
   install -Dm755 "$srcdir"/"$pkgname".initd ./etc/init.d/"$pkgname"
   install -Dm755 "$srcdir"/"$pkgname".service ./var/lib/"$pkgname"/service/run
+  install -Dm755 "$srcdir"/"$pkgname".setup ./var/lib/"$pkgname"/bin/environment
 <% end %>
 }
