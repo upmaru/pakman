@@ -3,4 +3,4 @@
 name=<%= configuration["name"] %>
 command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["name"] %>
 
-/var/lib/<%= configuration["name"] %>/bin/environment && exec ${command} <%= configuration["process"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1
+source /var/lib/<%= configuration["name"] %>/bin/environment && exec ${command} <%= configuration["process"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1

@@ -20,7 +20,7 @@ command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["name"] %>
 <%= Enum.map(configuration["command"]["variations"], fn {key, input} -> %>
 <%= key %>() {
   export HOME=/var/lib/<%= configuration["name"] %>
-  /var/lib/<%= configuration["name"] %>/bin/environment && $command <%= configuration["command"]["call"] %> <%= input %>
+  source /var/lib/<%= configuration["name"] %>/bin/environment && $command <%= configuration["command"]["call"] %> <%= input %>
 }
 <% end) %>
 
