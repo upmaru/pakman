@@ -13,13 +13,5 @@ runs:
   args:
     - --command
     - ${{inputs.command}}
-    - --version
-    - ${{inputs.version}}
-    - --build
-    - ${{inputs.build}}
-    - --depends
-    - ${{inputs.depends}}
-    - --makedepends
-    - ${{inputs.makedepends}}
     - --archive
     - ${{inputs.archive}}
