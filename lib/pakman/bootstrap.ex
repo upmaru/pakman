@@ -3,15 +3,13 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Bootstrap.Templates
 
   def perform(_options) do
-    workspace = Path.join(System.get_env("GITHUB_WORKSPACE"), "src")
+    workspace = System.get_env("GITHUB_WORKSPACE")
 
     %{organization: namespace, name: name} = Environment.repository()
 
-    {version, 0} =
-      System.cmd("git", ["describe", "--tags", "--always"], cd: workspace)
+    {version, 0} = System.cmd("git", ["describe", "--tags", "--always"])
 
-    {build, 0} =
-      System.cmd("git", ["rev-list", "HEAD", "--count"], cd: workspace)
+    {build, 0} = System.cmd("git", ["rev-list", "HEAD", "--count"])
 
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
     config = YamlElixir.read_from_file!(Path.join(workspace, "instellar.yml"))
@@ -28,9 +26,7 @@ defmodule Pakman.Bootstrap do
           })
       })
 
-    System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace],
-      cd: workspace
-    )
+    System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
 
     File.mkdir_p!(base_path)
 
