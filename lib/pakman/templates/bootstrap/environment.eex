@@ -2,6 +2,8 @@
 
 set -e
 
+# load environment for <%= name %>
+
 endpoint="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_INSTALLATION_ENDPOINT)"
 token="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_BOT_TOKEN)"
 
