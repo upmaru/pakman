@@ -3,7 +3,7 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Bootstrap.Templates
 
   def perform(_options) do
-    workspace = System.get_env("GITHUB_WORKSPACE")
+    workspace = File.cwd!()
 
     %{organization: namespace, name: name} = Environment.repository()
 
