@@ -7,9 +7,11 @@ defmodule Pakman.Bootstrap do
 
     %{organization: namespace, name: name} = Environment.repository()
 
-    {version, 0} = System.cmd("git", ["describe", "--tags", "--always"])
+    {version, 0} =
+      System.cmd("git", ["describe", "--tags", "--always"], cd: workspace)
 
-    {build, 0} = System.cmd("git", ["rev-list", "HEAD", "--count"])
+    {build, 0} =
+      System.cmd("git", ["rev-list", "HEAD", "--count"], cd: workspace)
 
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
     config = YamlElixir.read_from_file!(Path.join(workspace, "instellar.yml"))
@@ -26,7 +28,9 @@ defmodule Pakman.Bootstrap do
           })
       })
 
-    System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
+    System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace],
+      cd: workspace
+    )
 
     File.mkdir_p!(base_path)
 
