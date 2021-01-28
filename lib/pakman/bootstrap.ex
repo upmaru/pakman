@@ -9,7 +9,7 @@ defmodule Pakman.Bootstrap do
 
     {version, 0} = System.cmd("git", ["describe", "--tags", "--always"])
 
-    {build, 0} = System.cmd("git", ["rev-list", "HEAD", "--count"])
+    {build, 0} = IO.inspect(System.cmd("git", ["rev-list", "HEAD", "--count"]))
 
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
 
