@@ -7,7 +7,7 @@ set -e
 endpoint="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_INSTALLATION_ENDPOINT)"
 token="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_BOT_TOKEN)"
 
-echo "----- Feching ${endpoint} -----"
+echo "----- Fetching ${endpoint} -----"
 
 variables="$(curl -s "${endpoint}" -H "Authorization: Bearer ${token}" -H 'Content-Type: application/json; charset=utf-8' | jq '.data.attributes.variables')"
 
