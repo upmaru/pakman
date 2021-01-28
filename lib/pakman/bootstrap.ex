@@ -26,7 +26,8 @@ defmodule Pakman.Bootstrap do
           })
       })
 
-    System.cmd("sudo", ["chown", "-R", "builder:abuild", "*"])
+    File.chgrp!(workspace, 1)
+    # System.cmd("chown", ["-R", "builder:abuild", "."])
 
     File.mkdir_p!(base_path)
 
