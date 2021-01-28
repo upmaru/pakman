@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 name=<%= configuration["name"] %>
 command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["name"] %>
