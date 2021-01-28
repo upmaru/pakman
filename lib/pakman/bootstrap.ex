@@ -11,8 +11,12 @@ defmodule Pakman.Bootstrap do
 
     {build, 0} = System.cmd("git", ["rev-list", "HEAD", "--count"])
 
-    base_path = ".apk/#{namespace}/#{name}"
-    config = YamlElixir.read_from_file!(Path.join(workspace, "instellar.yml"))
+    base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
+
+    config =
+      workspace
+      |> Path.join("instellar.yml")
+      |> YamlElixir.read_from_file!()
 
     config =
       Map.merge(config, %{
@@ -26,8 +30,7 @@ defmodule Pakman.Bootstrap do
           })
       })
 
-    File.chgrp!(workspace, 1)
-    # System.cmd("chown", ["-R", "builder:abuild", "."])
+    System.cmd("sudo", ["chown", "-R", "builder:abuild", "."])
 
     File.mkdir_p!(base_path)
 
