@@ -3,7 +3,7 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Bootstrap.Templates
 
   def perform(_options) do
-    IO.inspect(System.cmd("cat", ["/etc/repositories"]))
+    IO.inspect(System.cmd("cat", ["/etc/apk/repositories"]))
 
     workspace = System.get_env("GITHUB_WORKSPACE")
 
