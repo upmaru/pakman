@@ -43,7 +43,7 @@ defmodule Pakman.Bootstrap do
     )
 
     if run_config = Map.get(config, "run") do
-      create_run_files(base_path, run_config)
+      create_life_cycle_files(base_path, run_config)
     end
 
     create_build_files(base_path, name, config["type"])
@@ -94,14 +94,18 @@ defmodule Pakman.Bootstrap do
     create_file(base_path, name, :environment)
   end
 
-  def create_run_files(base_path, %{"name" => name} = configuration) do
+  def create_life_cycle_files(base_path, %{"name" => name} = configuration) do
     [base_path, "#{name}.initd"]
     |> Path.join()
     |> File.write!(Templates.initd(configuration))
 
-    [base_path, "#{name}.service"]
+    [base_path, "#{name}.run"]
     |> Path.join()
-    |> File.write!(Templates.service(configuration))
+    |> File.write!(Templates.run(configuration))
+
+    [base_path, "#{name}.finish"]
+    |> Path.join()
+    |> File.write(Templates.finish(configuration))
   end
 
   defp create_hook_file({hook_name, content}, base_path, name) do
