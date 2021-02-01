@@ -30,6 +30,7 @@ depend() {
 
 start_pre() {
   if [ ! -L "${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>" ]; then
+    echo "----- Updating Service files -----"
     ln -s "/var/lib/<%= configuration["name"] %>/service" "${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
   fi
 }
