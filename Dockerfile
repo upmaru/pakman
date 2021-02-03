@@ -1,6 +1,6 @@
-FROM elixir:1.9-alpine
+FROM alpine:3.11
 
-RUN apk add alpine-sdk coreutils cmake \
+RUN apk add sudo alpine-sdk elixir coreutils cmake \
   && adduser -G abuild -g "Alpine Package Builder" -s /bin/ash -D builder \
   && echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
