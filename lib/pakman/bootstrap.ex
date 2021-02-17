@@ -7,7 +7,7 @@ defmodule Pakman.Bootstrap do
 
     %{organization: namespace, name: name} = Environment.repository()
 
-    version = Keyword.get(options, :version)
+    version = String.split(Keyword.get(options, :version), "-") |> List.first()
     build = Keyword.get(options, :build)
     depends = Keyword.get(options, :depends)
     makedepends = Keyword.get(options, :makedepends)
