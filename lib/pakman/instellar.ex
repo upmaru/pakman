@@ -1,7 +1,7 @@
 defmodule Pakman.Instellar do
   use Tesla
 
-  plug(Tesla.Middleware.BaseUrl, "https://instellar.app")
+  plug(Tesla.Middleware.BaseUrl, "https://web.instellar.app")
   plug(Tesla.Middleware.JSON)
 
   alias Tesla.Multipart
