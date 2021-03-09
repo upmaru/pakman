@@ -28,6 +28,7 @@ defmodule Pakman.MixProject do
       {:tesla, "~> 1.3.1"},
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.5.0"},
+      {:slugger, "~> 0.3.0"},
       {:hackney, "~> 1.15.0"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
