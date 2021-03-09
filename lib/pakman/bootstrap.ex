@@ -9,6 +9,11 @@ defmodule Pakman.Bootstrap do
 
     {version, 0} = System.cmd("git", ["describe", "--tags", "--always"])
 
+    version =
+      version
+      |> String.split("-")
+      |> List.first()
+
     build = System.get_env("GITHUB_RUN_NUMBER")
 
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
@@ -107,6 +112,8 @@ defmodule Pakman.Bootstrap do
     |> Path.join()
     |> File.write(Templates.finish(configuration))
   end
+
+  defp get_version
 
   defp create_hook_file({hook_name, content}, base_path, name) do
     [base_path, "#{name}.#{hook_name}"]
