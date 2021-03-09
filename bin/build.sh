@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cd "$GITHUB_WORKSPACE"/.apk/"$GITHUB_REPOSITORY" || exit
+repository=$(echo "$GITHUB_REPOSITORY" | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)
+
+cd "$GITHUB_WORKSPACE"/.apk/"$repository" || exit
 
 abuild snapshot
 abuild -r
