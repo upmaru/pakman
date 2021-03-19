@@ -23,11 +23,13 @@ defmodule Pakman.Instellar do
       {"x-instellar-package-token", package_token}
     ]
 
+    ref = System.get_env("WORKFLOW_REF") || System.get_env("GITHUB_REF")
+
     multipart =
       Multipart.new()
       |> Multipart.add_content_type_param("application/x-www-form-urlencoded")
       |> Multipart.add_file(archive_path, name: "deployment[archive]")
-      |> Multipart.add_field("deployment[ref]", System.get_env("GITHUB_REF"))
+      |> Multipart.add_field("deployment[ref]", ref)
       |> Multipart.add_field("deployment[hash]", System.get_env("GITHUB_SHA"))
 
     case post("/publish/deployments", multipart, headers: headers) do
