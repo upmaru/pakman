@@ -23,7 +23,7 @@ defmodule Pakman.Instellar do
       {"x-instellar-package-token", package_token}
     ]
 
-    ref = System.get_env("WORKFLOW_REF") || System.get_env("GITHUB_REF")
+    ref = IO.inspect(System.get_env("WORKFLOW_REF")) || System.get_env("GITHUB_REF")
 
     multipart =
       Multipart.new()
