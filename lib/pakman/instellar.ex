@@ -1,15 +1,14 @@
 defmodule Pakman.Instellar do
   use Tesla
 
-  plug(Tesla.Middleware.BaseUrl, "https://web.instellar.app")
-  plug(Tesla.Middleware.JSON)
-
   alias Tesla.Multipart
 
   def authenticate do
     auth_token = System.get_env("INSTELLAR_AUTH_TOKEN")
 
-    case post("/publish/automation/callback", %{auth_token: auth_token}) do
+    client()
+    |> post("/publish/automation/callback", %{auth_token: auth_token})
+    |> case do
       {:ok, %{status: 201, body: body}} -> {:ok, body["data"]["token"]}
       {:ok, %{status: 404}} -> {:error, :not_found}
     end
@@ -33,7 +32,9 @@ defmodule Pakman.Instellar do
       |> Multipart.add_field("deployment[ref]", ref)
       |> Multipart.add_field("deployment[hash]", sha)
 
-    case post("/publish/deployments", multipart, headers: headers) do
+    client()
+    |> post("/publish/deployments", multipart, headers: headers)
+    |> case do
       {:ok, %{status: 201, body: body}} ->
         {:ok, :created, body["data"]}
 
@@ -43,5 +44,17 @@ defmodule Pakman.Instellar do
       _ ->
         {:error, :deployment_creation_failed}
     end
+  end
+
+  defp client do
+    endpoint = System.get_env("INSTELLAR_ENDPOINT", "https://web.instellar.app")
+
+    middleware = [
+      {Tesla.Middleware.BaseUrl, endpoint},
+      Tesla.Middleware.JSON,
+      Tesla.Middleware.Logger
+    ]
+
+    Tesla.client(middleware, {Tesla.Adapter.Mint, [timeout: 30_000]})
   end
 end
