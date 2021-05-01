@@ -55,6 +55,6 @@ defmodule Pakman.Instellar do
       Tesla.Middleware.Logger
     ]
 
-    Tesla.client(middleware, {Tesla.Adapter.Mint, [timeout: 30_000]})
+    Tesla.client(middleware)
   end
 end
