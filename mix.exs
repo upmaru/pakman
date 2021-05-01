@@ -25,7 +25,7 @@ defmodule Pakman.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tesla, "~> 1.3.1"},
+      {:tesla, "~> 1.3.3"},
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.5.0"},
       {:slugger, "~> 0.3.0"},
