@@ -54,10 +54,9 @@ package() {
 
 	cd "$pkgdir"
 
-  install -dm755 ./etc/"$pkgname"
   install -dm750 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"
 
-  mv -f "$srcdir"/<%= configuration["build"]["destination"] %> ./etc/"$pkgname"
+  mv "$srcdir"/<%= configuration["build"]["destination"] %> ./etc/"$pkgname"
 
 <%= if configuration["type"] == "static" do %>
   install -Dm644 "$srcdir"/nginx.conf ./etc/"$pkgname"/default.conf
