@@ -55,7 +55,7 @@ package() {
 	cd "$pkgdir"
 
   install -dm755 ./etc/"$pkgname"
-  install -d -m750 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"
+  install -dm750 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"
 
   mv "$srcdir"/<%= configuration["build"]["destination"] %> ./etc/"$pkgname"
 
