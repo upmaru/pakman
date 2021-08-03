@@ -54,6 +54,8 @@ package() {
 
 	cd "$pkgdir"
 
+  install -dm755 ./var/lib/"$pkgname"/
+
   mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/"$pkgname"/
 
 <%= if configuration["type"] == "static" do %>
