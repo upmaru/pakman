@@ -1,6 +1,6 @@
 #!/bin/sh
 
 name=<%= configuration["name"] %>
-command=/etc/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
+command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
 
-source /etc/<%= configuration["name"] %>/bin/environment && ${command} <%= configuration["start"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1
+source /var/lib/<%= configuration["name"] %>/bin/environment && ${command} <%= configuration["start"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1
