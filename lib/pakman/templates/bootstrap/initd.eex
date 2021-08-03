@@ -15,12 +15,12 @@ supervisor="s6"
 # shellcheck disable=2034
 s6_service_path="${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
 
-command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
+command=/etc/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
 
 <%= Enum.map(configuration["command"]["variations"], fn {key, input} -> %>
 <%= key %>() {
-  export HOME=/var/lib/<%= configuration["name"] %>
-  source /var/lib/<%= configuration["name"] %>/bin/environment && $command <%= configuration["command"]["call"] %> <%= input %>
+  export HOME=/etc/<%= configuration["name"] %>
+  source /etc/<%= configuration["name"] %>/bin/environment && $command <%= configuration["command"]["call"] %> <%= input %>
 }
 <% end) %>
 
@@ -31,6 +31,6 @@ depend() {
 start_pre() {
   if [ ! -L "${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>" ]; then
     echo "----- Updating Service files -----"
-    ln -s "/var/lib/<%= configuration["name"] %>/service" "${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
+    ln -s "/etc/<%= configuration["name"] %>/service" "${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
   fi
 }
