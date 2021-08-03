@@ -15,7 +15,7 @@ supervisor="s6"
 # shellcheck disable=2034
 s6_service_path="${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
 
-command=/etc/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
+command=/etc/<%= configuration["name"] %>/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
 
 <%= Enum.map(configuration["command"]["variations"], fn {key, input} -> %>
 <%= key %>() {
