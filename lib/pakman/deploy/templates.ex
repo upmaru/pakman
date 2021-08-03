@@ -13,13 +13,4 @@ defmodule Pakman.Deploy.Templates do
       :package_token
     ]
   )
-
-  EEx.function_from_file(
-    :def,
-    :terraform_vars,
-    Path.join(@prefix, "terraform.eex"),
-    [
-      :name
-    ]
-  )
 end
