@@ -1,6 +1,6 @@
 #!/bin/sh
 
 name=<%= configuration["name"] %>
-command=/etc/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
+command=/etc/<%= configuration["name"] %>/app/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
 
 ${command} <%= configuration["stop"]["call"] %>
