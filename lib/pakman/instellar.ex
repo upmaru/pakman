@@ -15,7 +15,13 @@ defmodule Pakman.Instellar do
   end
 
   def create_deployment(token, archive_path) do
+    workspace = System.get_env("GITHUB_WORKSPACE")
     package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
+
+    config =
+      workspace
+      |> Path.join("instellar.yml")
+      |> YamlElixir.read_from_file!()
 
     headers = [
       {"authorization", "Bearer #{token}"},
@@ -31,6 +37,7 @@ defmodule Pakman.Instellar do
       |> Multipart.add_file(archive_path, name: "deployment[archive]")
       |> Multipart.add_field("deployment[ref]", ref)
       |> Multipart.add_field("deployment[hash]", sha)
+      |> Multipart.add_field("deployment[stack]", config["stack"])
 
     client()
     |> post("/publish/deployments", multipart, headers: headers)

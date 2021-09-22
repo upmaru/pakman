@@ -27,7 +27,7 @@ defmodule Pakman.MixProject do
     [
       {:tesla, "~> 1.3.3"},
       {:jason, ">= 1.0.0"},
-      {:yaml_elixir, "~> 2.5.0"},
+      {:yaml_elixir, "~> 2.8.0"},
       {:slugger, "~> 0.3.0"},
       {:hackney, "~> 1.16.0"}
       # {:dep_from_hexpm, "~> 0.3.0"},
