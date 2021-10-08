@@ -14,7 +14,6 @@ defmodule Pakman.Deploy.Prepare do
     File.mkdir_p!(~s(deploy))
 
     create_setup(name, branch, package_token)
-    create_terraform_vars(name)
 
     ~s(deploy)
     |> Path.join("pakman.rsa.pub")
@@ -25,9 +24,5 @@ defmodule Pakman.Deploy.Prepare do
     ["deploy", "setup.start"]
     |> Path.join()
     |> File.write!(Templates.local_d_setup(name, branch, package_token))
-  end
-
-  defp create_terraform_vars(name) do
-    File.write!("deploy.auto.tfvars", Templates.terraform_vars(name))
   end
 end

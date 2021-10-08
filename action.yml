@@ -5,14 +5,6 @@ inputs:
   command:
     description: 'command to run'
     required: true
-  version:
-    description: 'version'
-  build:
-    description: 'build'
-  depends:
-    description: 'dependencies'
-  makedepends:
-    description: 'build dependencies'
   archive:
     description: 'archive path'
 runs:
@@ -21,13 +13,5 @@ runs:
   args:
     - --command
     - ${{inputs.command}}
-    - --version
-    - ${{inputs.version}}
-    - --build
-    - ${{inputs.build}}
-    - --depends
-    - ${{inputs.depends}}
-    - --makedepends
-    - ${{inputs.makedepends}}
     - --archive
     - ${{inputs.archive}}

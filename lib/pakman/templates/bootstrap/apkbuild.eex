@@ -7,21 +7,29 @@ options="!check"
 pkgusers="<%= name %>"
 pkggroups="<%= name %>"
 license="MIT"
+<%= if configuration["type"] != "static" do %>
 subpackages="<%= name %>-openrc"
-depends="<%= depends %>"
-makedepends="<%= makedepends %>"
+<% end %>
+depends="<%= Enum.join(configuration["dependencies"]["runtime"], " ") %>"
+makedepends="<%= Enum.join(configuration["dependencies"]["build"], " ") %>"
 url="https://github.com/<%= System.get_env(~s(GITHUB_REPOSITORY)) %>"
 install="
   $pkgname.pre-install
-  $pkgname.post-install
-  $pkgname.post-upgrade
-  $pkgname.pre-deinstall
+<%= if hook = configuration["hook"] do %>
+  <%= Enum.map(hook, fn {hook_name, _content} -> %>
+  $pkgname.<%= hook_name %>
+  <% end) %>
+<% end %>
 "
 
 source="
   $pkgname-$pkgver.tar
+<%= if configuration["type"] != "static" do %>
   $pkgname.initd
-  $pkgname.service
+  $pkgname.run
+  $pkgname.finish
+  $pkgname.environment
+<% end %>
 "
 
 root=../../..
@@ -37,18 +45,8 @@ snapshot() {
 }
 
 build() {
-  export MIX_ENV=prod
-
   cd "$srcdir"
-  mix local.hex --force
-  mix local.rebar --force
-  mix do deps.get --only prod
-  npm --prefix ./assets install ./assets
-
-  npm run deploy --prefix ./assets
-  mix phx.digest
-
-  mix release
+  <%= configuration["build"]["command"] %>
 }
 
 package() {
@@ -56,11 +54,16 @@ package() {
 
 	cd "$pkgdir"
 
-  install -dm755 -o $pkgusers -g $pkggroups ./var/lib/"$pkgname"/
-  install -dm755 -g $pkggroups ./var/www/localhost/htdocs/console/
+  install -dm755 -o $pkgusers -g $pkggroups "$pkgdir"/var/lib/$pkgname
 
-  mv -v "$srcdir"/_build/prod/rel/"$pkgname"/* ./var/lib/"$pkgname"/
+  mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/$pkgname
 
-  install -Dm755 "$srcdir"/"$pkgname".initd ./etc/init.d/"$pkgname"
-  install -Dm755 "$srcdir"/"$pkgname".service ./var/lib/"$pkgname"/service/run
+<%= if configuration["type"] == "static" do %>
+  install -Dm644 "$srcdir"/nginx.conf "$pkgdir"/etc/"$pkgname"/default.conf
+<% else %>
+  install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+  install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
+  install -Dm755 "$srcdir"/$pkgname.finish "$pkgdir"/var/lib/$pkgname/service/finish
+  install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
+<% end %>
 }

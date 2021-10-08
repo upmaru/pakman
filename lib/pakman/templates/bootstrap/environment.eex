@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+# load environment for <%= name %>
+
+endpoint="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_INSTALLATION_ENDPOINT)"
+token="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_BOT_TOKEN)"
+
+echo "----- Fetching ${endpoint} -----"
+
+export HOSTNAME="$(echo $HOSTNAME)"
+
+variables="$(curl -s "${endpoint}" -H "Authorization: Bearer ${token}" -H 'Content-Type: application/json; charset=utf-8' | jq '.data.attributes.variables')"
+
+for s in $(echo $variables | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" ); do
+  export $s
+done

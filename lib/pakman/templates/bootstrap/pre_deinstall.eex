@@ -1,4 +1,0 @@
-#!/bin/sh
-
-rc-service <%= name %> stop
-rc-update del <%= name %>
