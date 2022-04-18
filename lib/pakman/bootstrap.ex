@@ -4,6 +4,7 @@ defmodule Pakman.Bootstrap do
 
   def perform(_options) do
     workspace = System.get_env("GITHUB_WORKSPACE")
+    System.cmd("sudo", ["git", "config", "--global", "--add", "safe.directory", workspace])
 
     %{organization: namespace, name: name} = Environment.repository()
 
