@@ -15,4 +15,6 @@ RUN mix escript.build
 
 USER builder
 
+RUN git config --global --add safe.directory /github/workspace
+
 ENTRYPOINT [ "/var/lib/pakman/bin/pakman" ]
