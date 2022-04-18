@@ -16,7 +16,7 @@ defmodule Pakman.CLI do
 
     command = String.to_atom(command)
     
-    System.cmd("sudo", ["git", "config", "--global", "--add", "safe.directory", System.get_env("GITHUB_WORKSPACE")])
+    System.cmd("sudo", ["chown", "-R", "root:root", System.get_env("GITHUB_WORKSPACE")])
 
     apply(Pakman, command, [options])
   end
