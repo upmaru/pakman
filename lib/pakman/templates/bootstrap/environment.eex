@@ -4,14 +4,24 @@ set -e
 
 # load environment for <%= name %>
 
+manager="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.managed_by)"
+export HOSTNAME="$(echo $HOSTNAME)"
+
+if ["$manager" = uplink]
+then 
+endpoint="$(curl -s --unix-socket /dev/lx/sock x/1.0/config/user.install_variables_endpoint)"
+
+echo "----- Fetching ${endpoint} -----"
+
+variables="$(curl -s "${endpoint}" -H 'Content-Type: application/json; charset=utf-8' | jq '.data.attributes.variables')"
+else
 endpoint="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_INSTALLATION_ENDPOINT)"
 token="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_BOT_TOKEN)"
 
 echo "----- Fetching ${endpoint} -----"
 
-export HOSTNAME="$(echo $HOSTNAME)"
-
 variables="$(curl -s "${endpoint}" -H "Authorization: Bearer ${token}" -H 'Content-Type: application/json; charset=utf-8' | jq '.data.attributes.variables')"
+fi
 
 for s in $(echo $variables | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" ); do
   export $s
