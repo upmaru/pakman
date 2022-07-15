@@ -7,7 +7,7 @@ name="<%= configuration["name"] %>"
 description="<%= configuration["name"] %> service"
 
 # shellcheck disable=2034
-extra_commands="<%= Enum.map(configuration["command"]["variations"], fn {key, _} -> key end) %>" 
+extra_commands="<%= Enum.join(Enum.map(configuration["command"]["variations"], fn {key, _} -> key end), " ") %>"
 
 # shellcheck disable=2034
 supervisor="s6"
