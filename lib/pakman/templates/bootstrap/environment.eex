@@ -7,7 +7,7 @@ set -e
 manager="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.managed_by)"
 export HOSTNAME="$(echo $HOSTNAME)"
 
-if [ $manager = "uplink" ]
+if [ "$manager" = "uplink" ]
 then 
 endpoint="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.install_variables_endpoint)"
 
