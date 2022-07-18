@@ -31,6 +31,6 @@ while read -rd $'' line
 do
   export "$line"
 done < <(jq -r <<<"$variables" \
-           'to_entries|map("\(.key)=\"\(.value)\"\u0000")[]')
+           'to_entries|map("\(.key)=\(.value)\u0000")[]')
 
 bash -c "$@"
