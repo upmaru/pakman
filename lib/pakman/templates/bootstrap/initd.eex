@@ -25,7 +25,7 @@ command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "bi
 <% end) %>
 
 depend() {
-  need net s6-svscan
+  need net
 }
 
 start_pre() {
