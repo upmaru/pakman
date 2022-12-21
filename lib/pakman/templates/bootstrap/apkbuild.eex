@@ -54,16 +54,16 @@ build() {
 }
 
 package() {
-  <%= if package = configuration["package"] %>
-    <%= configuration["package"]["command"] %>
-  <% else %>
-    mkdir -p "$pkgdir"
+<%= if package = configuration["package"] %>
+  <%= configuration["package"]["command"] %>
+<% else %>
+  mkdir -p "$pkgdir"
 
-    cd "$pkgdir"
+  cd "$pkgdir"
 
-    install -dm755 -o $pkgusers -g $pkggroups "$pkgdir"/var/lib/$pkgname
+  install -dm755 -o $pkgusers -g $pkggroups "$pkgdir"/var/lib/$pkgname
 
-    mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/$pkgname
+  mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/$pkgname
 
   <%= if configuration["type"] == "static" do %>
     install -Dm644 "$srcdir"/nginx.conf "$pkgdir"/etc/"$pkgname"/default.conf

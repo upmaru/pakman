@@ -2,10 +2,6 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Environment
   alias Pakman.Bootstrap.Templates
 
-  alias __MODULE__.{
-    Custom
-  }
-
   def perform(_options) do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
