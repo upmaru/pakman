@@ -49,6 +49,8 @@ defmodule Pakman.Bootstrap do
           config
         )
 
+        create_file(base_path, name, :pre_install)
+
       _ ->
         create_apkbuild(
           base_path,
