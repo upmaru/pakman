@@ -54,7 +54,7 @@ build() {
 }
 
 package() {
-<%= if package = configuration["package"] %>
+<%= if package = configuration["package"] do %>
   <%= configuration["package"]["command"] %>
 <% else %>
   mkdir -p "$pkgdir"
