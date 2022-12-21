@@ -25,14 +25,14 @@ install="
 source="
   $pkgname-$pkgver.tar
   <%= if source = configuration["source"] do %>
-    <%= configuration["source"]["paths"] %>
+    <%= source %>
   <% else %>
-  <%= if configuration["type"] not in ["static", "custom"] do %>
-    $pkgname.initd
-    $pkgname.run
-    $pkgname.finish
-    $pkgname.environment
-  <% end %>
+    <%= if configuration["type"] not in ["static", "custom"] do %>
+      $pkgname.initd
+      $pkgname.run
+      $pkgname.finish
+      $pkgname.environment
+    <% end %>
   <% end %>
 "
 
@@ -55,7 +55,7 @@ build() {
 
 package() {
 <%= if package = configuration["package"] do %>
-  <%= configuration["package"]["command"] %>
+  <%= package %>
 <% else %>
   mkdir -p "$pkgdir"
 
