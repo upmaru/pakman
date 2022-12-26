@@ -1,4 +1,6 @@
 defmodule Pakman.Setup do
+  alias Pakman.Environment
+
   def perform do
     home = System.get_env("HOME")
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
