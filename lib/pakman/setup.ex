@@ -4,6 +4,10 @@ defmodule Pakman.Setup do
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
 
+    %{organization: namespace, name: name} = Environment.repository()
+
+    key_name = Enum.join([namespace, name], "-")
+
     System.cmd("sudo", ["chown", "-R", "builder:abuild", home])
 
     abuild_config_path = Path.join(home, ".abuild")
@@ -15,11 +19,11 @@ defmodule Pakman.Setup do
     |> File.write!(render_conf(home))
 
     abuild_config_path
-    |> Path.join("pakman.rsa")
+    |> Path.join("#{key_name}.rsa")
     |> File.write!(private_key)
 
     abuild_config_path
-    |> Path.join("pakman.rsa.pub")
+    |> Path.join("#{key_name}.rsa.pub")
     |> File.write!(public_key)
   end
 
