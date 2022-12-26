@@ -18,7 +18,7 @@ defmodule Pakman.Setup do
 
     abuild_config_path
     |> Path.join("abuild.conf")
-    |> File.write!(render_conf(home))
+    |> File.write!(render_conf(home, key_name))
 
     abuild_config_path
     |> Path.join("#{key_name}.rsa")
@@ -29,8 +29,8 @@ defmodule Pakman.Setup do
     |> File.write!(public_key)
   end
 
-  defp render_conf(home),
+  defp render_conf(home, key_name),
     do: """
-    PACKAGER_PRIVKEY=#{home}/.abuild/pakman.rsa
+    PACKAGER_PRIVKEY=#{home}/.abuild/#{key_name}.rsa
     """
 end
