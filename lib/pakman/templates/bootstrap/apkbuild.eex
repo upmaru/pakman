@@ -24,12 +24,16 @@ install="
 
 source="
   $pkgname-$pkgver.tar
-<%= if configuration["type"] != "static" do %>
-  $pkgname.initd
-  $pkgname.run
-  $pkgname.finish
-  $pkgname.environment
-<% end %>
+  <%= if source = configuration["source"] do %>
+    <%= source %>
+  <% else %>
+    <%= if configuration["type"] not in ["static", "custom"] do %>
+      $pkgname.initd
+      $pkgname.run
+      $pkgname.finish
+      $pkgname.environment
+    <% end %>
+  <% end %>
 "
 
 root=../../..
@@ -50,20 +54,24 @@ build() {
 }
 
 package() {
+<%= if package = configuration["package"] do %>
+  <%= package %>
+<% else %>
   mkdir -p "$pkgdir"
 
-	cd "$pkgdir"
+  cd "$pkgdir"
 
   install -dm755 -o $pkgusers -g $pkggroups "$pkgdir"/var/lib/$pkgname
 
   mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/$pkgname
 
-<%= if configuration["type"] == "static" do %>
-  install -Dm644 "$srcdir"/nginx.conf "$pkgdir"/etc/"$pkgname"/default.conf
-<% else %>
-  install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
-  install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
-  install -Dm755 "$srcdir"/$pkgname.finish "$pkgdir"/var/lib/$pkgname/service/finish
-  install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
+  <%= if configuration["type"] == "static" do %>
+    install -Dm644 "$srcdir"/nginx.conf "$pkgdir"/etc/"$pkgname"/default.conf
+  <% else %>
+    install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+    install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
+    install -Dm755 "$srcdir"/$pkgname.finish "$pkgdir"/var/lib/$pkgname/service/finish
+    install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
+  <% end %>
 <% end %>
 }

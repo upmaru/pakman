@@ -39,22 +39,36 @@ defmodule Pakman.Bootstrap do
 
     File.mkdir_p!(base_path)
 
-    create_apkbuild(
-      base_path,
-      name,
-      String.trim(version),
-      String.trim(build),
-      config
-    )
+    case config["type"] do
+      "custom" ->
+        create_apkbuild(
+          base_path,
+          name,
+          String.trim(version),
+          String.trim(build),
+          config
+        )
 
-    if run_config = Map.get(config, "run") do
-      create_life_cycle_files(base_path, run_config)
+        create_file(base_path, name, :pre_install)
+
+      _ ->
+        create_apkbuild(
+          base_path,
+          name,
+          String.trim(version),
+          String.trim(build),
+          config
+        )
+
+        if run_config = Map.get(config, "run") do
+          create_life_cycle_files(base_path, run_config)
+        end
+
+        create_build_files(base_path, name, config["type"])
+
+        Map.get(config, "hook", %{})
+        |> Enum.map(&create_hook_file(&1, base_path, name))
     end
-
-    create_build_files(base_path, name, config["type"])
-
-    Map.get(config, "hook", %{})
-    |> Enum.map(&create_hook_file(&1, base_path, name))
 
     Pakman.setup()
   end
