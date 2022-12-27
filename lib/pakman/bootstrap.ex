@@ -51,6 +51,9 @@ defmodule Pakman.Bootstrap do
 
         create_file(base_path, name, :pre_install)
 
+        Map.get(config, "hook", %{})
+        |> Enum.map(&create_hook_file(&1, base_path, name))
+
       _ ->
         create_apkbuild(
           base_path,
