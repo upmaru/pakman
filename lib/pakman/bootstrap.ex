@@ -74,6 +74,7 @@ defmodule Pakman.Bootstrap do
     end
 
     Pakman.setup()
+    File.ls!()
   end
 
   defp create_apkbuild(base_path, name, version, build, configuration) do
