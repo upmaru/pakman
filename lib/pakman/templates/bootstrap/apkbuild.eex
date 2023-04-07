@@ -63,7 +63,9 @@ package() {
 
   install -dm755 -o $pkgusers -g $pkggroups "$pkgdir"/var/lib/$pkgname
 
-  cp -r "$srcdir"/<%= configuration["build"]["destination"] %> ./var/lib/$pkgname
+  <%= Enum.map(configuration["build"]["destinations"], fn destination -> %>
+  cp -r "$srcdir"/<%= destination %> ./var/lib/$pkgname --exclude $pkgname.* --exclude $pkgname-$pkgver.tar
+  <% end) %>
 
   <%= if configuration["type"] == "static" do %>
     install -Dm644 "$srcdir"/nginx.conf "$pkgdir"/etc/"$pkgname"/default.conf
