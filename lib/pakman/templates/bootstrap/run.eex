@@ -8,7 +8,7 @@ cd /var/lib/<%= configuration["name"] %>
 case "${SERVICE_MODE}" in
   <%= Enum.map(configuration["run"]["services"], fn service -> %>
   "<%= service["name"] %>")
-    command=/var/lib/<%= configuration["name"]/bin/<%= Map.get(service, "binary") %>
+    command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(service, "binary") %>
     ${command} <%= configuration["start"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1
   <% end) %>
   ;;
