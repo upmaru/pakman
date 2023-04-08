@@ -2,10 +2,12 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Environment
   alias Pakman.Bootstrap.Templates
 
-  def perform(_options) do
+  @system Application.get_env(:pakman, :system) || System
+
+  def perform(options \\ []) do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
-    System.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
+    @system.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
 
     %{organization: namespace, name: name} = Environment.repository()
 
@@ -20,10 +22,11 @@ defmodule Pakman.Bootstrap do
 
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
 
-    config =
-      workspace
-      |> Path.join("instellar.yml")
-      |> YamlElixir.read_from_file!()
+    config_file =
+      Keyword.get(options, :config_file) ||
+        Path.join(workspace, "instellar.yml")
+
+    config = YamlElixir.read_from_file!(config_file)
 
     config =
       Map.merge(config, %{
@@ -114,7 +117,7 @@ defmodule Pakman.Bootstrap do
     create_file(base_path, name, :profile)
     create_file(base_path, name, :pre_install)
     create_file(base_path, name, :environment)
-    create_file(base_path, name, :environment_exec)
+    create_file(base_path, name, :env_exec)
   end
 
   def create_life_cycle_files(base_path, %{"name" => name} = configuration) do

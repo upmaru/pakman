@@ -28,3 +28,6 @@ import Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env()}.exs"
+if config_env() == :test do
+  config :pakman, :system, Pakman.SystemMock
+end

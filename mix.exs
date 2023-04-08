@@ -6,6 +6,7 @@ defmodule Pakman.MixProject do
       app: :pakman,
       version: "0.1.0",
       elixir: "~> 1.8",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       escript: [
@@ -22,6 +23,8 @@ defmodule Pakman.MixProject do
     ]
   end
 
+  defp elixirc_paths(:test), do: ["lib", "test/support", "test/fixture"]
+  defp elixirc_paths(_), do: ["lib"]
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -29,7 +32,9 @@ defmodule Pakman.MixProject do
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.8.0"},
       {:slugger, "~> 0.3.0"},
-      {:hackney, "~> 1.16.0"}
+      {:hackney, "~> 1.16.0"},
+
+      {:mox, "~> 1.0", only: :test}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]

@@ -39,8 +39,8 @@ defmodule Pakman.Bootstrap.Templates do
 
   EEx.function_from_file(
     :def,
-    :environment,
-    Path.join(@prefix, "environment_exec.eex"),
+    :env_exec,
+    Path.join(@prefix, "env_exec.eex"),
     [
       :name
     ]
