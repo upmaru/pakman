@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 name=<%= configuration["name"] %>
 command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
