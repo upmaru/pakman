@@ -32,7 +32,7 @@ source="
       $pkgname.run
       $pkgname.finish
       $pkgname.environment
-      $pkgname.environment_exec
+      $pkgname.env_exec
     <% end %>
   <% end %>
 "
