@@ -32,7 +32,7 @@ source="
       $pkgname.run
       $pkgname.finish
       $pkgname.environment
-      $pkgname.env_exec
+      $pkgname.env-exec
     <% end %>
   <% end %>
 "
@@ -75,7 +75,7 @@ package() {
     install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
     install -Dm755 "$srcdir"/$pkgname.finish "$pkgdir"/var/lib/$pkgname/service/finish
     install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
-    install -Dm755 "$srcdir"/$pkgname.env_exec "$pkgdir"/var/lib/$pkgname/bin/env-exec
+    install -Dm755 "$srcdir"/$pkgname.env-exec "$pkgdir"/var/lib/$pkgname/bin/env-exec
   <% end %>
 <% end %>
 }
