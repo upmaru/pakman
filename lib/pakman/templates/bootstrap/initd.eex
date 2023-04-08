@@ -7,7 +7,7 @@ name="<%= configuration["name"] %>"
 description="<%= configuration["name"] %> service"
 
 # shellcheck disable=2034
-extra_commands="<%= Enum.join(Enum.map(configuration["command"]["variations"], fn {key, _} -> key end), " ") %>"
+extra_commands="<%= Enum.join(Enum.map(configuration["commands"], fn command -> command["name"] end), " ") %>"
 
 # shellcheck disable=2034
 supervisor="s6"
@@ -15,13 +15,13 @@ supervisor="s6"
 # shellcheck disable=2034
 s6_service_path="${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
 
-command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
 
-<%= Enum.map(configuration["command"]["variations"], fn {key, input} -> %>
-<%= key %>() {
+<%= Enum.map(configuration["commands"], fn command -> %>
+<%= command["name"] %>() {
   export HOME=/var/lib/<%= configuration["name"] %>
   cd /var/lib/<%= configuration["name"] %>
-  /var/lib/<%= configuration["name"] %>/bin/environment "${command} <%= configuration["command"]["call"] %> <%= input %>"
+  command=/var/lib/<%= configuration["name"] %>/bin/<%= command["binary"] %>
+  /var/lib/<%= configuration["name"] %>/bin/environment-exec "${command} <%= command["call"] %>"
 }
 <% end) %>
 

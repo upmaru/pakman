@@ -27,3 +27,4 @@ do
 done < <(jq -r <<<"$variables" \
            'to_entries|map("\(.key)=\(.value)\u0000")[]')
 
+bash -c "$@"

@@ -114,6 +114,7 @@ defmodule Pakman.Bootstrap do
     create_file(base_path, name, :profile)
     create_file(base_path, name, :pre_install)
     create_file(base_path, name, :environment)
+    create_file(base_path, name, :environment_exec)
   end
 
   def create_life_cycle_files(base_path, %{"name" => name} = configuration) do
