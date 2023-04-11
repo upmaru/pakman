@@ -26,7 +26,7 @@ jobs:
 
       - name: Install OS Deps
         run: | 
-          apk update && apk add --update tar build-base libsodium-dev \
+          apk update && apk add --update git tar build-base libsodium-dev \
             elixir erlang-dialyzer
 
       - name: Retrieve Cached Dependencies
@@ -70,7 +70,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          apk update && apk add --update tar build-base libsodium-dev \
+          apk update && apk add --update git tar build-base libsodium-dev \
             elixir erlang-dialyzer
 
           mix local.rebar --force
@@ -114,7 +114,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          apk update && apk add --update tar build-base libsodium-dev \
+          apk update && apk add --update git tar build-base libsodium-dev \
             elixir erlang-dialyzer
 
           mix local.rebar --force
