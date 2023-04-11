@@ -2,8 +2,8 @@ name: 'pakman'
 author: 'Zack Siri'
 description: 'builds project into alpine package'
 inputs:
-  stack:
-    description: 'choose your alpine version'
+  alpine-version:
+    description: 'alpine version'
     required: true
   command:
     description: 'command to run'
@@ -14,6 +14,7 @@ runs:
   using: 'docker'
   image: docker/${{inputs.stack}}
   args:
+    - ${{inputs.alpine-version }}
     - --command
     - ${{inputs.command}}
     - --archive
