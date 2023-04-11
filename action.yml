@@ -12,7 +12,7 @@ inputs:
     description: 'archive path'
 runs:
   using: 'docker'
-  image: docker/${{inputs.stack}}
+  image: 'Dockerfile'
   args:
     - ${{inputs.alpine-version }}
     - --command
