@@ -2,7 +2,7 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Environment
   alias Pakman.Bootstrap.Templates
 
-  @system Application.get_env(:pakman, :system) || System
+  @system Application.compile_env(:pakman, :system) || System
 
   def perform(options \\ []) do
     workspace = System.get_env("GITHUB_WORKSPACE")
