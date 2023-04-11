@@ -6,16 +6,6 @@ defmodule Pakman do
     to: Pakman.Bootstrap,
     as: :perform
 
-  def create_archive(_options) do
-    System.cmd("zip", [
-      "-r",
-      "packages.zip",
-      Path.join(System.get_env("HOME"), "packages")
-    ])
-
-    IO.inspect(File.ls!())
-  end
-
   defdelegate create_deployment(options),
     to: Pakman.Deploy,
     as: :perform
