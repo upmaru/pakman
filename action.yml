@@ -2,6 +2,9 @@ name: 'pakman'
 author: 'Zack Siri'
 description: 'builds project into alpine package'
 inputs:
+  stack:
+    description: 'choose your alpine version'
+    required: true
   command:
     description: 'command to run'
     required: true
