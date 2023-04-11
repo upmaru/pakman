@@ -8,7 +8,11 @@ This action allows you to build your software into an distributable self-contain
 
 We've created example projects that show you how to configure your project to work with this github action.
 
-- [Ruby on Rails](https://github.com/upmaru-stage/locomo/blob/main/instellar.yml)
-- [Python Django](https://github.com/upmaru-stage/monty/blob/main/instellar.yml)
+- [Ruby on Rails](https://github.com/upmaru-stage/locomo)
+  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/locomo/blob/main/.github/workflows/deployment.yml)
+  - [instellar.yml](https://github.com/upmaru-stage/locomo/blob/main/instellar.yml)
+- [Python Django](https://github.com/upmaru-stage/monty)
+  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/monty/blob/main/.github/workflows/deployment.yml)
+  - [instellar.yml](https://github.com/upmaru-stage/monty/blob/main/instellar.yml)
 
 
