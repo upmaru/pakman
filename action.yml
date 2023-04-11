@@ -9,9 +9,12 @@ inputs:
     description: 'archive path'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker/${{inputs.stack}}'
   args:
     - --command
     - ${{inputs.command}}
     - --archive
     - ${{inputs.archive}}
+branding:
+  icon: 'package'
+  color: 'purple'
