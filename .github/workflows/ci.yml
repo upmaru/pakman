@@ -1,0 +1,134 @@
+name: 'CI'
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deps:
+    name: Dependencies
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine:edge
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install OS Deps
+        run: | 
+          apk update && apk add --update tar build-base libsodium-dev \
+            elixir
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v3
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-instellar-${{ hashFiles('mix.lock') }}-v2
+
+      - name: Install Dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p priv/plts
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+          mix deps.compile
+          mix dialyzer --plt
+
+  static_code_analysis:
+    name: Static Code Analysis
+    needs: deps
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine:3.16
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Dependencies
+        run: |
+          apk update && apk add --update tar build-base libsodium-dev \
+            elixir nodejs npm
+
+          mix local.rebar --force
+          mix local.hex --force
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v3
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+
+          key: ${{ runner.os }}-instellar-${{ hashFiles('mix.lock') }}-v2
+
+      - name: Check Code Format
+        run: mix format --check-formatted
+
+      - name: Run Dialyzer
+        run: mix dialyzer --no-check --halt-exit-status
+
+  test:
+    name: Unit Tests
+    needs: deps
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine:edge
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Dependencies
+        run: |
+          apk update && apk add --update tar build-base libsodium-dev \
+            elixir nodejs npm
+
+          mix local.rebar --force
+          mix local.hex --force
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v3
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-instellar-${{ hashFiles('mix.lock') }}-v2
+
+      - name: Run Tests
+        run: mix test --trace --slowest 10
