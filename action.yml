@@ -14,7 +14,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{inputs.alpine-version }}
+    - ${{inputs.alpine-version}}
     - --command
     - ${{inputs.command}}
     - --archive
