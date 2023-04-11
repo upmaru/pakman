@@ -9,7 +9,7 @@ defmodule Pakman do
   def create_archive(_options) do
     System.cmd("zip", [
       "-r",
-      "packagez.zip",
+      "packages.zip",
       Path.join(System.get_env("HOME"), "packages")
     ])
   end
