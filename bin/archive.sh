@@ -1,7 +1,3 @@
 #!/bin/sh
 
-cd "$HOME"
-
-ls -la
-
-zip -r packages.zip "$HOME"/packages
+sudo zip -r packages.zip "$HOME"/packages
