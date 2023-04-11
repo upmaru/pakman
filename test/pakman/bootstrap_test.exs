@@ -21,7 +21,8 @@ defmodule Pakman.BootstrapTest do
         :ok
       end)
 
-      assert :ok == Pakman.Bootstrap.perform([config_file: "test/fixtures/rails.yml"])
+      assert :ok ==
+               Pakman.Bootstrap.perform(config_file: "test/fixtures/rails.yml")
     end
   end
 end
