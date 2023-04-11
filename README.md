@@ -4,6 +4,8 @@
 
 This action allows you to build your software into an distributable self-contained package. This github action should be able to build any language / framework into a distributable alpine package.
 
+![Packing Man](cover.png)
+
 ## Example Projects
 
 We've created example projects that show you how to configure your project to work with this github action.
