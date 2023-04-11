@@ -1,0 +1,67 @@
+dependencies:
+  build:
+    - ruby
+    - ruby-bundler
+    - ruby-dev
+    - ruby-tzinfo
+    - libpq-dev
+  runtime:
+    - bash
+    - curl
+    - jq
+    - ca-certificates
+    - s6
+    - ruby
+    - ruby-bundler
+    - ruby-tzinfo
+    - libpq
+    - locomo-openrc
+
+stack: alpine/3.17
+
+build:
+  destinations: 
+    - '*'
+    - .bundle
+  command: |
+    bundle config set deployment 'true'
+    bundle config set without 'development test'
+    
+    bundle install
+    
+    bundle exec rails assets:precompile
+
+run: 
+  name: locomo
+  commands: 
+  - name: migrate
+    binary: rails
+    call: db:migrate
+  services:
+  - name: web
+    binary: rails
+    start: 
+      call: server
+    stop:
+      kill: true
+      pid_path: tmp/pids/server.pid
+  - name: worker
+    binary: bundle
+    start:
+      call: 'exec sidekiq -C config/sidekiq.yml'
+
+hook:
+  post-install: |
+    rc-update add locomo
+    rc-service locomo migrate
+
+  pre-upgrade: |
+    rc-service locomo stop
+
+  post-upgrade: |
+    rc-service locomo migrate
+    rc-service locomo start
+
+  post-deinstall: |
+    rc-service locomo stop
+    rc-update locomo rdio

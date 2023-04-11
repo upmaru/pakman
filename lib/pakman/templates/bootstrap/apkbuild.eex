@@ -3,7 +3,7 @@ pkgver="<%= version %>"
 pkgrel="<%= build %>"
 pkgdesc="<%= name %>"
 arch="x86_64"
-options="!check"
+options="!check !tracedeps"
 pkgusers="<%= name %>"
 pkggroups="<%= name %>"
 license="MIT"
@@ -32,6 +32,7 @@ source="
       $pkgname.run
       $pkgname.finish
       $pkgname.environment
+      $pkgname.env-exec
     <% end %>
   <% end %>
 "
@@ -63,7 +64,9 @@ package() {
 
   install -dm755 -o $pkgusers -g $pkggroups "$pkgdir"/var/lib/$pkgname
 
-  mv -v "$srcdir"/<%= configuration["build"]["destination"] %>/* ./var/lib/$pkgname
+  <%= Enum.map(configuration["build"]["destinations"], fn destination -> %>
+  cp -r "$srcdir"/<%= destination %> ./var/lib/$pkgname
+  <% end) %>
 
   <%= if configuration["type"] == "static" do %>
     install -Dm644 "$srcdir"/nginx.conf "$pkgdir"/etc/"$pkgname"/default.conf
@@ -72,6 +75,7 @@ package() {
     install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
     install -Dm755 "$srcdir"/$pkgname.finish "$pkgdir"/var/lib/$pkgname/service/finish
     install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
+    install -Dm755 "$srcdir"/$pkgname.env-exec "$pkgdir"/var/lib/$pkgname/bin/env-exec
   <% end %>
 <% end %>
 }

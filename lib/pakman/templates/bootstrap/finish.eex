@@ -1,6 +1,28 @@
-#!/bin/sh
+#!/bin/bash
 
 name=<%= configuration["name"] %>
-command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
+source /var/lib/<%= configuration["name"] %>/bin/environment
 
-${command} <%= configuration["stop"]["call"] %>
+cd /var/lib/<%= configuration["name"] %>
+
+case "${SERVICE_MODE}" in
+<%= Enum.map(configuration["services"], fn service -> %>
+  "<%= service["name"] %>")
+    <%= if service["stop"]["kill"] do %>
+    kill $(cat <%= service["stop"]["pid_path"] %>)
+    <% else %>
+    command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["binary"] %>
+    ${command} <%= service["stop"]["call"] %>
+    <% end %>
+  ;;
+<% end) %>
+  <% default_service = List.first(configuration["services"]) %>
+  *)
+    <%= if default_service["stop"]["kill"] do %>
+    kill $(cat <%= default_service["stop"]["pid_path"] %>)
+    <% else %>
+    command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["binary"] %>
+    ${command} <%= default_service["stop"]["call"] %>
+    <% end %>
+  ;;
+esac

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+source /var/lib/<%= name %>/bin/environment
+
+cd /var/lib/<%= name %>
+
+bash -c "$@"

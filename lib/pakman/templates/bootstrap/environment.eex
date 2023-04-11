@@ -2,8 +2,6 @@
 
 set -e
 
-# load environment for <%= name %>
-
 manager="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.managed_by)"
 export HOSTNAME="$(echo $HOSTNAME)"
 
@@ -23,14 +21,8 @@ echo "----- Fetching ${endpoint} -----"
 variables="$(curl -s "${endpoint}" -H "Authorization: Bearer ${token}" -H 'Content-Type: application/json; charset=utf-8' | jq '.data.attributes.variables')"
 fi
 
-# for s in $(echo $variables | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" ); do
-  # export $s
-# done
-
 while read -rd $'' line
 do
   export "$line"
 done < <(jq -r <<<"$variables" \
            'to_entries|map("\(.key)=\(.value)\u0000")[]')
-
-bash -c "$@"
