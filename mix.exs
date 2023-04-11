@@ -9,6 +9,7 @@ defmodule Pakman.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      dialyzer: dialyzer(),
       escript: [
         main_module: Pakman.CLI,
         path: "bin/pakman"
@@ -20,6 +21,13 @@ defmodule Pakman.MixProject do
   def application do
     [
       extra_applications: [:logger, :eex]
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_core_path: "priv/plts",
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
     ]
   end
 

@@ -27,7 +27,7 @@ jobs:
       - name: Install OS Deps
         run: | 
           apk update && apk add --update tar build-base libsodium-dev \
-            elixir
+            elixir erlang-dialyzer
 
       - name: Retrieve Cached Dependencies
         uses: actions/cache@v3
@@ -71,7 +71,7 @@ jobs:
       - name: Install Dependencies
         run: |
           apk update && apk add --update tar build-base libsodium-dev \
-            elixir nodejs npm
+            elixir erlang-dialyzer
 
           mix local.rebar --force
           mix local.hex --force
@@ -115,7 +115,7 @@ jobs:
       - name: Install Dependencies
         run: |
           apk update && apk add --update tar build-base libsodium-dev \
-            elixir nodejs npm
+            elixir erlang-dialyzer
 
           mix local.rebar --force
           mix local.hex --force
