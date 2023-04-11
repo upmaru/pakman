@@ -28,8 +28,16 @@ defmodule Pakman.Bootstrap do
 
     config = YamlElixir.read_from_file!(config_file)
 
+    options =
+      if config["dependencies"]["trace"] do
+        ["!check"]
+      else
+        ["!check", "!tracedeps"]
+      end
+
     config =
       Map.merge(config, %{
+        "options" => options,
         "dependencies" =>
           Map.merge(config["dependencies"], %{
             "runtime" =>
