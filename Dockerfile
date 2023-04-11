@@ -1,4 +1,4 @@
-FROM alpine:3.17
+FROM alpine:3.16
 
 RUN apk add --no-cache zip tar sudo alpine-sdk coreutils cmake elixir \
   && adduser -G abuild -g "Alpine Package Builder" -s /bin/ash -D builder \
