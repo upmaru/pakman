@@ -12,6 +12,8 @@ defmodule Pakman do
       "packages.zip",
       Path.join(System.get_env("HOME"), "packages")
     ])
+
+    IO.inspect(File.ls!())
   end
 
   defdelegate create_deployment(options),
