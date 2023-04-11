@@ -37,7 +37,7 @@ jobs:
             deps
             _build
             priv/plts
-          key: ${{ runner.os }}-instellar-${{ hashFiles('mix.lock') }}-v2
+          key: ${{ runner.os }}-pakman-${{ hashFiles('mix.lock') }}
 
       - name: Install Dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
@@ -85,7 +85,7 @@ jobs:
             _build
             priv/plts
 
-          key: ${{ runner.os }}-instellar-${{ hashFiles('mix.lock') }}-v2
+          key: ${{ runner.os }}-pakman-${{ hashFiles('mix.lock') }}
 
       - name: Check Code Format
         run: mix format --check-formatted
@@ -128,7 +128,7 @@ jobs:
             deps
             _build
             priv/plts
-          key: ${{ runner.os }}-instellar-${{ hashFiles('mix.lock') }}-v2
+          key: ${{ runner.os }}-pakman-${{ hashFiles('mix.lock') }}
 
       - name: Run Tests
         run: mix test --trace --slowest 10
