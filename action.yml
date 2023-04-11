@@ -12,7 +12,7 @@ inputs:
     description: 'archive path'
 runs:
   using: 'docker'
-  image: 'docker/${{inputs.stack}}'
+  image: docker/${{inputs.stack}}
   args:
     - --command
     - ${{inputs.command}}
