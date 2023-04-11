@@ -11,7 +11,7 @@ defmodule Pakman.Bootstrap do
 
     %{organization: namespace, name: name} = Environment.repository()
 
-    {version, 0} = System.cmd("git", ["describe", "--tags", "--always"])
+    {version, _} = System.cmd("git", ["describe", "--tags", "--always"])
 
     version =
       version
