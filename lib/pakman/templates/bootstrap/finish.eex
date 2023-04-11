@@ -11,7 +11,7 @@ case "${SERVICE_MODE}" in
     <%= if service["stop"]["kill"] do %>
     kill $(cat <%= service["stop"]["pid_path"] %>)
     <% else %>
-    command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["binary"] %>
+    command=/var/lib/<%= configuration["name"] %>/bin/<%= service["binary"] %>
     ${command} <%= service["stop"]["call"] %>
     <% end %>
   ;;
@@ -21,7 +21,7 @@ case "${SERVICE_MODE}" in
     <%= if default_service["stop"]["kill"] do %>
     kill $(cat <%= default_service["stop"]["pid_path"] %>)
     <% else %>
-    command=/var/lib/<%= configuration["name"] %>/bin/<%= configuration["binary"] %>
+    command=/var/lib/<%= configuration["name"] %>/bin/<%= default_service["binary"] %>
     ${command} <%= default_service["stop"]["call"] %>
     <% end %>
   ;;

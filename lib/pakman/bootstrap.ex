@@ -2,7 +2,7 @@ defmodule Pakman.Bootstrap do
   alias Pakman.Environment
   alias Pakman.Bootstrap.Templates
 
-  @system Application.get_env(:pakman, :system) || System
+  @system Application.compile_env(:pakman, :system) || System
 
   def perform(options \\ []) do
     workspace = System.get_env("GITHUB_WORKSPACE")
@@ -11,7 +11,7 @@ defmodule Pakman.Bootstrap do
 
     %{organization: namespace, name: name} = Environment.repository()
 
-    {version, 0} = System.cmd("git", ["describe", "--tags", "--always"])
+    {version, _} = System.cmd("git", ["describe", "--tags", "--always"])
 
     version =
       version
@@ -28,8 +28,16 @@ defmodule Pakman.Bootstrap do
 
     config = YamlElixir.read_from_file!(config_file)
 
+    options =
+      if config["dependencies"]["trace"] do
+        ["!check"]
+      else
+        ["!check", "!tracedeps"]
+      end
+
     config =
       Map.merge(config, %{
+        "options" => options,
         "dependencies" =>
           Map.merge(config["dependencies"], %{
             "runtime" =>
