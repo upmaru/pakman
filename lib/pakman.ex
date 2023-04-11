@@ -6,7 +6,7 @@ defmodule Pakman do
     to: Pakman.Bootstrap,
     as: :perform
 
-  def create_archive(options) do
+  def create_archive(_options) do
     System.cmd("zip", [
       "-r",
       "packagez.zip",
