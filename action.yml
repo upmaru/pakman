@@ -1,4 +1,4 @@
-name: 'Instellar PAKman'
+name: 'instellar-pakman'
 author: 'Zack Siri'
 description: 'Builds project into alpine package to be deployed using instellar.app'
 inputs:
