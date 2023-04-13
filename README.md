@@ -6,6 +6,16 @@ This action allows you to build your software into an distributable self-contain
 
 ![Packing Man](cover.png)
 
+## Versions
+
+You can choose from multiple version of alpine by choosing the tag
+
+- `pakman@alpine-edge-7.1` - uses alpine:edge image
+- `pakman@alpine-3.17-7.1` - uses alpine:3.17 image
+- `pakman@alpine-3.16-7.1` - uses alpine:3.16 image
+- `pakman@alpine-3.15-7.1` - uses alpine:3.15 image
+- `pakman@alpine-3.14-7.1` - uses alpine:3.14 image
+
 ## Example Projects
 
 We've created example projects that show you how to configure your project to work with this github action.
