@@ -1,6 +1,6 @@
 name: 'instellar-pakman'
 author: 'Zack Siri'
-description: 'builds project into alpine package'
+description: 'Builds project into alpine package to be deployed using instellar.app'
 inputs:
   command:
     description: 'command to run'
