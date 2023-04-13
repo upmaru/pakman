@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/upmaru/pakman/actions/workflows/ci.yml/badge.svg)](https://github.com/upmaru/pakman/actions/workflows/ci.yml)
 
-This action allows you to build your software into an distributable self-contained package. This github action should be able to build any language / framework into a distributable alpine package.
+This action allows you to build your software into an distributable self-contained package. It is designed to be used with [instellar.app](https://instellar.app)
 
 ![Packing Man](cover.png)
 
