@@ -8,13 +8,19 @@ cd /var/lib/<%= configuration["name"] %>
 case "${SERVICE_MODE}" in
   <%= Enum.map(configuration["services"], fn service -> %>
   "<%= service["name"] %>")
-    command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(service, "binary") %>
+    <% command = if service["path"], 
+      do: "#{service["path"]}/#{Map.get(service, "binary")}", 
+      else: "/var/lib/#{configuration["name"]}/bin/#{Map.get(service, "binary")}" %>
+    command=<%= command %>
     ${command} <%= service["start"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1
   ;;
   <% end) %>
   <% default_service = List.first(configuration["services"]) %>
   *)
-    command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(default_service, "binary") %>
+    <% command = if default_service["path"], 
+      do: "#{default_service["path"]}/#{Map.get(default_service, "binary")}", 
+      else: "/var/lib/#{configuration["name"]}/bin/#{Map.get(default_service, "binary")}" %>
+    command=<%= command %>
     ${command} <%= default_service["start"]["call"] %> > /var/log/<%= configuration["name"] %>.log 2>&1
   ;;
 esac

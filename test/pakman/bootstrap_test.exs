@@ -18,7 +18,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_WORKSPACE", "tmp/rails")
 
       Pakman.SystemMock
-      |> expect(:cmd, fn _binary, _options ->
+      |> expect(:cmd, 2, fn _binary, _options ->
         :ok
       end)
 
@@ -35,7 +35,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_WORKSPACE", "tmp/elixir")
 
       Pakman.SystemMock
-      |> expect(:cmd, fn _binary, _options ->
+      |> expect(:cmd, 2, fn _binary, _options ->
         :ok
       end)
 
@@ -52,7 +52,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_WORKSPACE", "tmp/next")
 
       Pakman.SystemMock
-      |> expect(:cmd, fn _binary, _options ->
+      |> expect(:cmd, 2, fn _binary, _options ->
         :ok
       end)
 

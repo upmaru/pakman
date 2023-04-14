@@ -1,6 +1,8 @@
 defmodule Pakman.Setup do
   alias Pakman.Environment
 
+  @system Application.compile_env(:pakman, :system) || System
+
   def perform do
     home = System.get_env("HOME")
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
@@ -10,7 +12,7 @@ defmodule Pakman.Setup do
 
     key_name = Enum.join([namespace, name], "-")
 
-    System.cmd("sudo", ["chown", "-R", "builder:abuild", home])
+    @system.cmd("sudo", ["chown", "-R", "builder:abuild", home])
 
     abuild_config_path = Path.join(home, ".abuild")
 

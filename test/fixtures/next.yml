@@ -25,8 +25,11 @@ run:
   services:
   - name: web
     binary: npm
+    path: /usr/bin
     start:
       call: start
+    stop:
+      kill: true
 
 hook:
   post-install: |
