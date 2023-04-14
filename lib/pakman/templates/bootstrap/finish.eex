@@ -9,7 +9,7 @@ case "${SERVICE_MODE}" in
 <%= Enum.map(configuration["services"], fn service -> %>
   "<%= service["name"] %>")
     <%= if service["stop"]["kill"] do %>
-    kill $(cat <%= service["stop"]["pid_path"] %>)
+    kill $(s6-svstat -p /var/lib/<%= configuration["name"] %>/service)
     <% else %>
     command=/var/lib/<%= configuration["name"] %>/bin/<%= service["binary"] %>
     ${command} <%= service["stop"]["call"] %>
@@ -19,7 +19,7 @@ case "${SERVICE_MODE}" in
   <% default_service = List.first(configuration["services"]) %>
   *)
     <%= if default_service["stop"]["kill"] do %>
-    kill $(cat <%= default_service["stop"]["pid_path"] %>)
+    kill $(s6-svstat -p /var/lib/<%= configuration["name"] %>/service)
     <% else %>
     command=/var/lib/<%= configuration["name"] %>/bin/<%= default_service["binary"] %>
     ${command} <%= default_service["stop"]["call"] %>

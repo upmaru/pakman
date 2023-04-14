@@ -46,5 +46,18 @@ defmodule Pakman.BootstrapTest do
 
       refute apkbuild =~ "!tracedeps"
     end
+
+    test "next config" do
+      System.put_env("HOME", "tmp/next")
+      System.put_env("GITHUB_WORKSPACE", "tmp/next")
+
+      Pakman.SystemMock
+      |> expect(:cmd, fn _binary, _options ->
+        :ok
+      end)
+
+      assert :ok ==
+               Pakman.Bootstrap.perform(config_file: "test/fixtures/next.yml")
+    end
   end
 end
