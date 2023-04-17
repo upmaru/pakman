@@ -14,6 +14,7 @@ defmodule Pakman.Instellar do
     end
   end
 
+  @spec create_deployment(binary, binary) :: {:ok, atom, map} | {:error, atom}
   def create_deployment(token, archive_path) do
     workspace = System.get_env("GITHUB_WORKSPACE")
     package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")

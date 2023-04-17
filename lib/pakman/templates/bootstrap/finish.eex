@@ -1,6 +1,0 @@
-#!/bin/sh
-
-name=<%= configuration["name"] %>
-command=/var/lib/<%= configuration["name"] %>/bin/<%= Map.get(configuration, "binary", configuration["name"]) %>
-
-${command} <%= configuration["stop"]["call"] %>

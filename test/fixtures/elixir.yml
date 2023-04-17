@@ -1,0 +1,64 @@
+dependencies:
+  trace: true
+  build:
+    - elixir
+    - npm
+  runtime:
+    - bash
+    - curl
+    - s6
+    - jq
+    - openssl 
+    - libgcc 
+    - libstdc++ 
+    - ncurses-libs
+    - ca-certificates
+    - rdio-openrc
+
+stack: alpine/3.17
+
+build:
+  destinations: 
+    - '_build/prod/rel/rdio/*'
+  command: |
+    export MIX_ENV=prod
+
+    mix local.hex --force
+    mix local.rebar --force
+    mix do deps.get --only prod
+
+    npm --prefix ./assets install ./assets
+
+    mix assets.deploy
+
+    mix release
+
+run: 
+  name: rdio
+  commands:
+  - name: migrate
+    binary: rdio
+    call: 'eval Rdio.Release.Tasks.migrate'
+  services:
+  - name: web
+    binary: rdio
+    start:
+      call: start
+    stop:
+      call: stop
+
+hook:
+  post-install: |
+    rc-update add rdio
+    rc-service rdio migrate
+
+  pre-upgrade: |
+    rc-service rdio stop
+
+  post-upgrade: |
+    rc-service rdio migrate
+    rc-service rdio start
+
+  post-deinstall: |
+    rc-service rdio stop
+    rc-update del rdio
