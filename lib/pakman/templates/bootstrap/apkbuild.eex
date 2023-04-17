@@ -30,7 +30,6 @@ source="
     <%= if configuration["type"] not in ["static", "custom"] do %>
       $pkgname.initd
       $pkgname.run
-      $pkgname.finish
       $pkgname.environment
       $pkgname.env-exec
     <% end %>
@@ -73,7 +72,6 @@ package() {
   <% else %>
     install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
     install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
-    install -Dm755 "$srcdir"/$pkgname.finish "$pkgdir"/var/lib/$pkgname/service/finish
     install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
     install -Dm755 "$srcdir"/$pkgname.env-exec "$pkgdir"/var/lib/$pkgname/bin/env-exec
   <% end %>
