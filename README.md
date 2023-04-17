@@ -10,11 +10,11 @@ This action allows you to build your software into an distributable self-contain
 
 You can choose from multiple version of alpine by choosing the tag
 
-- `pakman@alpine-edge-7.1` - uses alpine:edge image
-- `pakman@alpine-3.17-7.1` - uses alpine:3.17 image
-- `pakman@alpine-3.16-7.1` - uses alpine:3.16 image
-- `pakman@alpine-3.15-7.1` - uses alpine:3.15 image
-- `pakman@alpine-3.14-7.1` - uses alpine:3.14 image
+- `pakman@alpine-edge-7.2` - uses alpine:edge image
+- `pakman@alpine-3.17-7.2` - uses alpine:3.17 image
+- `pakman@alpine-3.16-7.2` - uses alpine:3.16 image
+- `pakman@alpine-3.15-7.2` - uses alpine:3.15 image
+- `pakman@alpine-3.14-7.2` - uses alpine:3.14 image
 
 ## Example Projects
 
@@ -32,4 +32,7 @@ We've created example projects that show you how to configure your project to wo
   - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/monty/blob/main/.github/workflows/deployment.yml)
   - [instellar.yml](https://github.com/upmaru-stage/monty/blob/main/instellar.yml)
 
+- [Next.js](https://github.com/upmaru-stage/nimbus) - Includes only deployment configuration
+  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/nimbus/blob/main/.github/workflows/deployment.yml)
+  - [instellar.yml](https://github.com/upmaru-stage/nimbus/blob/main/instellar.yml)
 
