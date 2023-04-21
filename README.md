@@ -21,8 +21,8 @@ You can choose from multiple version of alpine by choosing the tag
 We've created example projects that show you how to configure your project to work with this github action.
 
 - [Elixir / Phoenix](https://github.com/upmaru-stage/rdio) - Includes CI configuration as well as deployment configuration
-  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/rdio/blob/main/.github/workflows/deployment.yml)
-  - [instellar.yml](https://github.com/upmaru-stage/rdio/blob/main/instellar.yml)
+  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/rdio/blob/develop/.github/workflows/deployment.yml)
+  - [instellar.yml](https://github.com/upmaru-stage/rdio/blob/develop/instellar.yml)
 
 - [Ruby on Rails](https://github.com/upmaru-stage/locomo) - Includes only deployment configuration
   - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/locomo/blob/main/.github/workflows/deployment.yml)
