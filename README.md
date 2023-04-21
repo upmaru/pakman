@@ -36,3 +36,7 @@ We've created example projects that show you how to configure your project to wo
   - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/nimbus/blob/main/.github/workflows/deployment.yml)
   - [instellar.yml](https://github.com/upmaru-stage/nimbus/blob/main/instellar.yml)
 
+- [Go](https://github.com/upmaru-stage/gemini) - Includes only deployment configuration
+  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/gemini/blob/main/.github/workflows/deployment.yml)
+  - [instellar.yml](https://github.com/upmaru-stage/gemini/blob/main/instellar.yml)
+
