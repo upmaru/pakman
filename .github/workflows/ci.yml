@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:edge
+      image: alpine:3.17
 
     steps:
       - name: Cancel Previous Runs
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:edge
+      image: alpine:3.17
 
     steps:
       - name: Cancel Previous Runs
@@ -99,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:edge
+      image: alpine:3.17
 
     steps:
       - name: Cancel Previous Runs
