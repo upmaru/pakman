@@ -136,10 +136,6 @@ defmodule Pakman.Bootstrap do
     [base_path, "#{name}.run"]
     |> Path.join()
     |> File.write!(Templates.run(configuration))
-
-    [base_path, "#{name}.finish"]
-    |> Path.join()
-    |> File.write(Templates.finish(configuration))
   end
 
   defp create_hook_file({hook_name, content}, base_path, name) do

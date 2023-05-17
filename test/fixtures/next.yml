@@ -1,0 +1,46 @@
+dependencies:
+  trace: true
+  build:
+    - nodejs
+    - npm
+  runtime:
+    - bash
+    - curl
+    - s6
+    - jq
+    - ca-certificates
+    - nimbus-openrc
+
+stack: alpine/3.17
+
+build:
+  destinations: 
+    - '*'
+    - .next
+  command: |
+    npm run build
+
+run: 
+  name: nimbus
+  services:
+  - name: web
+    binary: npm
+    path: /usr/bin
+    start:
+      call: start
+    stop:
+      kill: true
+
+hook:
+  post-install: |
+    rc-update add nimbus
+
+  pre-upgrade: |
+    rc-service nimbus stop
+
+  post-upgrade: |
+    rc-service nimbus start
+
+  post-deinstall: |
+    rc-service nimbus stop
+    rc-update del rdio
