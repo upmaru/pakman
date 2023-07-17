@@ -54,6 +54,44 @@ defmodule Pakman.Instellar do
     end
   end
 
+  def create_configuration(token, deployment_id) do
+    workspace = System.get_env("GITHUB_WORKSPACE")
+    package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
+
+    config =
+      workspace
+      |> Path.join("instellar.yml")
+      |> YamlElixir.read_from_file!()
+
+    headers = [
+      {"authorization", "Bearer #{token}"},
+      {"x-instellar-package-token", package_token}
+    ]
+
+    configuration_params = %{
+      payload: %{
+        kits: config["kits"]
+      }
+    }
+
+    client()
+    |> post(
+      "/publish/deployments/#{deployment_id}/configurations",
+      %{configuration: configuration_params},
+      headers: headers
+    )
+    |> case do
+      {:ok, %{status: 201, body: body}} ->
+        {:ok, :created, body["data"]}
+
+      {:ok, %{status: 200, body: body}} ->
+        {:ok, :already_exists, body["data"]}
+
+      _ ->
+        {:error, :configuration_creation_failed}
+    end
+  end
+
   defp add_stack(multipart, nil), do: multipart
 
   defp add_stack(multipart, stack)
