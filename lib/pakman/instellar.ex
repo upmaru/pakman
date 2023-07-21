@@ -3,11 +3,6 @@ defmodule Pakman.Instellar do
 
   alias Tesla.Multipart
 
-  @cacerts CAStore.file_path()
-           |> File.read!()
-           |> :public_key.pem_decode()
-           |> Enum.map(fn {_, cert, _} -> cert end)
-
   def authenticate do
     auth_token = System.get_env("INSTELLAR_AUTH_TOKEN")
 
@@ -100,25 +95,20 @@ defmodule Pakman.Instellar do
   defp client do
     endpoint = System.get_env("INSTELLAR_ENDPOINT", "https://web.instellar.app")
 
-    if Application.get_env(:pakman, :env) == :test do
-      middleware = [
-        {Tesla.Middleware.BaseUrl, endpoint},
-        Tesla.Middleware.JSON
-      ]
+    middleware =
+      if Application.get_env(:pakman, :env) == :test do
+        [
+          {Tesla.Middleware.BaseUrl, endpoint},
+          Tesla.Middleware.JSON
+        ]
+      else
+        [
+          {Tesla.Middleware.BaseUrl, endpoint},
+          Tesla.Middleware.JSON,
+          {Tesla.Middleware.Logger, debug: false}
+        ]
+      end
 
-      Tesla.client(middleware, Tesla.Adapter.Mint)
-    else
-      middleware = [
-        {Tesla.Middleware.BaseUrl, endpoint},
-        Tesla.Middleware.JSON,
-        {Tesla.Middleware.Logger, debug: false}
-      ]
-
-      Tesla.client(
-        middleware,
-        {Tesla.Adapter.Mint,
-         protocols: [:http1], transport_opts: [cacerts: @cacerts]}
-      )
-    end
+    Tesla.client(middleware)
   end
 end

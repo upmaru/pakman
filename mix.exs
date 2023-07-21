@@ -20,6 +20,7 @@ defmodule Pakman.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {Pakman.Application, []},
       extra_applications: [:logger, :eex]
     ]
   end
@@ -40,6 +41,7 @@ defmodule Pakman.MixProject do
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.8.0"},
       {:slugger, "~> 0.3.0"},
+      {:finch, "~> 0.16.0"},
       {:mint, "~> 1.5.0"},
       {:castore, "~> 1.0"},
       {:bypass, "~> 2.1", only: :test},
