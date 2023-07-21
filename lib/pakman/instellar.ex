@@ -14,15 +14,10 @@ defmodule Pakman.Instellar do
     end
   end
 
-  @spec create_deployment(binary, binary) :: {:ok, atom, map} | {:error, atom}
-  def create_deployment(token, archive_path) do
-    workspace = System.get_env("GITHUB_WORKSPACE")
+  @spec create_deployment(binary, binary, map) ::
+          {:ok, atom, map} | {:error, atom}
+  def create_deployment(token, archive_path, config_params) do
     package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
-
-    config =
-      workspace
-      |> Path.join("instellar.yml")
-      |> YamlElixir.read_from_file!()
 
     headers = [
       {"authorization", "Bearer #{token}"},
@@ -38,7 +33,7 @@ defmodule Pakman.Instellar do
       |> Multipart.add_file(archive_path, name: "deployment[archive]")
       |> Multipart.add_field("deployment[ref]", ref)
       |> Multipart.add_field("deployment[hash]", sha)
-      |> add_stack(config["stack"])
+      |> add_stack(config_params["stack"])
 
     client()
     |> post("/publish/deployments", multipart, headers: headers)
@@ -54,14 +49,9 @@ defmodule Pakman.Instellar do
     end
   end
 
-  def create_configuration(token, deployment_id) do
-    workspace = System.get_env("GITHUB_WORKSPACE")
+  def create_configuration(token, deployment_id, %{"kits" => kits})
+      when is_list(kits) do
     package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
-
-    config =
-      workspace
-      |> Path.join("instellar.yml")
-      |> YamlElixir.read_from_file!()
 
     headers = [
       {"authorization", "Bearer #{token}"},
@@ -70,7 +60,7 @@ defmodule Pakman.Instellar do
 
     configuration_params = %{
       payload: %{
-        kits: config["kits"]
+        kits: kits
       }
     }
 
@@ -92,6 +82,10 @@ defmodule Pakman.Instellar do
     end
   end
 
+  def create_configuration(_token, _deployment_id, _configuration) do
+    {:ok, :no_configuration, %{}}
+  end
+
   defp add_stack(multipart, nil), do: multipart
 
   defp add_stack(multipart, stack)
@@ -104,7 +98,7 @@ defmodule Pakman.Instellar do
     middleware = [
       {Tesla.Middleware.BaseUrl, endpoint},
       Tesla.Middleware.JSON,
-      Tesla.Middleware.Logger
+      {Tesla.Middleware.Logger, debug: false}
     ]
 
     Tesla.client(middleware)
