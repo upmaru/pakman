@@ -10,11 +10,11 @@ This action allows you to build your software into an distributable self-contain
 
 You can choose from multiple version of alpine by choosing the tag
 
-- `pakman@alpine-edge-7.3` - uses alpine:edge image
-- `pakman@alpine-3.18-7.3` - uses alpine:3.18 image
-- `pakman@alpine-3.17-7.3` - uses alpine:3.17 image
-- `pakman@alpine-3.16-7.3` - uses alpine:3.16 image
-- `pakman@alpine-3.15-7.3` - uses alpine:3.15 image
+- `pakman@alpine-edge-7.4` - uses alpine:edge image
+- `pakman@alpine-3.18-7.4` - uses alpine:3.18 image
+- `pakman@alpine-3.17-7.4` - uses alpine:3.17 image
+- `pakman@alpine-3.16-7.4` - uses alpine:3.16 image
+- `pakman@alpine-3.15-7.4` - uses alpine:3.15 image
 
 ## Example Projects
 
