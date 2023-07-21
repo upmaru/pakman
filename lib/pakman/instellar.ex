@@ -29,7 +29,7 @@ defmodule Pakman.Instellar do
 
     multipart =
       Multipart.new()
-      |> Multipart.add_content_type_param("application/x-www-form-urlencoded")
+      |> Multipart.add_content_type_param("multipart/form-data")
       |> Multipart.add_file(archive_path, name: "deployment[archive]")
       |> Multipart.add_field("deployment[ref]", ref)
       |> Multipart.add_field("deployment[hash]", sha)
