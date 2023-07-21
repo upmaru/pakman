@@ -100,15 +100,20 @@ defmodule Pakman.Instellar do
   defp client do
     endpoint = System.get_env("INSTELLAR_ENDPOINT", "https://web.instellar.app")
 
-    middleware = [
-      {Tesla.Middleware.BaseUrl, endpoint},
-      Tesla.Middleware.JSON,
-      {Tesla.Middleware.Logger, debug: false}
-    ]
-
     if Application.get_env(:pakman, :env) == :test do
+      middleware = [
+        {Tesla.Middleware.BaseUrl, endpoint},
+        Tesla.Middleware.JSON
+      ]
+
       Tesla.client(middleware, Tesla.Adapter.Mint)
     else
+      middleware = [
+        {Tesla.Middleware.BaseUrl, endpoint},
+        Tesla.Middleware.JSON,
+        {Tesla.Middleware.Logger, debug: false}
+      ]
+
       Tesla.client(
         middleware,
         {Tesla.Adapter.Mint, transport_opts: [cacerts: @cacerts]}
