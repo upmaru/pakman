@@ -116,7 +116,8 @@ defmodule Pakman.Instellar do
 
       Tesla.client(
         middleware,
-        {Tesla.Adapter.Mint, transport_opts: [cacerts: @cacerts]}
+        {Tesla.Adapter.Mint,
+         protocols: [:http1], transport_opts: [cacerts: @cacerts]}
       )
     end
   end
