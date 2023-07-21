@@ -4,7 +4,7 @@ defmodule Pakman.MixProject do
   def project do
     [
       app: :pakman,
-      version: "7.0.0",
+      version: "7.2.0",
       elixir: "~> 1.8",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -20,6 +20,7 @@ defmodule Pakman.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {Pakman.Application, []},
       extra_applications: [:logger, :eex]
     ]
   end
@@ -36,11 +37,14 @@ defmodule Pakman.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tesla, "~> 1.6.0"},
+      {:tesla, "~> 1.7.0"},
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.8.0"},
       {:slugger, "~> 0.3.0"},
-      {:hackney, "~> 1.16.0"},
+      {:finch, "~> 0.16.0"},
+      {:mint, "~> 1.5.0"},
+      {:castore, "~> 1.0"},
+      {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
