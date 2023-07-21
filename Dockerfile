@@ -12,7 +12,7 @@ ENV MIX_ENV="prod"
 
 RUN mix local.rebar --force
 RUN mix local.hex --force
-RUN mix deps.get
+RUN mix deps.get --only prod
 RUN mix escript.build
 
 USER builder
