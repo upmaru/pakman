@@ -7,32 +7,28 @@ defmodule Pakman.Application do
            |> Enum.map(fn {_, cert, _} -> cert end)
 
   def start(_, _) do
-    children =
-      []
-      |> append_finch()
+    children = [
+      {Finch, finch_options(Application.get_env(:pakman, :env))}
+    ]
 
     opts = [strategy: :one_for_one, name: Instellar.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
-  defp append_finch(children) do
-    if Application.get_env(:pakman, :env) == :test do
-      children ++ [{Finch, name: Pakman.Finch}]
-    else
-      children ++
-        [
-          {Finch,
-           name: Pakman.Finch,
-           pools: %{
-             default: [
-               conn_opts: [
-                 transport_opts: [
-                   cacerts: @cacerts
-                 ]
-               ]
-             ]
-           }}
+  defp finch_options(:test), do: [name: Pakman.Finch]
+
+  defp finch_options(_) do
+    [
+      name: Pakman.Finch,
+      pools: %{
+        default: [
+          conn_opts: [
+            transport_opts: [
+              cacerts: @cacerts
+            ]
+          ]
         ]
-    end
+      }
+    ]
   end
 end
