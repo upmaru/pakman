@@ -40,7 +40,8 @@ defmodule Pakman.MixProject do
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.8.0"},
       {:slugger, "~> 0.3.0"},
-      {:hackney, "~> 1.18.0"},
+      {:mint, "~> 1.5.0"},
+      {:castore, "~> 1.0"},
       {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false}

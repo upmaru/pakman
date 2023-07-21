@@ -3,6 +3,11 @@ defmodule Pakman.Instellar do
 
   alias Tesla.Multipart
 
+  @cacerts CAStore.file_path()
+           |> File.read!()
+           |> :public_key.pem_decode()
+           |> Enum.map(fn {_, cert, _} -> cert end)
+
   def authenticate do
     auth_token = System.get_env("INSTELLAR_AUTH_TOKEN")
 
@@ -101,6 +106,13 @@ defmodule Pakman.Instellar do
       {Tesla.Middleware.Logger, debug: false}
     ]
 
-    Tesla.client(middleware)
+    if Application.get_env(:pakman, :env) == :test do
+      Tesla.client(middleware, Tesla.Adapter.Mint)
+    else
+      Tesla.client(
+        middleware,
+        {Tesla.Adapter.Mint, transport_opts: [cacerts: @cacerts]}
+      )
+    end
   end
 end
