@@ -8,6 +8,8 @@ COPY . /var/lib/pakman
 
 WORKDIR /var/lib/pakman
 
+ENV MIX_ENV="prod"
+
 RUN mix local.rebar --force
 RUN mix local.hex --force
 RUN mix deps.get
