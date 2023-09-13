@@ -77,6 +77,9 @@ defmodule Pakman.Instellar do
       {:ok, %{status: 200, body: body}} ->
         {:ok, :already_exists, body["data"]}
 
+      {:ok, %{status: 422, body: body}} ->
+        {:error, body}
+
       _ ->
         {:error, :configuration_creation_failed}
     end

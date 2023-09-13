@@ -29,6 +29,9 @@ defmodule Pakman.Deploy do
       print_deployment_message(deployment_message)
       print_configuration_message(configuration_message)
     else
+      {:error, body} ->
+        raise Failure, message: "[Pakman.Deploy] #{inspect(body)}"
+
       _ ->
         raise Failure, message: "[Pakman.Deploy] Deployment creation failed..."
     end
