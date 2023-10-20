@@ -37,6 +37,13 @@ run:
   - name: migrate
     binary: rails
     call: db:migrate
+  - name: console
+    binary: rails
+    call: console
+  - name: logs
+    path: /usr/bin
+    binary: tail
+    call: -f -n 200 /var/log/locomo/current
   services:
   - name: web
     binary: rails
