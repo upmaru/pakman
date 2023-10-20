@@ -2,7 +2,10 @@
 # and its dependencies with the aid of the Mix.Config module.
 import Config
 
-config :tesla, :adapter, {Tesla.Adapter.Finch, name: Pakman.Finch}
+config :tesla,
+       :adapter,
+       {Tesla.Adapter.Finch, name: Pakman.Finch, receive_timeout: 30_000}
+
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,

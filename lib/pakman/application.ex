@@ -20,7 +20,6 @@ defmodule Pakman.Application do
   defp finch_options(_) do
     [
       name: Pakman.Finch,
-      receive_timeout: 30_000,
       pools: %{
         default: [
           conn_opts: [
