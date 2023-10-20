@@ -136,12 +136,27 @@ defmodule Pakman.Bootstrap do
     [base_path, "#{name}.run"]
     |> Path.join()
     |> File.write!(Templates.run(configuration))
+
+    [base_path, "#{name}.log"]
+    |> Path.join()
+    |> File.write!(Templates.log(name))
   end
 
   defp create_hook_file({hook_name, content}, base_path, name) do
     [base_path, "#{name}.#{hook_name}"]
     |> Path.join()
     |> File.write!(Templates.hook(content))
+  end
+
+  defp create_file(base_path, name, :environment = type) do
+    file_type =
+      type
+      |> Atom.to_string()
+      |> String.replace("_", "-")
+
+    [base_path, "#{name}.#{file_type}"]
+    |> Path.join()
+    |> File.write!(Templates.environment())
   end
 
   defp create_file(base_path, name, type) do
