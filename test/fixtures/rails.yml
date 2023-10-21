@@ -19,6 +19,10 @@ dependencies:
 
 stack: alpine/3.17
 
+architectures:
+  - x86_64
+  - aarch64
+
 build:
   destinations: 
     - '*'
