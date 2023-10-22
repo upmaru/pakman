@@ -10,6 +10,8 @@ defmodule Pakman.Setup do
 
     %{organization: namespace, name: name} = Environment.repository()
 
+    File.mkdir_p!("#{home}/packages/#{namespace}")
+
     key_name = Enum.join([namespace, name], "-")
 
     @system.cmd("sudo", ["chown", "-R", "runner:abuild", home])
