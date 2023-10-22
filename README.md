@@ -8,7 +8,7 @@ This action allows you to build your software into an distributable self-contain
 
 ## Basic Usage
 
-This is an example configuration. However you should be using the application configuration wizard on (opsmaru.com)[https://opsmaru.com]
+This is an example configuration. However you should be using the application configuration wizard on [opsmaru.com](https://opsmaru.com)
 
 ```yml
 name: 'Deployment'
