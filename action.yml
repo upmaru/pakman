@@ -48,5 +48,5 @@ runs:
         MIX_ENV: prod
 
     - name: List
-      run: ls -la ~/rootfs
+      run: ls -la ~/
       shell: bash
