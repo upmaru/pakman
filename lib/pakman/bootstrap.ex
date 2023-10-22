@@ -7,7 +7,7 @@ defmodule Pakman.Bootstrap do
   def perform(options \\ []) do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
-    @system.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
+    @system.cmd("sudo", ["chown", "-R", "runner:abuild", workspace])
 
     %{organization: namespace, name: name} = Environment.repository()
 

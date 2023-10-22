@@ -12,7 +12,7 @@ defmodule Pakman.Setup do
 
     key_name = Enum.join([namespace, name], "-")
 
-    @system.cmd("sudo", ["chown", "-R", "builder:abuild", home])
+    @system.cmd("sudo", ["chown", "-R", "runner:abuild", home])
 
     abuild_config_path = Path.join(home, ".abuild")
 
