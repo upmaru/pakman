@@ -50,7 +50,3 @@ runs:
       shell: alpine.sh {0}
       env:
         MIX_ENV: prod
-
-    - name: List
-      run: ls -la ~/.mix
-      shell: bash
