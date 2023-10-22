@@ -5,7 +5,7 @@ branding:
   color: 'purple'
 description: 'Builds project into alpine package to be deployed using instellar.app'
 inputs:
-  image:
+  alpine:
     description: |
       Alpine linux version to use (edge | v3.18 | v3.17 | v3.16 | v3.15)
     required: true
@@ -15,7 +15,7 @@ runs:
     - name: Setup Alpine
       uses: jirutka/setup-alpine@v1
       with:
-        branch: ${{ inputs.image }}
+        branch: ${{ inputs.alpine }}
         packages: |
           zip
           tar
