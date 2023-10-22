@@ -24,6 +24,8 @@ runs:
           elixir
           coreutils
           alpine-sdk
+        volumes:
+          - /home/runner/.mix:/home/runner/.mix
 
     - name: Add Runner Permission
       run: sudo addgroup runner abuild
@@ -33,7 +35,7 @@ runs:
       id: cache-pakman
       uses: actions/cache@v3
       with:
-        path: |
+        path:
           - ~/.mix
         key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman
 
