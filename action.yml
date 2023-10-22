@@ -1,20 +1,37 @@
 name: 'Instellar PAKman'
 author: 'Zack Siri'
-description: 'Builds project into alpine package to be deployed using instellar.app'
-inputs:
-  command:
-    description: 'command to run'
-    required: true
-  archive:
-    description: 'archive path'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - --command
-    - ${{inputs.command}}
-    - --archive
-    - ${{inputs.archive}}
 branding:
   icon: 'package'
   color: 'purple'
+description: 'Builds project into alpine package to be deployed using instellar.app'
+inputs:
+  image:
+    description: |
+      Alpine linux version to use (edge | v3.18 | v3.17 | v3.16 | v3.15)
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Setup Alpine
+      uses: jirutka/setup-alpine@v1
+      with:
+        branch: ${{ inputs.image }}
+        packages: |
+          zip
+          tar
+          sudo
+          cmake
+          elixir
+          coreutils
+          alpine-sdk
+
+    - name: Setup Environment
+      run: |
+        sudo addgroup runner abuild
+
+        mix local.rebar --force
+        mix local.hex --force
+        mix escript.install github upmaru/pakman branch feature/chroot-alpine --force
+      shell: alpine.sh {0}
+      env:
+        MIX_ENV: prod
