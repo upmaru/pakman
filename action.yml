@@ -12,6 +12,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Create Mix Directory
+      run: mkdir -p ~/.mix
+      shell: bash
+
     - name: Setup Alpine
       uses: jirutka/setup-alpine@v1
       with:
