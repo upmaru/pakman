@@ -48,3 +48,4 @@ runs:
 
     - name: List
       run: ls -la
+      shell: bash
