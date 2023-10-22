@@ -52,5 +52,5 @@ runs:
         MIX_ENV: prod
 
     - name: List
-      run: ls -la ~/
+      run: ls -la ~/.mix
       shell: bash
