@@ -28,8 +28,7 @@ runs:
           elixir
           coreutils
           alpine-sdk
-        volumes:
-          - /home/runner/.mix:/home/runner/.mix
+        volumes: /home/runner/.mix:/home/runner/.mix
 
     - name: Add Runner Permission
       run: sudo addgroup runner abuild
