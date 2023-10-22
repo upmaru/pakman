@@ -4,12 +4,13 @@ defmodule Pakman.MixProject do
   def project do
     [
       app: :pakman,
-      version: "8.0",
-      elixir: "~> 1.8",
+      version: "8.0.0",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: dialyzer(),
+      package: package(),
       escript: [
         main_module: Pakman.CLI
       ]
@@ -48,6 +49,16 @@ defmodule Pakman.MixProject do
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+    ]
+  end
+
+  def package do
+    [
+      description: "Build tool for opsmaru.com",
+      files: ["lib", "mix.exs", "README.md"],
+      maintainers: ["Zack Siri"],
+      licenses: ["MIT"],
+      links: %{github: "https://github.com/upmaru/pakman"}
     ]
   end
 end
