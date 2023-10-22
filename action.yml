@@ -25,7 +25,16 @@ runs:
           coreutils
           alpine-sdk
 
+    - name: Cache Pakman
+      id: cache-pakman
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.mix/escripts
+        key: ${{ runner.os }}-${{ runner.arch }}-pakman
+
     - name: Install Pakman
+      if: steps.cache-pakman.outputs.cache-hit != 'true'
       run: |
         sudo addgroup runner abuild
 
