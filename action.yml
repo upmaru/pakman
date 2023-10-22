@@ -25,7 +25,7 @@ runs:
           coreutils
           alpine-sdk
 
-    - name: Setup Environment
+    - name: Install Pakman
       run: |
         sudo addgroup runner abuild
 
