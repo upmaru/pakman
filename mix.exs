@@ -11,7 +11,8 @@ defmodule Pakman.MixProject do
       deps: deps(),
       dialyzer: dialyzer(),
       escript: [
-        main_module: Pakman.CLI
+        main_module: Pakman.CLI,
+        path: "bin/pakman"
       ]
     ]
   end
