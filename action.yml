@@ -13,7 +13,9 @@ runs:
   using: composite
   steps:
     - name: Create Mix Directory
-      run: mkdir -p ~/.mix
+      run: |
+        mkdir -p ~/.mix
+        echo "~/.mix/escripts" >> $GITHUB_PATH
       shell: bash
 
     - name: Setup Alpine
