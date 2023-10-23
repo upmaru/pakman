@@ -4,7 +4,7 @@ defmodule Pakman.MixProject do
   def project do
     [
       app: :pakman,
-      version: "8.0.0",
+      version: "8.0.1",
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
