@@ -14,6 +14,25 @@ defmodule Pakman.Instellar do
     end
   end
 
+  def get_storage(token) do
+    package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
+
+    headers = [
+      {"authorization", "Bearer #{token}"},
+      {"x-instellar-package-token", package_token}
+    ]
+
+    client()
+    |> get("/publish/storage", headers: headers)
+    |> case do
+      {:ok, %{status: 200, body: body}} -> 
+        {:ok, :success, body["data"]}
+
+      _ -> 
+        {:error, :get_storage_failed}
+    end
+  end
+
   @spec create_deployment(binary, binary, map) ::
           {:ok, atom, map} | {:error, atom}
   def create_deployment(token, archive_path, config_params) do
