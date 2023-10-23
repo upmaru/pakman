@@ -1,5 +1,6 @@
 defmodule Pakman.Bootstrap do
   alias Pakman.Environment
+  alias Pakman.Setup
   alias Pakman.Bootstrap.Templates
 
   @system Application.compile_env(:pakman, :system) || System
@@ -84,7 +85,7 @@ defmodule Pakman.Bootstrap do
         |> Enum.map(&create_hook_file(&1, base_path, name))
     end
 
-    Pakman.setup()
+    Setup.perform()
   end
 
   defp create_apkbuild(base_path, name, version, build, configuration) do
@@ -149,10 +150,7 @@ defmodule Pakman.Bootstrap do
   end
 
   defp create_file(base_path, name, :environment = type) do
-    file_type =
-      type
-      |> Atom.to_string()
-      |> String.replace("_", "-")
+    file_type = generate_file_type(type)
 
     [base_path, "#{name}.#{file_type}"]
     |> Path.join()
@@ -160,13 +158,16 @@ defmodule Pakman.Bootstrap do
   end
 
   defp create_file(base_path, name, type) do
-    file_type =
-      type
-      |> Atom.to_string()
-      |> String.replace("_", "-")
-
+    file_type = generate_file_type(type)
+      
     [base_path, "#{name}.#{file_type}"]
     |> Path.join()
     |> File.write!(apply(Templates, type, [name]))
+  end
+
+  defp generate_file_type(type) do
+    type
+    |> Atom.to_string()
+    |> String.replace("_", "-")
   end
 end

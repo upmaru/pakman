@@ -1,7 +1,7 @@
 defmodule Pakman.Bootstrap.Templates do
   require EEx
 
-  @prefix "lib/pakman/templates/bootstrap"
+  @prefix "lib/pakman/bootstrap/templates"
 
   EEx.function_from_file(
     :def,

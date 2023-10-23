@@ -9,7 +9,7 @@ defmodule Pakman.Deploy do
 
   def perform(options) do
     archive = Keyword.fetch!(options, :archive)
-    config_file = Keyword.get(options, :config_file, "instellar.yml")
+    config_file = Keyword.get(options, :config, "instellar.yml")
     workspace = System.get_env("GITHUB_WORKSPACE")
 
     config =
