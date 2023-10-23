@@ -13,9 +13,7 @@ runs:
   using: composite
   steps:
     - name: Create Mix Directory
-      run: |
-        mkdir -p ~/.mix
-        echo "~/.mix/escripts" >> $GITHUB_PATH
+      run: mkdir -p ~/.mix
       shell: bash
 
     - name: Setup Alpine
@@ -33,7 +31,9 @@ runs:
         volumes: /home/runner/.mix:/home/runner/.mix
 
     - name: Add Runner Permission
-      run: sudo addgroup runner abuild
+      run: |
+        sudo addgroup runner abuild
+        echo "~/.mix/escripts" >> $GITHUB_PATH
       shell: alpine.sh {0}
 
     - name: Cache Pakman
