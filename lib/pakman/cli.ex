@@ -1,5 +1,10 @@
 defmodule Pakman.CLI do
   @switches %{
+    bootstrap: [
+      switches: [
+        config: :string
+      ]
+    ],
     create_deployment: [
       switches: [
         archive: :string,

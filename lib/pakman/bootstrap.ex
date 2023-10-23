@@ -24,7 +24,7 @@ defmodule Pakman.Bootstrap do
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
 
     config_file =
-      Keyword.get(options, :config_file) ||
+      Keyword.get(options, :config) ||
         Path.join(workspace, "instellar.yml")
 
     config = YamlElixir.read_from_file!(config_file)
@@ -159,7 +159,7 @@ defmodule Pakman.Bootstrap do
 
   defp create_file(base_path, name, type) do
     file_type = generate_file_type(type)
-      
+
     [base_path, "#{name}.#{file_type}"]
     |> Path.join()
     |> File.write!(apply(Templates, type, [name]))
