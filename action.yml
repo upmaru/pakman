@@ -1,9 +1,9 @@
-name: 'Instellar PAKman'
+name: 'Opsmaru Pakman'
 author: 'Zack Siri'
 branding:
   icon: 'package'
   color: 'purple'
-description: 'Builds project into alpine package to be deployed using instellar.app'
+description: 'Builds project into alpine package to be deployed using opsmaru.com'
 inputs:
   alpine:
     description: |
