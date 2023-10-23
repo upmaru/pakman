@@ -30,10 +30,10 @@ runs:
           alpine-sdk
         volumes: /home/runner/.mix:/home/runner/.mix
 
-    - name: Add Runner Permission
+    - name: Prepare Runner User
       run: |
         sudo addgroup runner abuild
-        echo "~/.mix/escripts" >> $GITHUB_PATH
+        echo "/home/runner/.mix/escripts" >> $GITHUB_PATH
       shell: alpine.sh {0}
 
     - name: Cache Pakman
