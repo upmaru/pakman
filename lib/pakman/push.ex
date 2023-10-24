@@ -30,6 +30,8 @@ defmodule Pakman.Push do
 
     files = FileExt.ls_r(packages_path)
 
+    IO.inspect(files)
+
     storage = %{
       config:
         ExAws.Config.new(:s3,
