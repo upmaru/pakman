@@ -19,16 +19,12 @@ defmodule Pakman.Push do
 
     with {:ok, token} <- Instellar.authenticate(),
          {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token) do
-      workspace = System.get_env("GITHUB_WORKSPACE")
+      home = System.get_env("HOME")
       sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
-      packages_path = Path.join(workspace, "packages")
-
-      IO.inspect(packages_path)
+      packages_path = Path.join(home, "packages")
 
       files = FileExt.ls_r(packages_path)
-
-      IO.inspect(files)
 
       storage = %{
         config:
