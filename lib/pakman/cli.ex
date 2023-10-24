@@ -5,7 +5,12 @@ defmodule Pakman.CLI do
         config: :string
       ]
     ],
-    create_deployment: [
+    push: [
+      switches: [
+        concurrency: :integer
+      ]
+    ],
+    deploy: [
       switches: [
         archive: :string,
         config: :string
@@ -15,7 +20,8 @@ defmodule Pakman.CLI do
 
   @commands %{
     "bootstrap" => :bootstrap,
-    "deploy" => :create_deployment
+    "push" => :push,
+    "deploy" => :deploy
   }
 
   def main(args \\ []) do
