@@ -41,7 +41,7 @@ defmodule Pakman.Push do
 
       stream =
         Task.Supervisor.async_stream(
-          Pakman.TaskSupservisor,
+          Pakman.TaskSupervisor,
           files,
           __MODULE__,
           :push,
