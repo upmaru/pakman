@@ -91,7 +91,7 @@ defmodule Pakman.Push do
     |> ExAws.request(Keyword.new(storage.config))
     |> case do
       {:ok, result} ->
-        Logger.info("[Pakman.Push] pushed #{storage_path}")
+        Logger.info("[Pakman.Push] pushed - #{storage_path}")
 
         {:ok, result}
 
