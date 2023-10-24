@@ -18,15 +18,17 @@ defmodule Pakman.Push do
     Logger.info("[Pakman.Push] pushing...")
 
     with {:ok, token} <- Instellar.authenticate(),
-         {:ok, :success, %{"attributes" => storage}} <- Instellar.get_storage(token) do
+         {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token) do
       workspace = System.get_env("GITHUB_WORKSPACE")
       sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
       packages_path = Path.join(workspace, "packages")
 
+      IO.inspect(packages_path)
+
       files = FileExt.ls_r(packages_path)
 
-      Logger.info("[Pakman.Push] #{inspect(files)}")
+      IO.inspect(files)
 
       storage = %{
         config:
