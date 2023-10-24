@@ -30,7 +30,7 @@ defmodule Pakman.Push do
 
     files = FileExt.ls_r(packages_path)
 
-    IO.inspect(files)
+    inspect(files)
 
     storage = %{
       config:
@@ -46,7 +46,7 @@ defmodule Pakman.Push do
     }
 
     stream =
-      Task.Supervisor.async_stream(
+      Task.Supervisor.async_stream_nolink(
         Pakman.TaskSupervisor,
         files,
         __MODULE__,
@@ -82,6 +82,6 @@ defmodule Pakman.Push do
     |> S3.Upload.stream_file()
     |> S3.upload(storage.bucket, storage_path)
     |> ExAws.request(Keyword.new(storage.config))
-    |> IO.inspect()
+    |> inspect()
   end
 end
