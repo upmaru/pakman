@@ -16,7 +16,7 @@ defmodule Pakman.Push do
 
   def perform(options \\ [concurrency: 2]) do
     Logger.info("[Pakman.Push] pushing...")
-    
+
     with {:ok, token} <- Instellar.authenticate(),
          {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token),
          {:ok, uploads} <- push_files(storage, options) do
@@ -32,7 +32,7 @@ defmodule Pakman.Push do
 
     files = FileExt.ls_r(packages_path)
 
-    inspect(files)
+    Logger.info("[Pakman.Push] #{inspect(files)}")
 
     storage = %{
       config:
@@ -47,17 +47,17 @@ defmodule Pakman.Push do
       bucket: storage["bucket"]
     }
 
-    stream =
-      Task.Supervisor.async_stream_nolink(
-        Pakman.TaskSupervisor,
-        files,
-        __MODULE__,
-        :push_file,
-        [storage, sha],
-        max_concurrency: Keyword.get(options, :concurrency, 2)
-      )
+    # stream =
+    #   Task.Supervisor.async_stream_nolink(
+    #     Pakman.TaskSupervisor,
+    #     files,
+    #     __MODULE__,
+    #     :push_file,
+    #     [storage, sha],
+    #     max_concurrency: Keyword.get(options, :concurrency, 2)
+    #   )
 
-    uploads = Enum.to_list(stream)
+    uploads = Enum.map(files, &push_file(&1, storage, sha))
 
     if Enum.count(uploads) == Enum.count(files) do
       Logger.info("[Pakman.Push] completed - #{sha}")
