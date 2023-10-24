@@ -46,7 +46,8 @@ defmodule Pakman.Push do
           __MODULE__,
           :push,
           [storage, sha],
-          max_concurrency: Keyword.get(options, :concurrency, 2)
+          max_concurrency: Keyword.get(options, :concurrency, 2), 
+          timeout: 60_000
         )
 
       uploads = Enum.to_list(stream)
