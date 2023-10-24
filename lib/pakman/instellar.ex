@@ -25,10 +25,10 @@ defmodule Pakman.Instellar do
     client()
     |> get("/publish/storage", headers: headers)
     |> case do
-      {:ok, %{status: 200, body: body}} -> 
+      {:ok, %{status: 200, body: body}} ->
         {:ok, :success, body["data"]}
 
-      _ -> 
+      _ ->
         {:error, :get_storage_failed}
     end
   end

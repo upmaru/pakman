@@ -27,32 +27,43 @@ defmodule Pakman.Push do
     files = FileExt.ls_r(packages_path)
 
     storage = [
-      config: ExAws.Config.new(:s3, 
-        access_key_id: storage["credential"]["access_key_id"],
-        secret_access_key: storage["credential"]["secret_access_key"],
-        host: storage["host"],
-        port: storage["port"],
-        scheme: storage["scheme"],
-        region: storage["region"]
-      ),
+      config:
+        ExAws.Config.new(:s3,
+          access_key_id: storage["credential"]["access_key_id"],
+          secret_access_key: storage["credential"]["secret_access_key"],
+          host: storage["host"],
+          port: storage["port"],
+          scheme: storage["scheme"],
+          region: storage["region"]
+        ),
       bucket: storage["bucket"]
     ]
 
-    uploads = Enum.map(files, &push_file(&1, storage, sha))
+    stream =
+      Task.Supervisor.async_stream(
+        Pakman.TaskSupervisor,
+        files,
+        __MODULE__,
+        :push_file,
+        [storage, sha],
+        max_concurrency: 2
+      )
+
+    uploads = Enum.to_list(stream)
 
     if Enum.count(uploads) == Enum.count(files) do
-      Logger.info("[Pakman.Push] Push completed - #{identifier}")
+      Logger.info("[Pakman.Push] completed - #{identifier}")
 
       {:ok, uploads}
     else
-      comment = "Upload partially failed"
+      comment = "partially failed"
       message = "[Pakman.Push] #{comment} - #{identifier}"
       Logger.error(message)
       raise Error, message: message
     end
   end
 
-  defp push_file(path, config, identifier) do
+  def push_file(path, config, identifier) do
     file_with_arch_name =
       path
       |> Path.split()
