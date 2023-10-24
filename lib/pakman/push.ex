@@ -40,7 +40,7 @@ defmodule Pakman.Push do
           ),
         bucket: storage["bucket"]
       }
-      
+
       uploads = Enum.map(files, &push_file(&1, storage, sha))
 
       if Enum.count(uploads) == Enum.count(files) do
@@ -54,6 +54,7 @@ defmodule Pakman.Push do
         raise Error, message: message
       end
     end
+    |> IO.inspect()
   end
 
   def push_file(path, storage, identifier) do
