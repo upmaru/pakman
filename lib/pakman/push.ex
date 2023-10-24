@@ -18,7 +18,7 @@ defmodule Pakman.Push do
     Logger.info("[Pakman.Push] pushing...")
 
     with {:ok, token} <- Instellar.authenticate(),
-         {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token) do
+         {:ok, :success, %{"attributes" => storage}} <- Instellar.get_storage(token) do
       workspace = System.get_env("GITHUB_WORKSPACE")
       sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
@@ -54,7 +54,6 @@ defmodule Pakman.Push do
         raise Error, message: message
       end
     end
-    |> IO.inspect()
   end
 
   def push_file(path, storage, identifier) do
