@@ -18,56 +18,41 @@ defmodule Pakman.Push do
     Logger.info("[Pakman.Push] pushing...")
 
     with {:ok, token} <- Instellar.authenticate(),
-         {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token),
-         {:ok, uploads} <- push_files(storage, options) do
-      {:ok, uploads}
-    end
-  end
+         {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token) do
+      workspace = System.get_env("GITHUB_WORKSPACE")
+      sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
-  defp push_files(storage, options) do
-    workspace = System.get_env("GITHUB_WORKSPACE")
-    sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
+      packages_path = Path.join(workspace, "packages")
 
-    packages_path = Path.join(workspace, "packages")
+      files = FileExt.ls_r(packages_path)
 
-    files = FileExt.ls_r(packages_path)
+      Logger.info("[Pakman.Push] #{inspect(files)}")
 
-    Logger.info("[Pakman.Push] #{inspect(files)}")
+      storage = %{
+        config:
+          ExAws.Config.new(:s3,
+            access_key_id: storage["credential"]["access_key_id"],
+            secret_access_key: storage["credential"]["secret_access_key"],
+            host: storage["host"],
+            port: storage["port"],
+            scheme: storage["scheme"],
+            region: storage["region"]
+          ),
+        bucket: storage["bucket"]
+      }
+      
+      uploads = Enum.map(files, &push_file(&1, storage, sha))
 
-    storage = %{
-      config:
-        ExAws.Config.new(:s3,
-          access_key_id: storage["credential"]["access_key_id"],
-          secret_access_key: storage["credential"]["secret_access_key"],
-          host: storage["host"],
-          port: storage["port"],
-          scheme: storage["scheme"],
-          region: storage["region"]
-        ),
-      bucket: storage["bucket"]
-    }
+      if Enum.count(uploads) == Enum.count(files) do
+        Logger.info("[Pakman.Push] completed - #{sha}")
 
-    # stream =
-    #   Task.Supervisor.async_stream_nolink(
-    #     Pakman.TaskSupervisor,
-    #     files,
-    #     __MODULE__,
-    #     :push_file,
-    #     [storage, sha],
-    #     max_concurrency: Keyword.get(options, :concurrency, 2)
-    #   )
-
-    uploads = Enum.map(files, &push_file(&1, storage, sha))
-
-    if Enum.count(uploads) == Enum.count(files) do
-      Logger.info("[Pakman.Push] completed - #{sha}")
-
-      {:ok, uploads}
-    else
-      comment = "partially failed"
-      message = "[Pakman.Push] #{comment} - #{sha}"
-      Logger.error(message)
-      raise Error, message: message
+        {:ok, uploads}
+      else
+        comment = "partially failed"
+        message = "[Pakman.Push] #{comment} - #{sha}"
+        Logger.error(message)
+        raise Error, message: message
+      end
     end
   end
 
