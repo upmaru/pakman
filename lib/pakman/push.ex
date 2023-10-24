@@ -39,9 +39,22 @@ defmodule Pakman.Push do
         bucket: storage["bucket"]
       }
 
-      uploads = Enum.map(files, &push_file(&1, storage, sha))
+      stream =
+        Task.Supervisor.async_stream(
+          Pakman.TaskSupservisor,
+          files,
+          __MODULE__,
+          :push,
+          [storage, sha],
+          max_concurrency: Keyword.get(options, :concurrency, 2)
+        )
 
-      if Enum.count(uploads) == Enum.count(files) do
+      uploads = Enum.to_list(stream)
+
+      successful_uploads =
+        Enum.filter(uploads, fn {result, _} -> result == :ok end)
+
+      if Enum.count(successful_uploads) == Enum.count(files) do
         Logger.info("[Pakman.Push] completed - #{sha}")
 
         {:ok, uploads}
@@ -54,19 +67,36 @@ defmodule Pakman.Push do
     end
   end
 
-  def push_file(path, storage, identifier) do
+  def push(path, storage, sha) do
+    %{organization: organization, name: name} = Pakman.Environment.repository()
+
     file_with_arch_name =
       path
       |> Path.split()
       |> Enum.take(-2)
       |> Path.join()
 
-    storage_path = Path.join(identifier, file_with_arch_name)
+    storage_path =
+      Path.join([
+        "deployments",
+        organization,
+        name,
+        sha,
+        file_with_arch_name
+      ])
 
     path
     |> S3.Upload.stream_file()
     |> S3.upload(storage.bucket, storage_path)
     |> ExAws.request(Keyword.new(storage.config))
-    |> IO.inspect()
+    |> case do
+      {:ok, result} ->
+        Logger.info("[Pakman.Push] pushed #{storage_path}")
+
+        {:ok, result}
+
+      error ->
+        error
+    end
   end
 end
