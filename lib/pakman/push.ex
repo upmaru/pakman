@@ -15,6 +15,8 @@ defmodule Pakman.Push do
   end
 
   def perform(options \\ [concurrency: 2]) do
+    Logger.info("[Pakman.Push] pushing...")
+    
     with {:ok, token} <- Instellar.authenticate(),
          {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token),
          {:ok, uploads} <- push_files(storage, options) do
