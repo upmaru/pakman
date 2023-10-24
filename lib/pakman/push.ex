@@ -67,6 +67,6 @@ defmodule Pakman.Push do
     |> S3.Upload.stream_file()
     |> S3.upload(storage.bucket, storage_path)
     |> ExAws.request(Keyword.new(storage.config))
-    |> inspect()
+    |> IO.inspect()
   end
 end
