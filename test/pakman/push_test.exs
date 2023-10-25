@@ -40,11 +40,11 @@ defmodule Pakman.PushTest do
     ExAws.S3.put_bucket(storage["bucket"], storage["region"])
     |> ExAws.request(Keyword.new(ex_aws_config))
 
-    {:ok, bypass: bypass}
+    {:ok, bypass: bypass, storage: storage}
   end
 
   describe "push assets and create deployment" do
-    test "successfully push and create deployment", %{bypass: bypass} do
+    test "successfully push and create deployment", %{bypass: bypass, storage: storage} do
       Bypass.expect(bypass, "POST", "/publish/automation/callback", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -56,21 +56,7 @@ defmodule Pakman.PushTest do
         |> Plug.Conn.put_resp_header("content-type", "application/json")
         |> Plug.Conn.resp(
           200,
-          Jason.encode!(%{
-            data: %{
-              attributes: %{
-                "host" => "localhost",
-                "port" => 9000,
-                "scheme" => "http://",
-                "region" => "auto",
-                "bucket" => "test",
-                "credential" => %{
-                  "access_key_id" => "minioadmin",
-                  "secret_access_key" => "minioadmin"
-                }
-              }
-            }
-          })
+          Jason.encode!(%{data: %{attributes: storage}})
         )
       end)
 
