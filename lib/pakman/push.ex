@@ -17,6 +17,7 @@ defmodule Pakman.Push do
   def perform(options \\ [concurrency: 2]) do
     archive = Keyword.get(options, :archive, "packages.zip")
     config_file = Keyword.get(options, :config, "instellar.yml")
+    workspace = System.get_env("GITHUB_WORKSPACE")
 
     config =
       workspace
