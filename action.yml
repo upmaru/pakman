@@ -16,6 +16,7 @@ runs:
       run: |
         mkdir -p ~/.mix
         mkdir -p ~/packages
+        mkdir -p ~/artifacts
       shell: bash
 
     - name: Setup Alpine
@@ -33,6 +34,7 @@ runs:
         volumes: |
           /home/runner/.mix:/home/runner/.mix
           /home/runner/packages:/home/runner/packages
+          /home/runner/artifacts:/home/runner/artifacts
 
     - name: Prepare Runner User
       run: |
