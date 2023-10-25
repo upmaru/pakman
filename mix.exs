@@ -46,7 +46,6 @@ defmodule Pakman.MixProject do
       {:castore, "~> 1.0"},
       {:ex_aws, "~> 2.5"},
       {:ex_aws_s3, "~> 2.5"},
-      {:poison, "~> 5.0"},
       {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.7"},
       {:elixir_uuid, "~> 1.2"},

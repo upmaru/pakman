@@ -26,7 +26,8 @@ defmodule Pakman.Push do
 
     with {:ok, token} <- Instellar.authenticate(),
          {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token),
-         {:ok, %{archive: archive_path}} <- push_files(storage),
+         {:ok, %{archive: archive_path}} <-
+           push_files(storage, archive, options),
          {:ok, deployment_message, response} <-
            Instellar.create_deployment(token, archive_path, config),
          {:ok, configuration_message, _response} <-
@@ -37,16 +38,18 @@ defmodule Pakman.Push do
            ) do
       print_deployment_message(deployment_message)
       print_configuration_message(configuration_message)
+
+      {:ok, :pushed}
     else
       {:error, body} ->
-        raise Failure, message: "[Pakman.Push] #{inspect(body)}"
+        raise Error, message: "[Pakman.Push] #{inspect(body)}"
 
       _ ->
-        raise Failure, message: "[Pakman.Push] Deployment creation failed..."
+        raise Error, message: "[Pakman.Push] Deployment creation failed..."
     end
   end
 
-  def push_files(storage) do
+  def push_files(storage, archive, options) do
     home = System.get_env("HOME")
     sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
@@ -90,12 +93,12 @@ defmodule Pakman.Push do
     if Enum.count(successful_uploads) == Enum.count(files) do
       Logger.info("[Pakman.Push] completed - #{sha}")
 
-      archive_path =
+      {:ok, upload} =
         Enum.find(successful_uploads, fn {:ok, result} ->
           result.type == :archive
         end)
 
-      {:ok, %{archive: archive_path}}
+      {:ok, %{archive: upload.path}}
     else
       comment = "partially failed"
       message = "[Pakman.Push] #{comment} - #{sha}"
@@ -112,10 +115,10 @@ defmodule Pakman.Push do
     |> S3.upload(storage.bucket, storage_path)
     |> ExAws.request(Keyword.new(storage.config))
     |> case do
-      {:ok, result} ->
+      {:ok, _result} ->
         Logger.info("[Pakman.Push] pushed - #{storage_path}")
 
-        {:ok, %{type: :archive, path: storage_path}}
+        %{type: :archive, path: storage_path}
 
       error ->
         error
@@ -145,10 +148,10 @@ defmodule Pakman.Push do
     |> S3.upload(storage.bucket, storage_path)
     |> ExAws.request(Keyword.new(storage.config))
     |> case do
-      {:ok, result} ->
+      {:ok, _result} ->
         Logger.info("[Pakman.Push] pushed - #{storage_path}")
 
-        {:ok, %{type: :deployment, path: stoarge_path}}
+        %{type: :deployment, path: storage_path}
 
       error ->
         error

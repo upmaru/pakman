@@ -1,8 +1,6 @@
 defmodule Pakman.Instellar do
   use Tesla
 
-  alias Tesla.Multipart
-
   def authenticate do
     auth_token = System.get_env("INSTELLAR_AUTH_TOKEN")
 
