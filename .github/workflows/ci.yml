@@ -101,6 +101,17 @@ jobs:
     container:
       image: alpine:3.17
 
+    services:
+      minio:
+        image: minio/minio
+        ports:
+          - 9000:9000
+        env:
+            MINIO_ACCESS_KEY: minioadmin
+            MINIO_SECRET_KEY: minioadmin
+        # needed because the postgres container does not provide a healthcheck
+        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live"
+
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
