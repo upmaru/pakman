@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Pakman
-        uses: upmaru/pakman@feature/chroot-alpine
+        uses: upmaru/pakman@v8
         with:
           alpine: v3.18
 
@@ -71,7 +71,7 @@ jobs:
           path: /home/runner/artifacts
 
       - name: Setup Pakman
-        uses: upmaru/pakman@feature/chroot-alpine
+        uses: upmaru/pakman@v8
         with:
           alpine: v3.18
 
