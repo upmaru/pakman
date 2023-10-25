@@ -54,7 +54,7 @@ runs:
       run: |
         mix local.rebar --force
         mix local.hex --force
-        mix escript.install hex pakman 8.1.1 --force
+        mix escript.install hex pakman 8.1.2 --force
       shell: alpine.sh {0}
       env:
         MIX_ENV: prod
