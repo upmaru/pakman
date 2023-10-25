@@ -40,7 +40,7 @@ defmodule Pakman.MixProject do
       {:tesla, "~> 1.7.0"},
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.8.0"},
-      {:slugger, "~> 0.3.0"},
+      {:slugify, "~> 1.3"},
       {:finch, "~> 0.16.0"},
       {:mint, "~> 1.5.0"},
       {:castore, "~> 1.0"},
