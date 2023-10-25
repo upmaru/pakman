@@ -13,7 +13,9 @@ runs:
   using: composite
   steps:
     - name: Create Mix Directory
-      run: mkdir -p ~/.mix
+      run: |
+        mkdir -p ~/.mix
+        mkdir -p ~/packages
       shell: bash
 
     - name: Setup Alpine
@@ -28,7 +30,9 @@ runs:
           elixir
           coreutils
           alpine-sdk
-        volumes: /home/runner/.mix:/home/runner/.mix
+        volumes: |
+          /home/runner/.mix:/home/runner/.mix
+          /home/runner/packages:/home/runner/packages
 
     - name: Prepare Runner User
       run: |
