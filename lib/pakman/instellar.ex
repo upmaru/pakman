@@ -1,6 +1,8 @@
 defmodule Pakman.Instellar do
   use Tesla
 
+  require Logger
+
   def authenticate do
     auth_token = System.get_env("INSTELLAR_AUTH_TOKEN")
 
@@ -63,7 +65,9 @@ defmodule Pakman.Instellar do
       {:ok, %{status: 200, body: body}} ->
         {:ok, :already_exists, body["data"]}
 
-      _ ->
+      error ->
+        Logger.error("[Pakman.Instellar] #{inspect(error)}")
+
         {:error, :deployment_creation_failed}
     end
   end
