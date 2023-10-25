@@ -143,3 +143,5 @@ jobs:
 
       - name: Run Tests
         run: mix test --trace --slowest 10
+        env: 
+          MINIO_HOST: minio

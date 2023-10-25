@@ -6,8 +6,10 @@ defmodule Pakman.PushTest do
   setup do
     bypass = Bypass.open()
 
+    minio_host = System.get_env("MINIO_HOST") || "localhost"
+
     storage = %{
-      "host" => "localhost",
+      "host" => minio_host,
       "port" => 9000,
       "scheme" => "http://",
       "region" => "auto",
