@@ -73,7 +73,7 @@ defmodule Pakman.Push do
   end
 
   def push({:archives, path, id}, storage) do
-    storage_path = Path.join(["archives", id, path])
+    storage_path = Path.join(["archives", id, Path.basename(path)])
 
     path
     |> S3.Upload.stream_file()
