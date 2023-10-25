@@ -15,16 +15,20 @@ defmodule Pakman.Push do
   end
 
   def perform(options \\ [concurrency: 2]) do
-    Logger.info("[Pakman.Push] pushing...")
+    archive = Keyword.get(options, :archive, "packages.zip")
 
     with {:ok, token} <- Instellar.authenticate(),
          {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token) do
       home = System.get_env("HOME")
       sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
-      packages_path = Path.join(home, "packages")
+      packages_dir = Path.join(home, "packages")
+      archive_path = Path.join(home, archive)
 
-      files = FileExt.ls_r(packages_path)
+      files = 
+        FileExt.ls_r(packages_dir)
+        |> Enum.map(fn path -> {:deployments, path, sha} end)
+        |> Enum.concat([{:archive, archive_path, UUID.uuid4()}])
 
       storage = %{
         config:
@@ -68,7 +72,25 @@ defmodule Pakman.Push do
     end
   end
 
-  def push(path, storage, sha) do
+  def push({:archive, path, id}, storage) do
+    storage_path = Path.join(["archives", id, path])
+
+    path
+    |> S3.Upload.stream_file()
+    |> S3.upload(storage.bucket, storage_path)
+    |> ExAws.request(Keyword.new(storage.config))
+    |> case do
+      {:ok, result} ->
+        Logger.info("[Pakman.Push] pushed - #{storage_path}")
+
+        {:ok, result}
+
+      error ->
+        error
+    end
+  end
+
+  def push({:deployments, path, sha}, storage) do
     %{organization: organization, name: name} = Pakman.Environment.repository()
 
     file_with_arch_name =

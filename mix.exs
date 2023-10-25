@@ -49,6 +49,7 @@ defmodule Pakman.MixProject do
       {:poison, "~> 5.0"},
       {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.7"},
+      {:uuid, "~> 1.1" },
       {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
