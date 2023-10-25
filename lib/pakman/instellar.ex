@@ -48,7 +48,7 @@ defmodule Pakman.Instellar do
 
     deployment_params = %{
       ref: ref,
-      sha: sha,
+      hash: sha,
       archive_path: archive_path
     }
 
