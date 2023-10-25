@@ -59,7 +59,7 @@ defmodule Pakman.Push do
     files =
       FileExt.ls_r(packages_dir)
       |> Enum.map(fn path -> {:deployments, path, sha} end)
-      |> Enum.concat([{:archives, archive_path, UUID.uuid4()}])
+      |> Enum.concat([{:archives, archive_path, Ecto.UUID.generate()}])
 
     storage = %{
       config:

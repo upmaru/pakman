@@ -44,7 +44,10 @@ defmodule Pakman.PushTest do
   end
 
   describe "push assets and create deployment" do
-    test "successfully push and create deployment", %{bypass: bypass, storage: storage} do
+    test "successfully push and create deployment", %{
+      bypass: bypass,
+      storage: storage
+    } do
       Bypass.expect(bypass, "POST", "/publish/automation/callback", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("content-type", "application/json")
