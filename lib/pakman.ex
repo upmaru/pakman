@@ -10,8 +10,4 @@ defmodule Pakman do
   defdelegate push(options),
     to: Pakman.Push,
     as: :perform
-
-  defdelegate deploy(options),
-    to: Pakman.Deploy,
-    as: :perform
 end

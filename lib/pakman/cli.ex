@@ -7,21 +7,16 @@ defmodule Pakman.CLI do
     ],
     push: [
       switches: [
-        concurrency: :integer
-      ]
-    ],
-    deploy: [
-      switches: [
-        archive: :string,
-        config: :string
+        concurrency: :integer,
+        config: :string,
+        archive: :string
       ]
     ]
   }
 
   @commands %{
     "bootstrap" => :bootstrap,
-    "push" => :push,
-    "deploy" => :deploy
+    "push" => :push
   }
 
   def main(args \\ []) do

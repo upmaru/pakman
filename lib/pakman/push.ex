@@ -16,59 +16,90 @@ defmodule Pakman.Push do
 
   def perform(options \\ [concurrency: 2]) do
     archive = Keyword.get(options, :archive, "packages.zip")
+    config_file = Keyword.get(options, :config, "instellar.yml")
+
+    config =
+      workspace
+      |> Path.join(config_file)
+      |> YamlElixir.read_from_file!()
 
     with {:ok, token} <- Instellar.authenticate(),
-         {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token) do
-      home = System.get_env("HOME")
-      sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
+         {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token),
+         {:ok, %{archive: archive_path}} <- push_files(storage),
+         {:ok, deployment_message, response} <-
+           Instellar.create_deployment(token, archive_path, config),
+         {:ok, configuration_message, _response} <-
+           Instellar.create_configuration(
+             token,
+             response["attributes"]["id"],
+             config
+           ) do
+      print_deployment_message(deployment_message)
+      print_configuration_message(configuration_message)
+    else
+      {:error, body} ->
+        raise Failure, message: "[Pakman.Push] #{inspect(body)}"
 
-      packages_dir = Path.join(home, "packages")
-      archive_path = Path.join(home, archive)
+      _ ->
+        raise Failure, message: "[Pakman.Push] Deployment creation failed..."
+    end
+  end
 
-      files = 
-        FileExt.ls_r(packages_dir)
-        |> Enum.map(fn path -> {:deployments, path, sha} end)
-        |> Enum.concat([{:archives, archive_path, UUID.uuid4()}])
+  def push_files(storage) do
+    home = System.get_env("HOME")
+    sha = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
-      storage = %{
-        config:
-          ExAws.Config.new(:s3,
-            access_key_id: storage["credential"]["access_key_id"],
-            secret_access_key: storage["credential"]["secret_access_key"],
-            host: storage["host"],
-            port: storage["port"],
-            scheme: storage["scheme"],
-            region: storage["region"]
-          ),
-        bucket: storage["bucket"]
-      }
+    packages_dir = Path.join(home, "packages")
+    archive_path = Path.join(home, archive)
 
-      stream =
-        Task.Supervisor.async_stream(
-          Pakman.TaskSupervisor,
-          files,
-          __MODULE__,
-          :push,
-          [storage],
-          max_concurrency: Keyword.get(options, :concurrency, 2), 
-          timeout: 60_000
-        )
+    files =
+      FileExt.ls_r(packages_dir)
+      |> Enum.map(fn path -> {:deployments, path, sha} end)
+      |> Enum.concat([{:archives, archive_path, UUID.uuid4()}])
 
-      uploads = Enum.to_list(stream)
+    storage = %{
+      config:
+        ExAws.Config.new(:s3,
+          access_key_id: storage["credential"]["access_key_id"],
+          secret_access_key: storage["credential"]["secret_access_key"],
+          host: storage["host"],
+          port: storage["port"],
+          scheme: storage["scheme"],
+          region: storage["region"]
+        ),
+      bucket: storage["bucket"]
+    }
 
-      successful_uploads =
-        Enum.filter(uploads, fn {result, _} -> result == :ok end)
+    stream =
+      Task.Supervisor.async_stream(
+        Pakman.TaskSupervisor,
+        files,
+        __MODULE__,
+        :push,
+        [storage],
+        max_concurrency: Keyword.get(options, :concurrency, 2),
+        timeout: 60_000
+      )
 
-      if Enum.count(successful_uploads) == Enum.count(files) do
-        Logger.info("[Pakman.Push] completed - #{sha}")
+    uploads = Enum.to_list(stream)
 
-        {:ok, uploads}
-      else
-        comment = "partially failed"
-        message = "[Pakman.Push] #{comment} - #{sha}"
-        Logger.error(message)
-        raise Error, message: message
-      end
+    successful_uploads =
+      Enum.filter(uploads, fn {result, _} -> result == :ok end)
+
+    if Enum.count(successful_uploads) == Enum.count(files) do
+      Logger.info("[Pakman.Push] completed - #{sha}")
+
+      archive_path =
+        Enum.find(successful_uploads, fn {:ok, result} ->
+          result.type == :archive
+        end)
+
+      {:ok, %{archive: archive_path}}
+    else
+      comment = "partially failed"
+      message = "[Pakman.Push] #{comment} - #{sha}"
+      Logger.error(message)
+      raise Error, message: message
     end
   end
 
@@ -83,7 +114,7 @@ defmodule Pakman.Push do
       {:ok, result} ->
         Logger.info("[Pakman.Push] pushed - #{storage_path}")
 
-        {:ok, result}
+        {:ok, %{type: :archive, path: storage_path}}
 
       error ->
         error
@@ -116,10 +147,25 @@ defmodule Pakman.Push do
       {:ok, result} ->
         Logger.info("[Pakman.Push] pushed - #{storage_path}")
 
-        {:ok, result}
+        {:ok, %{type: :deployment, path: stoarge_path}}
 
       error ->
         error
     end
   end
+
+  defp print_deployment_message(:created),
+    do: Logger.info("[Pakman.Deploy] Deployment successfully created...")
+
+  defp print_deployment_message(:already_exists),
+    do: Logger.info("[Pakman.Deploy] Deployment already exists...")
+
+  defp print_configuration_message(:created),
+    do: Logger.info("[Pakman.Deploy] Configuration successfully created...")
+
+  defp print_configuration_message(:already_exists),
+    do: Logger.info("[Pakman.Deploy] Configuration already exists...")
+
+  defp print_configuration_message(:no_configuration),
+    do: Logger.info("[Pakman.Deploy] Configuration not found...")
 end
