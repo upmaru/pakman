@@ -1,20 +1,60 @@
-name: 'Instellar PAKman'
+name: 'Opsmaru Pakman'
 author: 'Zack Siri'
-description: 'Builds project into alpine package to be deployed using instellar.app'
-inputs:
-  command:
-    description: 'command to run'
-    required: true
-  archive:
-    description: 'archive path'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - --command
-    - ${{inputs.command}}
-    - --archive
-    - ${{inputs.archive}}
 branding:
   icon: 'package'
   color: 'purple'
+description: 'Builds project into alpine package to be deployed using opsmaru.com'
+inputs:
+  alpine:
+    description: |
+      Alpine linux version to use (edge | v3.18 | v3.17 | v3.16 | v3.15)
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Create Mix Directory
+      run: |
+        mkdir -p ~/.mix
+        mkdir -p ~/packages
+        mkdir -p ~/artifacts
+      shell: bash
+
+    - name: Setup Alpine
+      uses: jirutka/setup-alpine@v1
+      with:
+        branch: ${{ inputs.alpine }}
+        packages: |
+          zip
+          tar
+          sudo
+          cmake
+          elixir
+          coreutils
+          alpine-sdk
+        volumes: |
+          /home/runner/.mix:/home/runner/.mix
+          /home/runner/packages:/home/runner/packages
+          /home/runner/artifacts:/home/runner/artifacts
+
+    - name: Prepare Runner User
+      run: |
+        sudo addgroup runner abuild
+        echo "/home/runner/.mix/escripts" >> $GITHUB_PATH
+      shell: alpine.sh {0}
+
+    - name: Cache Pakman
+      id: cache-pakman
+      uses: actions/cache@v3
+      with:
+        path: ~/.mix
+        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman
+
+    - name: Install Pakman
+      if: steps.cache-pakman.outputs.cache-hit != 'true'
+      run: |
+        mix local.rebar --force
+        mix local.hex --force
+        mix escript.install github upmaru/pakman branch feature/chroot-alpine --force
+      shell: alpine.sh {0}
+      env:
+        MIX_ENV: prod

@@ -6,37 +6,88 @@ This action allows you to build your software into an distributable self-contain
 
 ![Packing Man](cover.png)
 
-## Versions
+## Basic Usage
 
-You can choose from multiple version of alpine by choosing the tag
+This is an example configuration. However you should be using the application configuration wizard on the OspMaru app.
 
-- `pakman@alpine-edge-7.4` - uses alpine:edge image
-- `pakman@alpine-3.18-7.4` - uses alpine:3.18 image
-- `pakman@alpine-3.17-7.4` - uses alpine:3.17 image
-- `pakman@alpine-3.16-7.4` - uses alpine:3.16 image
-- `pakman@alpine-3.15-7.4` - uses alpine:3.15 image
+```yml
+name: 'Deployment'
 
-## Example Projects
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
 
-We've created example projects that show you how to configure your project to work with this github action.
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          fetch-depth: 0
 
-- [Elixir / Phoenix](https://github.com/upmaru-stage/rdio) - Includes CI configuration as well as deployment configuration
-  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/rdio/blob/develop/.github/workflows/deployment.yml)
-  - [instellar.yml](https://github.com/upmaru-stage/rdio/blob/develop/instellar.yml)
+      - name: Setup Pakman
+        uses: upmaru/pakman@v8
+        with:
+          alpine: v3.18
 
-- [Ruby on Rails](https://github.com/upmaru-stage/locomo) - Includes only deployment configuration
-  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/locomo/blob/main/.github/workflows/deployment.yml)
-  - [instellar.yml](https://github.com/upmaru-stage/locomo/blob/main/instellar.yml)
-  
-- [Python Django](https://github.com/upmaru-stage/monty) - Includes only deployment configuration
-  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/monty/blob/main/.github/workflows/deployment.yml)
-  - [instellar.yml](https://github.com/upmaru-stage/monty/blob/main/instellar.yml)
+      - name: Bootstrap Configuration
+        run: |
+          pakman bootstrap
+        shell: alpine.sh {0}
+        env:
+          ABUILD_PRIVATE_KEY: ${{secrets.ABUILD_PRIVATE_KEY}}
+          ABUILD_PUBLIC_KEY: ${{secrets.ABUILD_PUBLIC_KEY}}
 
-- [Next.js](https://github.com/upmaru-stage/nimbus) - Includes only deployment configuration
-  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/nimbus/blob/main/.github/workflows/deployment.yml)
-  - [instellar.yml](https://github.com/upmaru-stage/nimbus/blob/main/instellar.yml)
+      - name: 'Build Package'
+        run: |
+          cd "$GITHUB_WORKSPACE"/.apk/"$GITHUB_REPOSITORY" || exit
 
-- [Go](https://github.com/upmaru-stage/gemini) - Includes only deployment configuration
-  - [.github/workflows/deployment.yml](https://github.com/upmaru-stage/gemini/blob/main/.github/workflows/deployment.yml)
-  - [instellar.yml](https://github.com/upmaru-stage/gemini/blob/main/instellar.yml)
+          abuild snapshot
+          abuild -r
+        shell: alpine.sh {0}
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ runner.arch }}
+          path: /home/runner/packages
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v3
+        with: 
+          path: /home/runner/artifacts
+
+      - name: Setup Pakman
+        uses: upmaru/pakman@v8
+        with:
+          alpine: v3.18
+
+      - name: Merge Artifact
+        run: |
+          cp -R /home/runner/artifacts/X64/. /home/runner/packages/
+          sudo zip -r /home/runner/packages.zip "$HOME"/packages
+        shell: alpine.sh {0}
+
+      - name: Push
+        run: pakman push
+        shell: alpine.sh {0}
+        env:
+          WORKFLOW_REF: ${{ github.ref }}
+          WORKFLOW_SHA: ${{ github.sha }}
+          INSTELLAR_ENDPOINT: https://opsmaru.com
+          INSTELLAR_PACKAGE_TOKEN: ${{secrets.INSTELLAR_PACKAGE_TOKEN}}
+          INSTELLAR_AUTH_TOKEN: ${{secrets.INSTELLAR_AUTH_TOKEN}}
+```

@@ -1,5 +1,5 @@
 defmodule Pakman.InstellarTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias Pakman.Instellar
 
