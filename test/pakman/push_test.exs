@@ -6,12 +6,37 @@ defmodule Pakman.PushTest do
   setup do
     bypass = Bypass.open()
 
+    storage = %{
+      "host" => "localhost",
+      "port" => 9000,
+      "scheme" => "http://",
+      "region" => "auto",
+      "bucket" => "test",
+      "credential" => %{
+        "access_key_id" => "minioadmin",
+        "secret_access_key" => "minioadmin"
+      }
+    }
+
+    ex_aws_config =
+      ExAws.Config.new(:s3,
+        access_key_id: storage["credential"]["access_key_id"],
+        secret_access_key: storage["credential"]["secret_access_key"],
+        host: storage["host"],
+        port: storage["port"],
+        scheme: storage["scheme"],
+        region: storage["region"]
+      )
+
     System.put_env("HOME", "test/fixtures")
     System.put_env("GITHUB_WORKSPACE", "")
     System.put_env("INSTELLAR_ENDPOINT", "http://localhost:#{bypass.port}")
     System.put_env("INSTELLAR_PACKAGE_TOKEN", "something")
     System.put_env("WORKFLOW_SHA", "somesha")
     System.put_env("GITHUB_REPOSITORY", "upmaru-stage/locomo")
+
+    ExAws.S3.put_bucket(storage["bucket"], storage["region"])
+    |> ExAws.request(Keyword.new(ex_aws_config))
 
     {:ok, bypass: bypass}
   end
