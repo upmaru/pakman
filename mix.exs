@@ -48,7 +48,7 @@ defmodule Pakman.MixProject do
       {:ex_aws_s3, "~> 2.5"},
       {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.7"},
-      {:ecto, "~> 3.10"},
+      {:uniq, "~> 0.6"},
       {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
