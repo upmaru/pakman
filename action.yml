@@ -54,7 +54,7 @@ runs:
       run: |
         mix local.rebar --force
         mix local.hex --force
-        mix escript.install github upmaru/pakman branch feature/chroot-alpine --force
+        mix escript.install hex upmaru/pakman 8.1.0 --force
       shell: alpine.sh {0}
       env:
         MIX_ENV: prod
