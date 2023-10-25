@@ -1,21 +1,36 @@
 defmodule Pakman.CLI do
-  @switches [
-    switches: [
-      command: :string,
-      version: :string,
-      build: :string,
-      depends: :string,
-      makedepends: :string,
-      archive: :string
+  @switches %{
+    bootstrap: [
+      switches: [
+        config: :string
+      ]
+    ],
+    push: [
+      switches: [
+        concurrency: :integer,
+        config: :string,
+        archive: :string
+      ]
     ]
-  ]
+  }
+
+  @commands %{
+    "bootstrap" => :bootstrap,
+    "push" => :push
+  }
 
   def main(args \\ []) do
-    {[{:command, command} | options], _, _} =
-      OptionParser.parse(args, @switches)
+    command = List.first(args)
+    call = Map.get(@commands, command)
 
-    command = String.to_atom(command)
+    if call do
+      switches = Map.get(@switches, command, switches: [])
 
-    apply(Pakman, command, [options])
+      {options, _, _} = OptionParser.parse(args, switches)
+
+      apply(Pakman, call, [options])
+    else
+      raise "Unknown command: #{inspect(command)}"
+    end
   end
 end

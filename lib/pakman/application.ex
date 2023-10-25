@@ -8,7 +8,8 @@ defmodule Pakman.Application do
 
   def start(_, _) do
     children = [
-      {Finch, finch_options(Application.get_env(:pakman, :env))}
+      {Finch, finch_options(Application.get_env(:pakman, :env))},
+      {Task.Supervisor, name: Pakman.TaskSupervisor}
     ]
 
     opts = [strategy: :one_for_one, name: Instellar.Supervisor]
@@ -20,7 +21,6 @@ defmodule Pakman.Application do
   defp finch_options(_) do
     [
       name: Pakman.Finch,
-      receive_timeout: 30_000,
       pools: %{
         default: [
           conn_opts: [

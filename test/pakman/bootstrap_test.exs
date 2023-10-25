@@ -23,7 +23,7 @@ defmodule Pakman.BootstrapTest do
       end)
 
       assert :ok ==
-               Pakman.Bootstrap.perform(config_file: "test/fixtures/rails.yml")
+               Pakman.Bootstrap.perform(config: "test/fixtures/rails.yml")
 
       apkbuild = File.read!("tmp/rails/.apk/upmaru/uplink/APKBUILD")
 
@@ -40,7 +40,7 @@ defmodule Pakman.BootstrapTest do
       end)
 
       assert :ok ==
-               Pakman.Bootstrap.perform(config_file: "test/fixtures/elixir.yml")
+               Pakman.Bootstrap.perform(config: "test/fixtures/elixir.yml")
 
       apkbuild = File.read!("tmp/elixir/.apk/upmaru/uplink/APKBUILD")
 
@@ -57,7 +57,7 @@ defmodule Pakman.BootstrapTest do
       end)
 
       assert :ok ==
-               Pakman.Bootstrap.perform(config_file: "test/fixtures/next.yml")
+               Pakman.Bootstrap.perform(config: "test/fixtures/next.yml")
     end
   end
 end

@@ -2,7 +2,7 @@ pkgname="<%= name %>"
 pkgver="<%= version %>"
 pkgrel="<%= build %>"
 pkgdesc="<%= name %>"
-arch="x86_64"
+arch="<%= if configuration["architectures"], do: Enum.join(configuration["architectures"], " "), else: "x86_64" %>"
 options="<%= Enum.join(configuration["options"], " ") %>"
 pkgusers="<%= name %>"
 pkggroups="<%= name %>"
@@ -25,14 +25,15 @@ install="
 source="
   $pkgname-$pkgver.tar
   <%= if source = configuration["source"] do %>
-    <%= source %>
+  <%= source %>
   <% else %>
-    <%= if configuration["type"] not in ["static", "custom"] do %>
-      $pkgname.initd
-      $pkgname.run
-      $pkgname.environment
-      $pkgname.env-exec
-    <% end %>
+  <%= if configuration["type"] not in ["static", "custom"] do %>
+    $pkgname.initd
+    $pkgname.run
+    $pkgname.log
+    $pkgname.environment
+    $pkgname.env-exec
+  <% end %>
   <% end %>
 "
 
@@ -72,6 +73,7 @@ package() {
   <% else %>
     install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
     install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
+    install -Dm755 "$srcdir"/$pkgname.log "$pkgdir"/var/lib/$pkgname/service/log/run
     install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
     install -Dm755 "$srcdir"/$pkgname.env-exec "$pkgdir"/var/lib/$pkgname/bin/env-exec
   <% end %>
