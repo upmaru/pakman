@@ -21,25 +21,24 @@ on:
       - develop
 
 jobs:
-  build_and_deploy:
-    name: Build and Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
 
-      - name: 'Setup PAKman'
-        uses: upmaru/pakman@v8
+      - name: Setup Pakman
+        uses: upmaru/pakman@feature/chroot-alpine
         with:
-          # specify which version of alpine to use
-          # choose from edge | v3.18 | v3.17 | v3.16 | v3.15
           alpine: v3.18
 
       - name: Bootstrap Configuration
-        run: ~/.mix/escripts/pakman --command bootstrap
+        run: |
+          pakman bootstrap
         shell: alpine.sh {0}
         env:
           ABUILD_PRIVATE_KEY: ${{secrets.ABUILD_PRIVATE_KEY}}
@@ -53,12 +52,37 @@ jobs:
           abuild -r
         shell: alpine.sh {0}
 
-      - name: 'Archive Package'
-        run: sudo zip -r packages.zip "$HOME"/packages
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ runner.arch }}
+          path: /home/runner/packages
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v3
+        with: 
+          path: /home/runner/artifacts
+
+      - name: Setup Pakman
+        uses: upmaru/pakman@feature/chroot-alpine
+        with:
+          alpine: v3.18
+
+      - name: Merge Artifact
+        run: |
+          cp -R /home/runner/artifacts/X64/. /home/runner/packages/
+          sudo zip -r /home/runner/packages.zip "$HOME"/packages
         shell: alpine.sh {0}
 
-      - name: 'Create Deployment'
-        run: ~/.mix/escripts/pakman --command create_deployment --archive packages.zip
+      - name: Push
+        run: pakman push
         shell: alpine.sh {0}
         env:
           WORKFLOW_REF: ${{ github.ref }}
