@@ -108,9 +108,8 @@ jobs:
         ports:
           - 9000:9000
         env:
-            MINIO_ACCESS_KEY: minioadmin
-            MINIO_SECRET_KEY: minioadmin
-        # needed because the postgres container does not provide a healthcheck
+          MINIO_ACCESS_KEY: minioadmin
+          MINIO_SECRET_KEY: minioadmin
         options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live"
 
     steps:
