@@ -49,7 +49,7 @@ defmodule Pakman.Push do
           files,
           __MODULE__,
           :push,
-          [storage, sha],
+          [storage],
           max_concurrency: Keyword.get(options, :concurrency, 2), 
           timeout: 60_000
         )
