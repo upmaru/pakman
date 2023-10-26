@@ -46,7 +46,6 @@ defmodule Pakman.MixProject do
       {:castore, "~> 1.0"},
       {:ex_aws, "~> 2.5"},
       {:ex_aws_s3, "~> 2.5"},
-      {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.7"},
       {:uniq, "~> 0.6"},
       {:bypass, "~> 2.1", only: :test},
