@@ -43,13 +43,13 @@ defmodule Pakman.Push do
 
       {:ok, :pushed}
     else
-      {:ok, %{"attributes" => %{"id" => _}}} ->
+      {:error, error} ->
+        raise Error, message: "[Pakman.Push] #{inspect(error)}"
+
+      {:ok, %{"attributes" => _}} ->
         Logger.info("[Pakman.Push] Deployment already exists...")
 
         {:ok, :already_exists}
-
-      {:error, body} ->
-        raise Error, message: "[Pakman.Push] #{inspect(body)}"
 
       _ ->
         raise Error, message: "[Pakman.Push] Deployment creation failed..."
@@ -166,17 +166,17 @@ defmodule Pakman.Push do
   end
 
   defp print_deployment_message(:created),
-    do: Logger.info("[Pakman.Deploy] Deployment successfully created...")
+    do: Logger.info("[Pakman.Push] Deployment successfully created...")
 
   defp print_deployment_message(:already_exists),
-    do: Logger.info("[Pakman.Deploy] Deployment already exists...")
+    do: Logger.info("[Pakman.Push] Deployment already exists...")
 
   defp print_configuration_message(:created),
-    do: Logger.info("[Pakman.Deploy] Configuration successfully created...")
+    do: Logger.info("[Pakman.Push] Configuration successfully created...")
 
   defp print_configuration_message(:already_exists),
-    do: Logger.info("[Pakman.Deploy] Configuration already exists...")
+    do: Logger.info("[Pakman.Push] Configuration already exists...")
 
   defp print_configuration_message(:no_configuration),
-    do: Logger.info("[Pakman.Deploy] Configuration not found...")
+    do: Logger.info("[Pakman.Push] Configuration not found...")
 end
