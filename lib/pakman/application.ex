@@ -25,6 +25,7 @@ defmodule Pakman.Application do
         default: [
           conn_opts: [
             transport_opts: [
+              verify: :verify_peer,
               cacerts: @cacerts
             ]
           ]

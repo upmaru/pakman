@@ -123,8 +123,6 @@ defmodule Pakman.Push do
     |> ExAws.request(Keyword.new(storage.config))
     |> case do
       {:ok, _result} ->
-        Logger.info("[Pakman.Push] pushed - #{storage_path}")
-
         %{type: :archive, path: storage_path}
 
       error ->
@@ -156,8 +154,6 @@ defmodule Pakman.Push do
     |> ExAws.request(Keyword.new(storage.config))
     |> case do
       {:ok, _result} ->
-        Logger.info("[Pakman.Push] pushed - #{storage_path}")
-
         %{type: :deployment, path: storage_path}
 
       error ->

@@ -6,8 +6,8 @@ config :tesla,
        :adapter,
        {Tesla.Adapter.Finch, name: Pakman.Finch, receive_timeout: 30_000}
 
-config :ex_aws, 
-       http_client: Pakman.ExAws.Client
+config :ex_aws,
+  http_client: Pakman.ExAws.Client
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
