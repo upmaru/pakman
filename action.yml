@@ -47,14 +47,14 @@ runs:
       uses: actions/cache@v3
       with:
         path: ~/.mix
-        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman-8.1.4
+        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman-8.1.5
 
     - name: Install Pakman
       if: steps.cache-pakman.outputs.cache-hit != 'true'
       run: |
         mix local.rebar --force
         mix local.hex --force
-        mix escript.install hex pakman 8.1.4 --force
+        mix escript.install hex pakman 8.1.5 --force
       shell: alpine.sh {0}
       env:
         MIX_ENV: prod

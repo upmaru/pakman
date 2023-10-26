@@ -144,7 +144,9 @@ defmodule Pakman.Instellar do
       if Application.get_env(:pakman, :env) == :test do
         [
           {Tesla.Middleware.BaseUrl, endpoint},
-          Tesla.Middleware.JSON
+          Tesla.Middleware.JSON,
+          {Tesla.Middleware.Logger,
+           debug: false, log_level: &custom_log_level/1}
         ]
       else
         [
