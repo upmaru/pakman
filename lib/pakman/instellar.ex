@@ -157,10 +157,7 @@ defmodule Pakman.Instellar do
         ]
       end
 
-    Tesla.client(
-      middleware,
-      {Tesla.Adapter.Finch, name: Pakman.Finch, receive_timeout: 30_000}
-    )
+    Tesla.client(middleware)
   end
 
   defp custom_log_level(env) do
