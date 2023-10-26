@@ -4,7 +4,7 @@ defmodule Pakman.MixProject do
   def project do
     [
       app: :pakman,
-      version: "8.1.6",
+      version: "8.1.7",
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -60,7 +60,7 @@ defmodule Pakman.MixProject do
   def package do
     [
       description: "Build tool for opsmaru.com",
-      files: ["lib", "mix.exs", "README.md"],
+      files: ["lib", "config", "mix.exs", "README.md"],
       maintainers: ["Zack Siri"],
       licenses: ["MIT"],
       links: %{github: "https://github.com/upmaru/pakman"}
