@@ -33,6 +33,25 @@ defmodule Pakman.Instellar do
     end
   end
 
+  def get_deployment(token, hash) do
+    package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
+
+    headers = [
+      {"authorization", "Bearer #{token}"},
+      {"x-instellar-package-token", package_token}
+    ]
+
+    client()
+    |> get("/publish/deployments/#{hash}", headers: headers)
+    |> case do
+      {:ok, %{status: 200, body: body}} ->
+        {:ok, body["data"]}
+
+      {:ok, %{status: 404}} ->
+        {:ok, :not_found}
+    end
+  end
+
   @spec create_deployment(binary, binary, map) ::
           {:ok, atom, map} | {:error, atom}
   def create_deployment(token, archive_path, config_params) do
