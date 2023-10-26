@@ -150,10 +150,17 @@ defmodule Pakman.Instellar do
         [
           {Tesla.Middleware.BaseUrl, endpoint},
           Tesla.Middleware.JSON,
-          {Tesla.Middleware.Logger, debug: false}
+          {Tesla.Middleware.Logger, debug: false, log_level: &custom_log_level/1}
         ]
       end
 
     Tesla.client(middleware)
+  end
+
+  defp custom_log_level(env) do
+    case env.status do
+      404 -> :info
+      _ -> :default
+    end
   end
 end
