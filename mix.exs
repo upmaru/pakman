@@ -60,7 +60,7 @@ defmodule Pakman.MixProject do
   def package do
     [
       description: "Build tool for opsmaru.com",
-      files: ["lib", "mix.exs", "README.md"],
+      files: ["lib", "config", "mix.exs", "README.md"],
       maintainers: ["Zack Siri"],
       licenses: ["MIT"],
       links: %{github: "https://github.com/upmaru/pakman"}
