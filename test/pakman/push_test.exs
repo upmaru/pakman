@@ -54,6 +54,12 @@ defmodule Pakman.PushTest do
         |> Plug.Conn.resp(201, Jason.encode!(%{data: %{token: "something"}}))
       end)
 
+      Bypass.expect(bypass, "GET", "/publish/deployments/somesha", fn conn ->
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "application/json")
+        |> Plug.Conn.resp(404, Jason.encode!(%{data: %{errors: %{detail: "not_found"}}}))
+      end)
+
       Bypass.expect(bypass, "GET", "/publish/storage", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -91,6 +97,24 @@ defmodule Pakman.PushTest do
       )
 
       assert {:ok, :pushed} = Push.perform(config: "test/fixtures/rails.yml")
+    end
+
+    test "when deployment already exists", %{
+      bypass: bypass
+    } do
+      Bypass.expect(bypass, "POST", "/publish/automation/callback", fn conn ->
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "application/json")
+        |> Plug.Conn.resp(201, Jason.encode!(%{data: %{token: "something"}}))
+      end)
+
+      Bypass.expect(bypass, "GET", "/publish/deployments/somesha", fn conn ->
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "application/json")
+        |> Plug.Conn.resp(200, Jason.encode!(%{data: %{attributes: %{id: 1}}}))
+      end)
+
+      assert {:ok, :already_exists} = Push.perform(config: "test/fixtures/rails.yml")
     end
   end
 end

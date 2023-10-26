@@ -18,6 +18,7 @@ defmodule Pakman.Push do
     archive = Keyword.get(options, :archive, "packages.zip")
     config_file = Keyword.get(options, :config, "instellar.yml")
     workspace = System.get_env("GITHUB_WORKSPACE")
+    hash = System.get_env("WORKFLOW_SHA") || System.get_env("GITHUB_SHA")
 
     config =
       workspace
@@ -25,6 +26,7 @@ defmodule Pakman.Push do
       |> YamlElixir.read_from_file!()
 
     with {:ok, token} <- Instellar.authenticate(),
+         {:ok, :not_found} <- Instellar.get_deployment(token, hash),
          {:ok, %{"attributes" => storage}} <- Instellar.get_storage(token),
          {:ok, %{archive: archive_path}} <-
            push_files(storage, archive, options),
@@ -41,6 +43,11 @@ defmodule Pakman.Push do
 
       {:ok, :pushed}
     else
+      {:ok, %{"attributes" => %{"id" => _}}} ->
+        Logger.info("[Pakman.Push] Deployment already exists...")
+
+        {:ok, :already_exists}
+
       {:error, body} ->
         raise Error, message: "[Pakman.Push] #{inspect(body)}"
 
