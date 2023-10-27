@@ -81,6 +81,10 @@ defmodule Pakman.Push do
       bucket: storage["bucket"]
     }
 
+    concurrency = 
+      Keyword.get(options, :concurrency, "2")
+      |> String.to_integer()
+      
     stream =
       Task.Supervisor.async_stream(
         Pakman.TaskSupervisor,
@@ -88,7 +92,7 @@ defmodule Pakman.Push do
         __MODULE__,
         :push,
         [storage],
-        max_concurrency: Keyword.get(options, :concurrency, 2),
+        max_concurrency: concurrency,
         timeout: 60_000
       )
 
