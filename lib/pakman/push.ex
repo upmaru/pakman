@@ -81,10 +81,10 @@ defmodule Pakman.Push do
       bucket: storage["bucket"]
     }
 
-    concurrency = 
+    concurrency =
       Keyword.get(options, :concurrency, "2")
       |> String.to_integer()
-      
+
     stream =
       Task.Supervisor.async_stream(
         Pakman.TaskSupervisor,
