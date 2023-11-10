@@ -13,9 +13,24 @@ defmodule Pakman.BootstrapTest do
   end
 
   describe "perform" do
+    test "caddy config" do
+      System.put_env("HOME", "tmp/caddy")
+      System.put_env("GITHUB_WORKSPACE", "tmp/caddy")
+      System.put_env("GITHUB_REPOSITORY", "upmaru/uplink-caddy")
+
+      Pakman.SystemMock
+      |> expect(:cmd, 2, fn _binary, _options ->
+        :ok
+      end)
+
+      assert :ok ==
+               Pakman.Bootstrap.perform(config: "test/fixtures/caddy.yml")
+    end
+
     test "rails config" do
       System.put_env("HOME", "tmp/rails")
       System.put_env("GITHUB_WORKSPACE", "tmp/rails")
+    System.put_env("GITHUB_REPOSITORY", "upmaru/rails")
 
       Pakman.SystemMock
       |> expect(:cmd, 2, fn _binary, _options ->
@@ -25,7 +40,7 @@ defmodule Pakman.BootstrapTest do
       assert :ok ==
                Pakman.Bootstrap.perform(config: "test/fixtures/rails.yml")
 
-      apkbuild = File.read!("tmp/rails/.apk/upmaru/uplink/APKBUILD")
+      apkbuild = File.read!("tmp/rails/.apk/upmaru/rails/APKBUILD")
 
       assert apkbuild =~ "!tracedeps"
     end
@@ -33,6 +48,7 @@ defmodule Pakman.BootstrapTest do
     test "elixir config" do
       System.put_env("HOME", "tmp/elixir")
       System.put_env("GITHUB_WORKSPACE", "tmp/elixir")
+      System.put_env("GITHUB_REPOSITORY", "upmaru/elixir")
 
       Pakman.SystemMock
       |> expect(:cmd, 2, fn _binary, _options ->
@@ -42,7 +58,7 @@ defmodule Pakman.BootstrapTest do
       assert :ok ==
                Pakman.Bootstrap.perform(config: "test/fixtures/elixir.yml")
 
-      apkbuild = File.read!("tmp/elixir/.apk/upmaru/uplink/APKBUILD")
+      apkbuild = File.read!("tmp/elixir/.apk/upmaru/elixir/APKBUILD")
 
       refute apkbuild =~ "!tracedeps"
     end

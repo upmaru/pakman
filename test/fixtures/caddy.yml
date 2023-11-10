@@ -1,0 +1,62 @@
+dependencies:
+  trace: true
+  build:
+    - go
+    - libcap
+  runtime:
+    - bash
+    - curl
+    - s6
+    - jq
+    - ca-certificates
+    - uplink-caddy-openrc
+    
+stack: alpine/3.18
+
+build:
+  destinations:
+    - build
+  command: |
+    go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+
+    mkdir build
+
+    ~/go/bin/xcaddy build --output ./bin/caddy \
+      --with github.com/ss098/certmagic-s3 \
+      --with github.com/caddyserver/cache-handler
+
+run: 
+  name: uplink-caddy
+  services:
+    - name: server
+      binary: caddy
+      path: /usr/sbin
+      start:
+        call: run
+
+package: |
+  cd "$srcdir"
+
+  install -Dm755 bin/caddy "$pkgdir"/usr/sbin/caddy
+  setcap cap_net_bind_service=+ep "$pkgdir"/usr/sbin/caddy
+
+  install -Dm644 "$srcdir"/Caddyfile "$pkgdir"/etc/$pkgname/Caddyfile
+  install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+  install -Dm755 "$srcdir"/$pkgname.run "$pkgdir"/var/lib/$pkgname/service/run
+  install -Dm755 "$srcdir"/$pkgname.log "$pkgdir"/var/lib/$pkgname/service/log/run
+  install -Dm755 "$srcdir"/$pkgname.environment "$pkgdir"/var/lib/$pkgname/bin/environment
+  install -Dm755 "$srcdir"/$pkgname.env-exec "$pkgdir"/var/lib/$pkgname/bin/env-exec
+
+hook:
+  post-install: |
+    rc-update add uplink-caddy
+
+  pre-upgrade: |
+    rc-service uplink-caddy stop
+
+  post-upgrade: |
+    rc-service uplink-caddy start
+
+  post-deinstall: |
+    rc-service uplink-caddy stop
+    rc-update del uplink-caddy
