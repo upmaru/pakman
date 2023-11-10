@@ -30,7 +30,7 @@ defmodule Pakman.BootstrapTest do
     test "rails config" do
       System.put_env("HOME", "tmp/rails")
       System.put_env("GITHUB_WORKSPACE", "tmp/rails")
-    System.put_env("GITHUB_REPOSITORY", "upmaru/rails")
+      System.put_env("GITHUB_REPOSITORY", "upmaru/rails")
 
       Pakman.SystemMock
       |> expect(:cmd, 2, fn _binary, _options ->
