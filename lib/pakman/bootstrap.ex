@@ -149,14 +149,6 @@ defmodule Pakman.Bootstrap do
     |> File.write!(Templates.hook(content))
   end
 
-  defp create_file(base_path, name, :environment = type) do
-    file_type = generate_file_type(type)
-
-    [base_path, "#{name}.#{file_type}"]
-    |> Path.join()
-    |> File.write!(Templates.environment())
-  end
-
   defp create_file(base_path, name, type) do
     file_type = generate_file_type(type)
 
