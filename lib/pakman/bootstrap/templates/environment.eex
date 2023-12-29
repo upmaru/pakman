@@ -2,7 +2,7 @@
 
 set -e
 
-function fetch_from_instellar() {
+function fetch_from_instellar_or_fallback() {
   endpoint="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_INSTALLATION_ENDPOINT)"
   token="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_BOT_TOKEN)"
   code="$(curl -s -o /dev/null -w "%{http_code}" "${endpoint}" -H "Authorization: Bearer ${token}" -H 'Content-Type: application/json; charset=utf-8')"
@@ -29,7 +29,7 @@ then
 
   variables="$(curl -s "${endpoint}" -H 'Content-Type: application/json; charset=utf-8' | jq '.data.attributes.variables')"
 else
-  fetch_from_instellar
+  fetch_from_instellar_or_fallback
 fi
 
 while read -rd $'' line
