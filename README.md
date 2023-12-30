@@ -28,7 +28,7 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_branch }}
+          ref: ${{ github.ref }}
           fetch-depth: 0
 
       - name: Setup Pakman
