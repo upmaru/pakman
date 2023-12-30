@@ -19,6 +19,10 @@ dependencies:
 
 stack: alpine/3.17
 
+architectures:
+  - x86_64
+  - aarch64
+
 build:
   destinations: 
     - '*'
@@ -37,6 +41,13 @@ run:
   - name: migrate
     binary: rails
     call: db:migrate
+  - name: console
+    binary: rails
+    call: console
+  - name: logs
+    path: /usr/bin
+    binary: tail
+    call: -f -n 200 /var/log/locomo/current
   services:
   - name: web
     binary: rails
@@ -65,3 +76,23 @@ hook:
   post-deinstall: |
     rc-service locomo stop
     rc-update locomo rdio
+
+kits: 
+- name: web
+  description: "web service"
+  main: true
+  ports:
+  - name: web
+    target: 3000
+    main: true
+  variables:
+  - key: RAILS_ENV
+    default_value: production
+  - key: DATABASE_URL
+    driver: "database/postgresql"
+  - key: RAILS_SERVE_STATIC_FILES
+    default_value: "1"
+  - key: SECRET_KEY_BASE
+    driver: "generic/secret"
+    driver_options:
+      length: 128

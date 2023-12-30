@@ -1,5 +1,6 @@
 defmodule Pakman.Bootstrap do
   alias Pakman.Environment
+  alias Pakman.Setup
   alias Pakman.Bootstrap.Templates
 
   @system Application.compile_env(:pakman, :system) || System
@@ -7,7 +8,7 @@ defmodule Pakman.Bootstrap do
   def perform(options \\ []) do
     workspace = System.get_env("GITHUB_WORKSPACE")
 
-    @system.cmd("sudo", ["chown", "-R", "builder:abuild", workspace])
+    @system.cmd("sudo", ["chown", "-R", "runner:abuild", workspace])
 
     %{organization: namespace, name: name} = Environment.repository()
 
@@ -23,7 +24,7 @@ defmodule Pakman.Bootstrap do
     base_path = Path.join(workspace, ".apk/#{namespace}/#{name}")
 
     config_file =
-      Keyword.get(options, :config_file) ||
+      Keyword.get(options, :config) ||
         Path.join(workspace, "instellar.yml")
 
     config = YamlElixir.read_from_file!(config_file)
@@ -84,7 +85,7 @@ defmodule Pakman.Bootstrap do
         |> Enum.map(&create_hook_file(&1, base_path, name))
     end
 
-    Pakman.setup()
+    Setup.perform()
   end
 
   defp create_apkbuild(base_path, name, version, build, configuration) do
@@ -136,6 +137,10 @@ defmodule Pakman.Bootstrap do
     [base_path, "#{name}.run"]
     |> Path.join()
     |> File.write!(Templates.run(configuration))
+
+    [base_path, "#{name}.log"]
+    |> Path.join()
+    |> File.write!(Templates.log(name))
   end
 
   defp create_hook_file({hook_name, content}, base_path, name) do
@@ -145,13 +150,16 @@ defmodule Pakman.Bootstrap do
   end
 
   defp create_file(base_path, name, type) do
-    file_type =
-      type
-      |> Atom.to_string()
-      |> String.replace("_", "-")
+    file_type = generate_file_type(type)
 
     [base_path, "#{name}.#{file_type}"]
     |> Path.join()
     |> File.write!(apply(Templates, type, [name]))
+  end
+
+  defp generate_file_type(type) do
+    type
+    |> Atom.to_string()
+    |> String.replace("_", "-")
   end
 end

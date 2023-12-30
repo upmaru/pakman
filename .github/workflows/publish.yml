@@ -1,0 +1,21 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  publish:
+    name: Publish to hex
+    runs-on: ubuntu-latest
+    environment: Release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with: 
+          otp-version: "25"
+          elixir-version: "1.14.4"
+      - uses: cucumber/action-publish-hex@v1.0.0
+        with:
+          hex-api-key: ${{ secrets.HEX_API_KEY }}

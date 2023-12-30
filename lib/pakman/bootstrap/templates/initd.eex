@@ -20,9 +20,12 @@ s6_service_path="${RC_SVCDIR}/s6-scan/<%= configuration["name"] %>"
 
 <%= Enum.map(commands, fn command -> %>
 <%= command["name"] %>() {
+  <% rendered_command = if command["path"], 
+    do: "#{command["path"]}/#{command["binary"]}",
+    else: "/var/lib/#{configuration["name"]}/bin/#{command["binary"]}" %> 
   export HOME=/var/lib/<%= configuration["name"] %>
   cd /var/lib/<%= configuration["name"] %>
-  command=/var/lib/<%= configuration["name"] %>/bin/<%= command["binary"] %>
+  command=<%= rendered_command %>
   /var/lib/<%= configuration["name"] %>/bin/env-exec "${command} <%= command["call"] %>"
 }
 <% end) %>

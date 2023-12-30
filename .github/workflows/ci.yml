@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/**
 
 jobs:
   deps:
@@ -11,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:edge
+      image: alpine:3.17
 
     steps:
       - name: Cancel Previous Runs
@@ -55,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:edge
+      image: alpine:3.17
 
     steps:
       - name: Cancel Previous Runs
@@ -99,7 +100,17 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:edge
+      image: alpine:3.17
+
+    services:
+      minio:
+        image: minio/minio:edge-cicd
+        ports:
+          - 9000:9000
+        env:
+          MINIO_ACCESS_KEY: minioadmin
+          MINIO_SECRET_KEY: minioadmin
+        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live"
 
     steps:
       - name: Cancel Previous Runs
@@ -132,3 +143,5 @@ jobs:
 
       - name: Run Tests
         run: mix test --trace --slowest 10
+        env: 
+          MINIO_HOST: minio
