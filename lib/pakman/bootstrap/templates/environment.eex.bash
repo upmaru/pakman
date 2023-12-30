@@ -14,7 +14,7 @@ function fetch_from_instellar_or_fallback() {
   else
     echo "----- Fetching from backup -----"
 
-    variables="$(cat /root/.<%= name %>/variables.json | jq '.data.attributes.variables')"
+    variables="$(curl -s --unix-socket /dev/lxd/sock x/1.0/config/user.INSTELLAR_INSTALLATION_DATA | base64 -d | jq '.data.attributes.variables')"
   fi
 }
 
