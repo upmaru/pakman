@@ -138,7 +138,7 @@ defmodule Pakman.Instellar do
        do: Map.put(params, :stack, stack)
 
   defp client do
-    endpoint = System.get_env("INSTELLAR_ENDPOINT", "https://web.instellar.app")
+    endpoint = System.get_env("INSTELLAR_ENDPOINT", "https://opsmaru.com")
 
     middleware =
       if Application.get_env(:pakman, :env) == :test do
