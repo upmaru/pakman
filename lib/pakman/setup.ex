@@ -8,9 +8,10 @@ defmodule Pakman.Setup do
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
 
-    %{organization: namespace, name: name} = Environment.repository()
+    %{organization: namespace, name: name, slug: slug} =
+      Environment.repository()
 
-    key_name = Enum.join([namespace, name], "-")
+    key_name = Enum.join([namespace, slug], "-")
 
     @system.cmd("sudo", ["chown", "-R", "runner:abuild", home])
 
