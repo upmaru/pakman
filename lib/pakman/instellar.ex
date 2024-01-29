@@ -152,8 +152,7 @@ defmodule Pakman.Instellar do
         [
           {Tesla.Middleware.BaseUrl, endpoint},
           Tesla.Middleware.JSON,
-          {Tesla.Middleware.Logger,
-           debug: false, log_level: &custom_log_level/1}
+          {Tesla.Middleware.Logger, debug: true, log_level: &custom_log_level/1}
         ]
       end
 
