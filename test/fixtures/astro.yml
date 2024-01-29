@@ -1,0 +1,51 @@
+dependencies:
+  build:
+    - nodejs-current
+    - npm
+  runtime:
+    - caddy
+    - bash
+    - curl
+    - s6
+    - jq
+    - ca-certificates
+    - artellectual-com-openrc
+
+stack: alpine/3.19
+
+build:
+  command: |
+    npm install
+    npm run build
+  destinations:
+    - dist
+    - Caddyfile
+
+run:
+  name: artellectual-com
+  services:
+    - binary: caddy
+      name: web
+      path: /usr/sbin
+      start:
+        call: run --config /var/lib/artellectual-com/Caddyfile
+
+hook:
+  post-deinstall: |
+    rc-service artellectual-com stop
+    rc-update del artellectual-com
+  post-install: |
+    rc-update add artellectual-com
+  post-upgrade: |
+    rc-service artellectual-com start
+  pre-upgrade: |
+    rc-service artellectual-com stop
+
+kits:
+  - description: static site server
+    main: true
+    name: web
+    ports:
+      - main: true
+        name: web
+        target: 3000
