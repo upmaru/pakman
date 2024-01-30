@@ -8,7 +8,7 @@ defmodule Pakman.Setup do
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
 
-    %{organization: namespace, name: name, slug: slug} =
+    %{organization: namespace, name: _name, slug: slug} =
       Environment.repository()
 
     key_name = Enum.join([namespace, slug], "-")
