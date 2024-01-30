@@ -13,6 +13,20 @@ defmodule Pakman.BootstrapTest do
   end
 
   describe "perform" do
+    test "astro config" do
+      System.put_env("HOME", "tmp/caddy")
+      System.put_env("GITHUB_WORKSPACE", "tmp/astro")
+      System.put_env("GITHUB_REPOSITORY", "artellectual/artellectual.com")
+
+      Pakman.SystemMock
+      |> expect(:cmd, 2, fn _binary, _options ->
+        :ok
+      end)
+
+      assert :ok ==
+               Pakman.Bootstrap.perform(config: "test/fixtures/astro.yml")
+    end
+
     test "caddy config" do
       System.put_env("HOME", "tmp/caddy")
       System.put_env("GITHUB_WORKSPACE", "tmp/caddy")

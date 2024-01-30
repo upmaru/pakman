@@ -9,6 +9,6 @@ defmodule Pakman.Environment do
       |> System.get_env()
       |> String.split("/")
 
-    %{organization: organization, name: Slug.slugify(name)}
+    %{organization: organization, name: name, slug: Slug.slugify(name)}
   end
 end

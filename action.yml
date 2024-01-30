@@ -7,7 +7,7 @@ description: 'Builds project into alpine package to be deployed using opsmaru.co
 inputs:
   alpine:
     description: |
-      Alpine linux version to use (edge | v3.18 | v3.17 | v3.16 | v3.15)
+      Alpine linux version to use (edge | v3.19 | v3.18 | v3.17 | v3.16)
     required: true
 runs:
   using: composite
@@ -44,17 +44,17 @@ runs:
 
     - name: Cache Pakman
       id: cache-pakman
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.mix
-        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman-8.2.2
+        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman-8.2.3
 
     - name: Install Pakman
       if: steps.cache-pakman.outputs.cache-hit != 'true'
       run: |
         mix local.rebar --force
         mix local.hex --force
-        mix escript.install hex pakman 8.2.2 --force
+        mix escript.install hex pakman 8.2.3 --force
       shell: alpine.sh {0}
       env:
         MIX_ENV: prod

@@ -10,7 +10,8 @@ defmodule Pakman.Bootstrap do
 
     @system.cmd("sudo", ["chown", "-R", "runner:abuild", workspace])
 
-    %{organization: namespace, name: name} = Environment.repository()
+    %{organization: namespace, name: name, slug: slug} =
+      Environment.repository()
 
     {version, _} = System.cmd("git", ["describe", "--tags", "--always"])
 
@@ -55,21 +56,21 @@ defmodule Pakman.Bootstrap do
       "custom" ->
         create_apkbuild(
           base_path,
-          name,
+          slug,
           String.trim(version),
           String.trim(build),
           config
         )
 
-        create_file(base_path, name, :pre_install)
+        create_file(base_path, slug, :pre_install)
 
         Map.get(config, "hook", %{})
-        |> Enum.map(&create_hook_file(&1, base_path, name))
+        |> Enum.map(&create_hook_file(&1, base_path, slug))
 
       _ ->
         create_apkbuild(
           base_path,
-          name,
+          slug,
           String.trim(version),
           String.trim(build),
           config
@@ -79,10 +80,10 @@ defmodule Pakman.Bootstrap do
           create_life_cycle_files(base_path, run_config)
         end
 
-        create_build_files(base_path, name, config["type"])
+        create_build_files(base_path, slug, config["type"])
 
         Map.get(config, "hook", %{})
-        |> Enum.map(&create_hook_file(&1, base_path, name))
+        |> Enum.map(&create_hook_file(&1, base_path, slug))
     end
 
     Setup.perform()
