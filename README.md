@@ -53,7 +53,7 @@ jobs:
         shell: alpine.sh {0}
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.arch }}
           path: /home/runner/packages
@@ -66,7 +66,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with: 
           path: /home/runner/artifacts
 
