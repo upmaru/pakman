@@ -8,7 +8,7 @@ defmodule Pakman.Setup do
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
     public_key = System.get_env("ABUILD_PUBLIC_KEY")
 
-    %{organization: namespace, name: name, slug: slug} =
+    %{organization: namespace, name: _name, slug: slug} =
       Environment.repository()
 
     key_name = Enum.join([namespace, slug], "-")
@@ -30,6 +30,10 @@ defmodule Pakman.Setup do
     abuild_config_path
     |> Path.join("#{key_name}.rsa.pub")
     |> File.write!(public_key)
+
+    public_key_path = Path.join(abuild_config_path, "#{key_name}.rsa.pub")
+
+    @system.cmd("sudo", ["cp", public_key_path, "/etc/apk/keys/"])
   end
 
   defp render_conf(home, key_name),

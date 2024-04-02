@@ -135,7 +135,7 @@ defmodule Pakman.Push do
   end
 
   def push({:deployments, path, sha}, storage) do
-    %{organization: organization, name: name, slug: slug} =
+    %{organization: organization, name: _name, slug: slug} =
       Pakman.Environment.repository()
 
     file_with_arch_name =

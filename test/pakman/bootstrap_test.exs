@@ -19,7 +19,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_REPOSITORY", "artellectual/artellectual.com")
 
       Pakman.SystemMock
-      |> expect(:cmd, 2, fn _binary, _options ->
+      |> expect(:cmd, 3, fn _binary, _options ->
         :ok
       end)
 
@@ -33,7 +33,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_REPOSITORY", "upmaru/uplink-caddy")
 
       Pakman.SystemMock
-      |> expect(:cmd, 2, fn _binary, _options ->
+      |> expect(:cmd, 3, fn _binary, _options ->
         :ok
       end)
 
@@ -47,7 +47,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_REPOSITORY", "upmaru/rails")
 
       Pakman.SystemMock
-      |> expect(:cmd, 2, fn _binary, _options ->
+      |> expect(:cmd, 3, fn _binary, _options ->
         :ok
       end)
 
@@ -65,7 +65,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_REPOSITORY", "upmaru/elixir")
 
       Pakman.SystemMock
-      |> expect(:cmd, 2, fn _binary, _options ->
+      |> expect(:cmd, 3, fn _binary, _options ->
         :ok
       end)
 
@@ -82,7 +82,7 @@ defmodule Pakman.BootstrapTest do
       System.put_env("GITHUB_WORKSPACE", "tmp/next")
 
       Pakman.SystemMock
-      |> expect(:cmd, 2, fn _binary, _options ->
+      |> expect(:cmd, 3, fn _binary, _options ->
         :ok
       end)
 
