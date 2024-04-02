@@ -3,8 +3,6 @@ defmodule Pakman.Setup do
 
   @system Application.compile_env(:pakman, :system) || System
 
-  @etc_apk_keys "/etc/apk/keys"
-
   def perform do
     home = System.get_env("HOME")
     private_key = System.get_env("ABUILD_PRIVATE_KEY")
@@ -33,9 +31,9 @@ defmodule Pakman.Setup do
     |> Path.join("#{key_name}.rsa.pub")
     |> File.write!(public_key)
 
-    @etc_apk_keys
-    |> Path.join("#{key_name}.rsa.pub")
-    |> File.write!(public_key)
+    public_key_path = Path.join(abuild_config_path, "#{key_name}.rsa.pub")
+
+    @system.cmd("sudo", ["cp", public_key_path, "/etc/apk/keys/"])
   end
 
   defp render_conf(home, key_name),
