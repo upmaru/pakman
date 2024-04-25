@@ -40,7 +40,7 @@ defmodule Pakman.Bootstrap do
     strip_binary = Map.get(config["build"], "strip_binary", true)
 
     options =
-      if not strip_binary do
+      if strip_binary == false do
         options ++ ["!strip"]
       else
         options
