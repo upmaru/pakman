@@ -1,0 +1,115 @@
+dependencies:
+  build:
+    - php82
+    - npm
+    - composer
+    - php82-session
+    - php82-fileinfo
+    - php82-tokenizer
+    - php82-dom
+    - php82-xml
+    - php82-xmlwriter
+    - php82-pcntl
+  runtime:
+    - php82
+    - composer
+    - php82-session
+    - php82-fileinfo
+    - php82-tokenizer
+    - php82-dom
+    - php82-xml
+    - php82-xmlwriter
+    - php82-pcntl
+    - bash
+    - curl
+    - s6
+    - jq
+    - ca-certificates
+    - php82-pgsql
+    - php82-pdo_pgsql
+    - laraone-openrc
+
+stack: alpine/3.19
+
+build:
+  strip_binary: false
+  command: |
+    export APP_ENV=production
+    export APP_DEBUG=false
+
+    composer install --optimize-autoloader --no-dev
+    php artisan octane:install --server=frankenphp --no-interaction
+    php artisan config:cache
+    php artisan event:cache
+    php artisan route:cache
+    php artisan view:cache
+    php artisan optimize
+
+    npm install
+    npm run build
+  destinations:
+    - '*'
+
+run:
+  commands:
+    - binary: php
+      call: artisan migrate --force --no-interaction
+      name: migrate
+      path: /usr/bin
+    - binary: php
+      call: artisan tinker
+      name: console
+      path: /usr/bin
+    - binary: php
+      call: artisan config:cache
+      name: configure
+      path: /usr/bin
+    - binary: tail
+      call: -f -n 100 /var/log/laraone/current
+      name: logs
+      path: /usr/bin
+  name: laraone
+  services:
+    - binary: php
+      name: web
+      path: /usr/bin
+      start:
+        call: artisan octane:start --server=frankenphp
+
+hook:
+  post-deinstall: |
+    rc-service laraone stop
+    rc-update del laraone
+  post-install: |
+    rc-update add laraone
+    rc-service laraone configure
+    rc-service laraone migrate
+  post-upgrade: |
+    rc-service laraone configure
+    rc-service laraone migrate
+    rc-service laraone start
+  pre-upgrade: |
+    rc-service laraone stop
+
+kits:
+  - description: web service
+    main: true
+    name: web
+    ports:
+      - main: true
+        name: web
+        target: 8000
+    variables:
+      - default_value: production
+        key: APP_ENV
+      - default_value: frankenphp
+        key: OCTANE_SERVER
+      - driver: generic/secret
+        driver_options:
+          framework: laravel
+          length: 32
+        key: APP_KEY
+      - driver: database/postgresql
+        key: DATABASE
+      - default_value: pgsql
+        key: DB_CONNECTION

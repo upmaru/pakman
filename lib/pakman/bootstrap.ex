@@ -37,6 +37,15 @@ defmodule Pakman.Bootstrap do
         ["!check", "!tracedeps"]
       end
 
+    strip_binary = Map.get(config["build"], "strip_binary", true)
+
+    options =
+      if strip_binary == false do
+        options ++ ["!strip"]
+      else
+        options
+      end
+
     config =
       Map.merge(config, %{
         "options" => options,
