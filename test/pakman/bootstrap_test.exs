@@ -59,6 +59,24 @@ defmodule Pakman.BootstrapTest do
       assert apkbuild =~ "!tracedeps"
     end
 
+    test "laravel config" do
+      System.put_env("HOME", "tmp/laravel")
+      System.put_env("GITHUB_WORKSPACE", "tmp/laravel")
+      System.put_env("GITHUB_REPOSITORY", "upmaru/laravel")
+
+      Pakman.SystemMock
+      |> expect(:cmd, 3, fn _binary, _options ->
+        :ok
+      end)
+
+      assert :ok ==
+               Pakman.Bootstrap.perform(config: "test/fixtures/laravel.yml")
+
+      apkbuild = File.read!("tmp/laravel/.apk/upmaru/laravel/APKBUILD")
+
+      assert apkbuild =~ "!strip"
+    end
+
     test "elixir config" do
       System.put_env("HOME", "tmp/elixir")
       System.put_env("GITHUB_WORKSPACE", "tmp/elixir")
