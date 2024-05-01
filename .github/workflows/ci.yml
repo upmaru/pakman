@@ -12,26 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.17
+      image: alpine:3.18
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Install OS Deps
-        run: | 
+        run: |
           apk update && apk add --update git sudo tar build-base libsodium-dev \
             elixir erlang-dialyzer
 
       - name: Retrieve Cached Dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-cache
         with:
           path: |
@@ -56,16 +56,16 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.17
+      image: alpine:3.18
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -78,7 +78,7 @@ jobs:
           mix local.hex --force
 
       - name: Retrieve Cached Dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-cache
         with:
           path: |
@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.17
+      image: alpine:3.18
 
     services:
       minio:
@@ -114,12 +114,12 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -132,7 +132,7 @@ jobs:
           mix local.hex --force
 
       - name: Retrieve Cached Dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-cache
         with:
           path: |
