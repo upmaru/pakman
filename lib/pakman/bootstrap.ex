@@ -148,6 +148,10 @@ defmodule Pakman.Bootstrap do
     |> Path.join()
     |> File.write!(Templates.run(configuration))
 
+    [base_path, "#{name}.finish"]
+    |> Path.join()
+    |> File.write!(Templates.finish(configuration))
+
     [base_path, "#{name}.log"]
     |> Path.join()
     |> File.write!(Templates.log(name))
