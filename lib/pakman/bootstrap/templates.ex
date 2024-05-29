@@ -64,6 +64,15 @@ defmodule Pakman.Bootstrap.Templates do
 
   EEx.function_from_file(
     :def,
+    :finish,
+    Path.join(@prefix, "finish.eex"),
+    [
+      :configuration
+    ]
+  )
+
+  EEx.function_from_file(
+    :def,
     :pre_install,
     Path.join(@prefix, "pre_install.eex"),
     [

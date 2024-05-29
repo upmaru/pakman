@@ -1,0 +1,2 @@
+#!/bin/execlineb -P
+s6-permafailon 60 5 1,101-103,SIGSEGV,SIGBUS
