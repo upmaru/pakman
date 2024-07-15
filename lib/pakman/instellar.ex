@@ -91,7 +91,11 @@ defmodule Pakman.Instellar do
     end
   end
 
-  def create_configuration(token, deployment_id, %{"kits" => kits})
+  def create_configuration(
+        token,
+        deployment_id,
+        %{"kits" => kits} = configuration
+      )
       when is_list(kits) do
     package_token = System.get_env("INSTELLAR_PACKAGE_TOKEN")
 
@@ -100,11 +104,23 @@ defmodule Pakman.Instellar do
       {"x-instellar-package-token", package_token}
     ]
 
+    sizes = Map.get(configuration, "sizes")
+
     configuration_params = %{
       payload: %{
         kits: kits
       }
     }
+
+    configuration_params =
+      if sizes do
+        payload = configuration_params.payload
+        payload = Map.put(payload, :sizes, sizes)
+
+        Map.put(configuration_params, :payload, payload)
+      else
+        configuration_params
+      end
 
     client()
     |> post(

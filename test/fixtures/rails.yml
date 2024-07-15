@@ -77,6 +77,12 @@ hook:
     rc-service locomo stop
     rc-update locomo rdio
 
+sizes:
+  - name: medium
+    allocation:
+      cpu: 1
+      memory: 1
+
 kits: 
 - name: web
   description: "web service"
