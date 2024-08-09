@@ -1,9 +1,9 @@
-name: 'Opsmaru Pakman'
-author: 'Zack Siri'
+name: "Opsmaru Pakman"
+author: "Zack Siri"
 branding:
-  icon: 'package'
-  color: 'purple'
-description: 'Builds project into alpine package to be deployed using opsmaru.com'
+  icon: "package"
+  color: "purple"
+description: "Builds project into alpine package to be deployed using opsmaru.com"
 inputs:
   alpine:
     description: |
@@ -47,14 +47,14 @@ runs:
       uses: actions/cache@v4
       with:
         path: ~/.mix
-        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman-8.2.10
+        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman-develop
 
     - name: Install Pakman
       if: steps.cache-pakman.outputs.cache-hit != 'true'
       run: |
         mix local.rebar --force
         mix local.hex --force
-        mix escript.install hex pakman 8.2.10 --force
+        mix escript.install github upmaru/pakman branch develop --force
       shell: alpine.sh {0}
       env:
         MIX_ENV: prod
