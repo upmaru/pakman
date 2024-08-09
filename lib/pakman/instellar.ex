@@ -105,6 +105,7 @@ defmodule Pakman.Instellar do
     ]
 
     sizes = Map.get(configuration, "sizes")
+    plans = Map.get(configuration, "plans")
 
     configuration_params = %{
       payload: %{
@@ -116,6 +117,16 @@ defmodule Pakman.Instellar do
       if sizes do
         payload = configuration_params.payload
         payload = Map.put(payload, :sizes, sizes)
+
+        Map.put(configuration_params, :payload, payload)
+      else
+        configuration_params
+      end
+
+    configuration_params =
+      if plans do
+        payload = configuration_params.payload
+        payload = Map.put(payload, :plans, plans)
 
         Map.put(configuration_params, :payload, payload)
       else
