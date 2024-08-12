@@ -33,9 +33,12 @@ defmodule Pakman.InstellarTest do
           assert %{"configuration" => %{"payload" => payload}} =
                    Jason.decode!(body)
 
-          assert %{"kits" => kits, "sizes" => sizes} = payload
+          assert %{"kits" => _kits, "sizes" => sizes, "plans" => plans} =
+                   payload
 
           assert Enum.count(sizes) == 1
+
+          assert Enum.count(plans) == 1
 
           conn
           |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -60,7 +63,7 @@ defmodule Pakman.InstellarTest do
           assert %{"configuration" => %{"payload" => payload}} =
                    Jason.decode!(body)
 
-          assert %{"kits" => kits} = payload
+          assert %{"kits" => _kits} = payload
 
           assert is_nil(payload["sizes"])
 

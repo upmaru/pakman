@@ -24,42 +24,42 @@ architectures:
   - aarch64
 
 build:
-  destinations: 
-    - '*'
+  destinations:
+    - "*"
     - .bundle
   command: |
     bundle config set deployment 'true'
     bundle config set without 'development test'
-    
+
     bundle install
-    
+
     bundle exec rails assets:precompile
 
-run: 
+run:
   name: locomo
-  commands: 
-  - name: migrate
-    binary: rails
-    call: db:migrate
-  - name: console
-    binary: rails
-    call: console
-  - name: logs
-    path: /usr/bin
-    binary: tail
-    call: -f -n 200 /var/log/locomo/current
+  commands:
+    - name: migrate
+      binary: rails
+      call: db:migrate
+    - name: console
+      binary: rails
+      call: console
+    - name: logs
+      path: /usr/bin
+      binary: tail
+      call: -f -n 200 /var/log/locomo/current
   services:
-  - name: web
-    binary: rails
-    start: 
-      call: server
-    stop:
-      kill: true
-      pid_path: tmp/pids/server.pid
-  - name: worker
-    binary: bundle
-    start:
-      call: 'exec sidekiq -C config/sidekiq.yml'
+    - name: web
+      binary: rails
+      start:
+        call: server
+      stop:
+        kill: true
+        pid_path: tmp/pids/server.pid
+    - name: worker
+      binary: bundle
+      start:
+        call: "exec sidekiq -C config/sidekiq.yml"
 
 hook:
   post-install: |
@@ -83,22 +83,33 @@ sizes:
       cpu: 1
       memory: 1
 
-kits: 
-- name: web
-  description: "web service"
-  main: true
-  ports:
+kits:
   - name: web
-    target: 3000
+    description: "web service"
     main: true
-  variables:
-  - key: RAILS_ENV
-    default_value: production
-  - key: DATABASE_URL
-    driver: "database/postgresql"
-  - key: RAILS_SERVE_STATIC_FILES
-    default_value: "1"
-  - key: SECRET_KEY_BASE
-    driver: "generic/secret"
-    driver_options:
-      length: 128
+    ports:
+      - name: web
+        target: 3000
+        main: true
+    variables:
+      - key: RAILS_ENV
+        default_value: production
+      - key: DATABASE_URL
+        driver: "database/postgresql"
+      - key: RAILS_SERVE_STATIC_FILES
+        default_value: "1"
+      - key: SECRET_KEY_BASE
+        driver: "generic/secret"
+        driver_options:
+          length: 128
+
+plans:
+  - name: basic
+    description: "Basic plan"
+    managed_by: package_owner
+    layers: [{ channel_slug: develop, size_slug: medium, kit_slug: web }]
+    pricings:
+      [
+        { amount: 1500, currency: USD, billing_period: monthly },
+        { amount: 15000, currency: USD, billing_period: yearly },
+      ]
