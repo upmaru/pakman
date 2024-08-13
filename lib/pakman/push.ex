@@ -47,7 +47,9 @@ defmodule Pakman.Push do
         raise Error, message: "[Pakman.Push] #{inspect(error)}"
 
       {:ok, %{"attributes" => attributes}} ->
-        Logger.info("[Pakman.Push] Deployment already exists copying existing...")
+        Logger.info(
+          "[Pakman.Push] Deployment already exists copying existing..."
+        )
 
         copy(attributes, config)
 
@@ -58,8 +60,14 @@ defmodule Pakman.Push do
 
   defp copy(%{"archive_path" => archive_path} = existing_deployment, config) do
     with {:ok, token} <- Instellar.authenticate(),
-         {:ok, deployment_message, response} <- Instellar.create_deployment(token, archive_path, config),
-         {:ok, configuration_message, _response} <- Instellar.create_configuration(token, response["attributes"]["id"], config) do
+         {:ok, deployment_message, response} <-
+           Instellar.create_deployment(token, archive_path, config),
+         {:ok, configuration_message, _response} <-
+           Instellar.create_configuration(
+             token,
+             response["attributes"]["id"],
+             config
+           ) do
       print_deployment_message(deployment_message)
       print_configuration_message(configuration_message)
 

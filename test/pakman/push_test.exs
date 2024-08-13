@@ -123,7 +123,8 @@ defmodule Pakman.PushTest do
                 "archive_path" => "archives/some-uuid/packages.zip"
               }
             }
-          }))
+          })
+        )
       end)
 
       Bypass.expect(bypass, "POST", "/publish/deployments", fn conn ->
@@ -153,8 +154,7 @@ defmodule Pakman.PushTest do
         end
       )
 
-      assert {:ok, :copied} =
-               Push.perform(config: "test/fixtures/rails.yml")
+      assert {:ok, :copied} = Push.perform(config: "test/fixtures/rails.yml")
     end
   end
 end
