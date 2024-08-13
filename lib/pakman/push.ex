@@ -58,7 +58,7 @@ defmodule Pakman.Push do
     end
   end
 
-  defp copy(%{"archive_path" => archive_path} = existing_deployment, config) do
+  defp copy(%{"archive_path" => archive_path}, config) do
     with {:ok, token} <- Instellar.authenticate(),
          {:ok, deployment_message, response} <-
            Instellar.create_deployment(token, archive_path, config),
