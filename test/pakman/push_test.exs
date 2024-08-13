@@ -114,10 +114,46 @@ defmodule Pakman.PushTest do
       Bypass.expect(bypass, "GET", "/publish/deployments/somesha", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("content-type", "application/json")
-        |> Plug.Conn.resp(200, Jason.encode!(%{data: %{attributes: %{id: 1}}}))
+        |> Plug.Conn.resp(
+          200,
+          Jason.encode!(%{
+            data: %{
+              attributes: %{
+                "id" => 1,
+                "archive_path" => "archives/some-uuid/packages.zip"
+              }
+            }
+          }))
       end)
 
-      assert {:ok, :already_exists} =
+      Bypass.expect(bypass, "POST", "/publish/deployments", fn conn ->
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "application/json")
+        |> Plug.Conn.resp(
+          201,
+          Jason.encode!(%{
+            data: %{
+              attributes: %{
+                "id" => 1,
+                "archive_path" => "archives/some-uuid/packages.zip"
+              }
+            }
+          })
+        )
+      end)
+
+      Bypass.expect_once(
+        bypass,
+        "POST",
+        "/publish/deployments/1/configurations",
+        fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.resp(201, Jason.encode!(%{data: %{id: 1}}))
+        end
+      )
+
+      assert {:ok, :copied} =
                Push.perform(config: "test/fixtures/rails.yml")
     end
   end
