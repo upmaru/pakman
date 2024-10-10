@@ -7,7 +7,7 @@ description: "Builds project into alpine package to be deployed using opsmaru.co
 inputs:
   alpine:
     description: |
-      Alpine linux version to use (edge | v3.19 | v3.18 | v3.17 | v3.16)
+      Alpine linux version to use (edge | 3.20 | v3.19 | v3.18 | v3.17 | v3.16)
     required: true
 runs:
   using: composite
@@ -22,6 +22,7 @@ runs:
     - name: Setup Alpine
       uses: jirutka/setup-alpine@v1
       with:
+        apk-tools-url: https://alpinelinux.opsmaru.com/api/v4/projects/5/packages/generic/v2.14.4/x86_64/apk.static#!sha256!42cea2a41dc09b263f04bb0ade8a2ba251256b91f89095ecc8a19903b2b3e39e
         branch: ${{ inputs.alpine }}
         packages: |
           zip
