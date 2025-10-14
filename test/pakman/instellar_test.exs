@@ -33,8 +33,16 @@ defmodule Pakman.InstellarTest do
           assert %{"configuration" => %{"payload" => payload}} =
                    Jason.decode!(body)
 
-          assert %{"kits" => _kits, "sizes" => sizes, "plans" => plans} =
-                   payload
+          assert %{
+                   "kits" => _kits,
+                   "sizes" => sizes,
+                   "plans" => plans,
+                   "page" => %{
+                     "title" => _title,
+                     "slogan" => _slogan,
+                     "description" => _description
+                   }
+                 } = payload
 
           assert Enum.count(sizes) == 1
 

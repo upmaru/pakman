@@ -113,3 +113,8 @@ plans:
         { amount: 1500, currency: USD, billing_period: monthly },
         { amount: 15000, currency: USD, billing_period: yearly },
       ]
+
+page:
+  title: "SomeApp"
+  slogan: "SomeApp is a web application"
+  description: "Some description about SomeApp."
