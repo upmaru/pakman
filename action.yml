@@ -22,7 +22,6 @@ runs:
     - name: Setup Alpine
       uses: jirutka/setup-alpine@v1
       with:
-        apk-tools-url: https://alpinelinux.opsmaru.com/api/v4/projects/5/packages/generic/v2.14.4/x86_64/apk.static#!sha256!42cea2a41dc09b263f04bb0ade8a2ba251256b91f89095ecc8a19903b2b3e39e
         branch: ${{ inputs.alpine }}
         packages: |
           zip
