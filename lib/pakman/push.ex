@@ -95,7 +95,8 @@ defmodule Pakman.Push do
           host: storage["host"],
           port: storage["port"],
           scheme: storage["scheme"],
-          region: storage["region"]
+          region: storage["region"],
+          http_opts: Pakman.Http.options()
         ),
       bucket: storage["bucket"]
     }

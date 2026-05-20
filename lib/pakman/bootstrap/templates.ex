@@ -32,7 +32,7 @@ defmodule Pakman.Bootstrap.Templates do
     :def,
     :environment,
     Path.join(@prefix, "environment.eex.bash"),
-    [:name]
+    [:_name]
   )
 
   EEx.function_from_file(
@@ -67,7 +67,7 @@ defmodule Pakman.Bootstrap.Templates do
     :finish,
     Path.join(@prefix, "finish.eex"),
     [
-      :configuration
+      :_configuration
     ]
   )
 

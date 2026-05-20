@@ -6,22 +6,21 @@ on:
       - develop
       - feature/**
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deps:
     name: Dependencies
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.18
+      image: alpine:3.20
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -56,16 +55,11 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.18
+      image: alpine:3.20
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -92,7 +86,7 @@ jobs:
         run: mix format --check-formatted
 
       - name: Run Dialyzer
-        run: mix dialyzer --no-check --halt-exit-status
+        run: mix dialyzer --no-check
 
   test:
     name: Unit Tests
@@ -100,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.18
+      image: alpine:3.20
 
     services:
       minio:
@@ -113,13 +107,8 @@ jobs:
         options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live"
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
