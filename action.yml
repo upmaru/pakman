@@ -7,7 +7,8 @@ description: "Builds project into alpine package to be deployed using opsmaru.co
 inputs:
   alpine:
     description: |
-      Alpine linux version to use (edge | 3.20 | v3.19 | v3.18 | v3.17 | v3.16)
+      Alpine linux version to use (edge | latest-stable | v3.x | 3.x)
+      Bare versions like 3.20 are normalized to v3.20.
     required: true
 runs:
   using: composite
@@ -19,10 +20,22 @@ runs:
         mkdir -p ~/artifacts
       shell: bash
 
+    - name: Normalize Alpine Version
+      id: normalize-alpine
+      run: |
+        alpine="$ALPINE_VERSION"
+        if [[ "$alpine" =~ ^[0-9]+\.[0-9]+$ ]]; then
+          alpine="v$alpine"
+        fi
+        echo "branch=$alpine" >> "$GITHUB_OUTPUT"
+      shell: bash
+      env:
+        ALPINE_VERSION: ${{ inputs.alpine }}
+
     - name: Setup Alpine
-      uses: jirutka/setup-alpine@v1
+      uses: upmaru/setup-alpine@develop
       with:
-        branch: ${{ inputs.alpine }}
+        branch: ${{ steps.normalize-alpine.outputs.branch }}
         packages: |
           zip
           tar
