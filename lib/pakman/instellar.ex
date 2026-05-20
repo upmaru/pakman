@@ -1,6 +1,4 @@
 defmodule Pakman.Instellar do
-  use Tesla
-
   require Logger
 
   def authenticate do
@@ -178,30 +176,14 @@ defmodule Pakman.Instellar do
   defp client do
     endpoint = System.get_env("INSTELLAR_ENDPOINT", "https://opsmaru.com")
 
-    middleware =
-      if Application.get_env(:pakman, :env) == :test do
-        [
-          {Tesla.Middleware.BaseUrl, endpoint},
-          Tesla.Middleware.JSON,
-          {Tesla.Middleware.Logger,
-           debug: false, log_level: &custom_log_level/1}
-        ]
-      else
-        [
-          {Tesla.Middleware.BaseUrl, endpoint},
-          Tesla.Middleware.JSON,
-          {Tesla.Middleware.Logger,
-           debug: false, log_level: &custom_log_level/1}
-        ]
-      end
-
-    Tesla.client(middleware)
+    Req.new([base_url: endpoint] ++ Pakman.Http.options())
   end
 
-  defp custom_log_level(env) do
-    case env.status do
-      404 -> :info
-      _ -> :default
-    end
+  defp get(client, url, opts) do
+    Req.get(client, [url: url] ++ opts)
+  end
+
+  defp post(client, url, body, opts \\ []) do
+    Req.post(client, [url: url, json: body] ++ opts)
   end
 end

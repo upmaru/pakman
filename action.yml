@@ -7,7 +7,8 @@ description: "Builds project into alpine package to be deployed using opsmaru.co
 inputs:
   alpine:
     description: |
-      Alpine linux version to use (edge | 3.20 | v3.19 | v3.18 | v3.17 | v3.16)
+      Alpine linux version to use (edge | latest-stable | v3.x | 3.x)
+      Bare versions like 3.20 are normalized to v3.20.
     required: true
 runs:
   using: composite
@@ -19,10 +20,34 @@ runs:
         mkdir -p ~/artifacts
       shell: bash
 
+    - name: Normalize Alpine Version
+      id: normalize-alpine
+      run: |
+        alpine="$ALPINE_VERSION"
+        if [[ "$alpine" =~ ^[0-9]+\.[0-9]+$ ]]; then
+          alpine="v$alpine"
+        fi
+        echo "branch=$alpine" >> "$GITHUB_OUTPUT"
+      shell: bash
+      env:
+        ALPINE_VERSION: ${{ inputs.alpine }}
+
+    - name: Resolve Pakman Ref
+      id: pakman-ref
+      run: |
+        ref="$ACTION_REF"
+        if [[ -z "$ref" ]]; then
+          ref="develop"
+        fi
+        echo "ref=$ref" >> "$GITHUB_OUTPUT"
+      shell: bash
+      env:
+        ACTION_REF: ${{ github.action_ref }}
+
     - name: Setup Alpine
-      uses: jirutka/setup-alpine@v1
+      uses: upmaru/setup-alpine@v1
       with:
-        branch: ${{ inputs.alpine }}
+        branch: ${{ steps.normalize-alpine.outputs.branch }}
         packages: |
           zip
           tar
@@ -44,17 +69,18 @@ runs:
 
     - name: Cache Pakman
       id: cache-pakman
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.mix
-        key: ${{ runner.arch }}-alpine-${{ inputs.alpine }}-pakman-8.3.2
+        key: ${{ runner.arch }}-alpine-${{ steps.normalize-alpine.outputs.branch }}-pakman-${{ steps.pakman-ref.outputs.ref }}
 
     - name: Install Pakman
       if: steps.cache-pakman.outputs.cache-hit != 'true'
       run: |
         mix local.rebar --force
         mix local.hex --force
-        mix escript.install hex pakman 8.3.2 --force
+        mix escript.install github upmaru/pakman ref "$PAKMAN_REF" --force
       shell: alpine.sh {0}
       env:
         MIX_ENV: prod
+        PAKMAN_REF: ${{ steps.pakman-ref.outputs.ref }}
