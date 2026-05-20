@@ -5,7 +5,8 @@ defmodule Pakman.MixProject do
     [
       app: :pakman,
       version: "8.3.2",
-      elixir: "~> 1.13",
+      elixir: "~> 1.14",
+      erlang: ">= 25.0",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -37,13 +38,10 @@ defmodule Pakman.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tesla, "~> 1.7.0"},
+      {:req, "~> 0.5.17"},
       {:jason, ">= 1.0.0"},
       {:yaml_elixir, "~> 2.8.0"},
       {:slugify, "~> 1.3"},
-      {:finch, "~> 0.16.0"},
-      {:mint, "~> 1.5.0"},
-      {:castore, "~> 1.0"},
       {:ex_aws, "~> 2.5"},
       {:ex_aws_s3, "~> 2.5"},
       {:sweet_xml, "~> 0.7"},
